@@ -47,6 +47,9 @@
     </div>
 </div>
 
+@include('partials.timestamps',['model'=>$model])
+
+
 
 
 

@@ -58,7 +58,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getStrRolesAttribute()
     {
-        $roles = $this->roles()->lists('name');
+        $roles = $this->roles()->lists('acronym');
         $trim_roles = [];
         foreach($roles as $role)
         {
