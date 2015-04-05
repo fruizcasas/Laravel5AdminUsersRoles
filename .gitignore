@@ -1,4 +1,8 @@
-/bootstrap/compiled.php
-.env.*.php
-.env.php
+/vendor
 .env
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php
+
+resources/assets/api.bootswatch.com_3_.php
+resources/assets/download.sh
