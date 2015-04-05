@@ -30,7 +30,7 @@ const VIEW_NAME    = 'admin.roles.show';
                     <div class="form-horizontal">
                         <div class="form-group">
                             <div class="col-md-2 col-md-offset-2">
-                                {!! link_to_route(INDEX_ROUTE,'Cancel',[$model->id],
+                                {!! link_to_route(INDEX_ROUTE,'Cancel',[],
                                                  ['class' => 'form-control btn btn-primary']) !!}
                             </div>
                             <div class="col-md-2">

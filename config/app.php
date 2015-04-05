@@ -155,9 +155,9 @@ return [
 
         // ...
         'DaveJamesMiller\Breadcrumbs\ServiceProvider',
-        // ...
-        'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
-        'Barryvdh\Debugbar\ServiceProvider',
+
+
+        // See into AppServiceProvider to add in dev mode
 
 
     ],
@@ -209,8 +209,6 @@ return [
         'View' => 'Illuminate\Support\Facades\View',
         // ...
         'Flash' => 'Laracasts\Flash\Flash',
-        // ...
-        'Debugbar' => 'Barryvdh\Debugbar\Facade',
 
         // ...
         'Breadcrumbs' => 'DaveJamesMiller\Breadcrumbs\Facade',
@@ -218,6 +216,10 @@ return [
         'Form' => 'Illuminate\Html\FormFacade',
         'Html' => 'Illuminate\Html\HtmlFacade',
 
+        // DEV MODE
+
+        // ...
+        'Debugbar' => 'Barryvdh\Debugbar\Facade',
     ],
 
 ];

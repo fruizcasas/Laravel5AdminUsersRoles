@@ -1,3 +1,9 @@
+<?php
+const VIEW_NAME    = 'admin.users.create';
+?>
+
+@include('admin.users._routes')
+
 @extends ('app')
 
 @section('headings')
@@ -5,7 +11,7 @@
 @endsection
 
 @section('breadcrumbs')
-    {!! Breadcrumbs::render('admin.users.create') !!}
+    {!! Breadcrumbs::render(VIEW_NAME) !!}
 @endsection
 
 
@@ -14,14 +20,14 @@
 <div class="row">
     <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-primary">
-            {!! Form::model($model,['action' =>'Admin\UsersController@store','class'=>'form-horizontal']) !!}
+            {!! Form::model($model,['route' =>STORE_ROUTE,'class'=>'form-horizontal']) !!}
                 <div class="panel-body">
                     @include('admin.users._form',['readonly' => false])
                 </div>
                 <div class="panel-footer">
                     <div class="form-group">
                         <div class="col-md-2 col-md-offset-2">
-                            {!! link_to_route('admin.users.index','Cancel',[],
+                            {!! link_to_route(INDEX_ROUTE,'Cancel',[],
                                          ['class' => 'form-control btn btn-primary']) !!}
                         </div>
                         <div class="col-md-2">

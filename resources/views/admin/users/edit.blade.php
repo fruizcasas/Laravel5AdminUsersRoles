@@ -1,3 +1,9 @@
+<?php
+const VIEW_NAME    = 'admin.users.edit';
+?>
+
+@include('admin.users._routes')
+
 @extends ('app')
 
 @section('headings')
@@ -5,7 +11,7 @@
 @endsection
 
 @section('breadcrumbs')
-    {!! Breadcrumbs::render('admin.users.edit') !!}
+    {!! Breadcrumbs::render(VIEW_NAME) !!}
 @endsection
 
 
@@ -15,7 +21,7 @@
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-primary">
                 {!! Form::model($model,['method' =>'PUT',
-                        'route'  => ['admin.users.update', $model->id],
+                        'route'  => [UPDATE_ROUTE, $model->id],
                         'class'=>'form-horizontal']) !!}
                     <div class="panel-body">
                         @include('admin.users._form',['readonly' => false])
@@ -23,7 +29,7 @@
                     <div class="panel-footer">
                         <div class="form-group">
                             <div class="col-md-2 col-md-offset-2">
-                                {!! link_to_route('admin.users.show','Cancel',[$model->id],
+                                {!! link_to_route(SHOW_ROUTE,'Cancel',[$model->id],
                                                  ['class' => 'form-control btn btn-primary']) !!}
                             </div>
                             <div class="col-md-2">

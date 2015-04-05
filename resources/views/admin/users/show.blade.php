@@ -1,3 +1,9 @@
+<?php
+const VIEW_NAME    = 'admin.users.show';
+?>
+
+@include('admin.users._routes')
+
 @extends ('app')
 
 @section('headings')
@@ -5,7 +11,7 @@
 @endsection
 
 @section('breadcrumbs')
-    {!! Breadcrumbs::render('admin.users.show') !!}
+    {!! Breadcrumbs::render(VIEW_NAME) !!}
 @endsection
 
 
@@ -23,34 +29,34 @@
                     <div class="form-horizontal">
                         <div class="form-group">
                             <div class="col-md-2 col-md-offset-2">
-                                {!! link_to_route('admin.users.index','Cancel',[$model->id],
+                                {!! link_to_route(INDEX_ROUTE,'Cancel',[],
                                                  ['class' => 'form-control btn btn-primary']) !!}
                             </div>
                             <div class="col-md-2">
-                                {!! link_to_action('Admin\UsersController@create','New',[],
+                                {!! link_to_route(CREATE_ROUTE,'New',[],
                                                 ['class' => 'form-control btn btn-warning ']) !!}
                             </div>
                         @if (! $model->trashed() )
                             <div class="col-md-2">
-                                {!! link_to_route('admin.users.edit','Edit',[$model->id],
+                                {!! link_to_route(EDIT_ROUTE,'Edit',[$model->id],
                                                  ['class' => 'form-control btn btn-warning']) !!}
                             </div>
                             <div class="col-md-2">
                                 {!! Form::open(['method' =>'DELETE',
-                                                'route'  => ['admin.users.destroy', $model->id]]) !!}
+                                                'route'  => [TRASH_ROUTE, $model->id]]) !!}
                                 {!! Form::submit('Trash', ['class' => 'form-control btn btn-danger']) !!}
                                 {!! Form::close() !!}
                             </div>
                         @else
                             <div class="col-md-2">
                                 {!! Form::open(['method' =>'POST',
-                                               'route'  => ['admin.users.restore', $model->id]]) !!}
+                                               'route'  => [RESTORE_ROUTE, $model->id]]) !!}
                                 {!! Form::submit('Restore', ['class' => 'form-control btn btn-warning']) !!}
                                 {!! Form::close() !!}
                             </div>
                             <div class="col-md-2">
                                 {!! Form::open(['method' =>'DELETE',
-                                                'route'  => ['admin.users.forcedelete', $model->id]]) !!}
+                                                'route'  => [DELETE_ROUTE, $model->id]]) !!}
                                 {!! Form::submit('Delete', ['class' => 'form-control btn btn-danger']) !!}
                                 {!! Form::close() !!}
                             </div>

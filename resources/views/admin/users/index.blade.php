@@ -1,3 +1,8 @@
+<?php
+const VIEW_NAME    = 'admin.users.index';
+?>
+
+@include('admin.users._routes')
 
 @extends ('app')
 
@@ -10,27 +15,6 @@
     {!! Breadcrumbs::render('admin.users') !!}
 @endsection
 
-<?php
- /*
-  * |-------------------------------------------------------------
-  * |
-  * |-------------------------------------------------------------
-  */
-
- const VIEW_NAME    = 'admin.users.index';
-
- const INDEX_ROUTE  = 'admin.users.index';
- const CREATE_ROUTE = 'admin.users.create';
- const SHOW_ROUTE   = 'admin.users.show';
-
- const FILTER_ROUTE = 'admin.users.filter';
- const SORT_ROUTE   = 'admin.users.sort';
-
-
- const HIDE_TRASH_ROUTE = 'profile.resettrash';
- const SHOW_TRASH_ROUTE = 'profile.settrash';
-
-?>
 
 @section('content')
 
