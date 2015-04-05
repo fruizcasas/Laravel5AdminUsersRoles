@@ -3,7 +3,6 @@
 use App\Http\Requests\Request;
 
 use Auth;
-use App\Role;
 
 class UserRequest extends Request {
 
@@ -14,7 +13,7 @@ class UserRequest extends Request {
 	 */
 	public function authorize()
 	{
-		return Auth::user()->hasRole(Role::ADMIN);
+		return Auth::user()->is_admin;
 	}
 
 	/**

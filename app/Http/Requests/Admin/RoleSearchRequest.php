@@ -1,12 +1,10 @@
 <?php namespace App\Http\Requests\Admin;
 
 use App\Http\Requests\Request;
-
 use Auth;
-use App\Role;
 
 
-class DeleteRequest extends Request {
+class RoleSearchRequest extends Request {
 
 	/**
 	 * Determine if the user is authorized to make this request.
@@ -16,7 +14,7 @@ class DeleteRequest extends Request {
 	public function authorize()
 	{
         return Auth::user()->is_admin;
-    }
+	}
 
 	/**
 	 * Get the validation rules that apply to the request.
@@ -26,7 +24,10 @@ class DeleteRequest extends Request {
 	public function rules()
 	{
 		return [
-			//
+            'id' => '',
+            'name' => '',
+            'display_name' => '',
+            'acronym' =>'',
 		];
 	}
 

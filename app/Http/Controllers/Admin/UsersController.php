@@ -34,12 +34,11 @@ class UsersController extends Controller
     protected $filter_fields = ['id', 'name', 'email','is_admin','roles'];
 
     protected $show_trash = 'empty';
-    protected $login_profile;
 
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('admin');
         $this->show_trash = 'empty';
     }
 
@@ -79,7 +78,7 @@ class UsersController extends Controller
             Profile::loginProfile()->setOrderBy($this->index_view, []);
         };
 
-        return redirect(route('admin.users.index'));
+        return redirect(route($this->index_route));
     }
 
 

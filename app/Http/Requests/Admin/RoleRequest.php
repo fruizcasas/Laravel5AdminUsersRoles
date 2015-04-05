@@ -2,6 +2,8 @@
 
 use App\Http\Requests\Request;
 
+use Auth;
+
 class RoleRequest extends Request {
 
 	/**
@@ -11,8 +13,8 @@ class RoleRequest extends Request {
 	 */
 	public function authorize()
 	{
-		return false;
-	}
+        return Auth::user()->is_admin;
+    }
 
 	/**
 	 * Get the validation rules that apply to the request.
@@ -22,7 +24,10 @@ class RoleRequest extends Request {
 	public function rules()
 	{
 		return [
-			//
+            'name' => 'required|min:5',
+            'display_name' => 'required|min:5',
+            'description' => '',
+            'acronym' => 'required|min:3:max:5',
 		];
 	}
 

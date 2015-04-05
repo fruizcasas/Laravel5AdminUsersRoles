@@ -3,11 +3,16 @@
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\Traits\SortableTrait;
+
+
 /**
  * Class Role
  * @package App
  */
 class Role extends Model {
+
+    use SortableTrait;
 
     use SoftDeletes;
     protected $dates = ['deleted_at'];
@@ -24,7 +29,7 @@ class Role extends Model {
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name','display_name','acronym','description'];
 
 
     /**

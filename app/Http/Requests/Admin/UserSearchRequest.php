@@ -12,7 +12,7 @@ class UserSearchRequest extends Request {
 	 */
 	public function authorize()
 	{
-		return Auth::check();
+		return Auth::user()->is_admin;
 	}
 
 	/**
