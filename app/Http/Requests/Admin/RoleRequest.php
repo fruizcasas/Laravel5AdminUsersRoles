@@ -13,7 +13,10 @@ class RoleRequest extends Request {
 	 */
 	public function authorize()
 	{
-        return Auth::user()->is_admin;
+        if (Auth::check()) {
+            return Auth::user()->is_admin;
+        }
+        return false;
     }
 
 	/**
@@ -27,7 +30,7 @@ class RoleRequest extends Request {
             'name' => 'required|min:5',
             'display_name' => 'required|min:5',
             'description' => '',
-            'acronym' => 'required|min:3:max:5',
+            'acronym' => 'required|min:3|max:5',
 		];
 	}
 

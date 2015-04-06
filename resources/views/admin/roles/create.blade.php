@@ -21,20 +21,9 @@ const VIEW_NAME    = 'admin.roles.create';
     <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-primary">
             {!! Form::model($model,['route' =>STORE_ROUTE,'class'=>'form-horizontal']) !!}
-                <div class="panel-body">
-                    @include('admin.roles._form',['readonly' => false])
-                </div>
-                <div class="panel-footer">
-                    <div class="form-group">
-                        <div class="col-md-2 col-md-offset-2">
-                            {!! link_to_route(INDEX_ROUTE,'Cancel',[],
-                                         ['class' => 'form-control btn btn-primary']) !!}
-                        </div>
-                        <div class="col-md-2">
-                            {!! Form::submit('Create new', ['class' => 'form-control btn btn-warning']) !!}
-                        </div>
-                    </div>
-                </div>
+                @include('partials.create_buttons')
+                @include('admin.roles._form',['readonly' => false])
+                @include('partials.create_buttons')
             {!! Form::close() !!}
             @if($errors->any())
             <div class="panel-footer">

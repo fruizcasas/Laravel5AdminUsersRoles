@@ -11,6 +11,7 @@ use App\Http\Requests\Admin\RoleRequest as ModelRequest;
 use App\Http\Requests\Admin\DeleteRequest as DeleteRequest;
 use App\Http\Requests\Admin\RoleSearchRequest as SearchRequest;
 use App\Models\Admin\Role;
+use App\Models\Admin\User;
 
 
 class RolesController extends Controller {
@@ -141,7 +142,7 @@ class RolesController extends Controller {
     public function store(ModelRequest $request)
     {
         try {
-            $model = new User($request->all());
+            $model = new Role($request->all());
             try {
                 DB::beginTransaction();
                 $model->save();

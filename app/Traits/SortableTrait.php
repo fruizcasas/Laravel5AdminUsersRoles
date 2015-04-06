@@ -32,6 +32,6 @@ trait SortableTrait
         $indicator = (array_has($order_by,$col)? ($order_by[$col] === 'asc' ? '&darr;' : '&uarr;') : null);
         $parameters = [ $col , Profile::loginProfile()->getOrderByValue($view,$col)==='asc'?'desc':'asc' ];
 
-        return link_to_route($route, "$title $indicator", $parameters,$attributes);
+        return link_to_route($route, "$title$indicator", $parameters,$attributes);
     }
 }

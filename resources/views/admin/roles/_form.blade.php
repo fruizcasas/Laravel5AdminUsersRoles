@@ -1,4 +1,7 @@
-<!--- Name Field --->
+<div class="panel-body">
+    <div class="form-horizontal">
+
+        <!--- Name Field --->
 <div class="form-group {{$errors->first('name','has-error')}}">
     {!! Form::label('name', 'Name:',['class' =>'col-sm-2 control-label text-right']) !!}
     <div class="col-sm-10">
@@ -48,9 +51,5 @@
 </div>
 
 @include('partials.timestamps',['model'=>$model])
-
-
-
-
-
-
+    </div>
+</div>

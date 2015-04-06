@@ -13,7 +13,10 @@ class UserRequest extends Request {
 	 */
 	public function authorize()
 	{
-		return Auth::user()->is_admin;
+        if (Auth::check()) {
+            return Auth::user()->is_admin;
+        }
+        return false;
 	}
 
 	/**
@@ -24,8 +27,9 @@ class UserRequest extends Request {
 	public function rules()
 	{
 		return [
-			'name' => 'required|min:5',
-            'email' => 'required|email'
+			'name' => 'required|min:5|max:10',
+            'email' => 'required|email',
+            'display_name' => 'required',
 		];
 	}
 

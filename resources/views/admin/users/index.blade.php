@@ -21,26 +21,20 @@ const VIEW_NAME    = 'admin.users.index';
 
     {!! Form::model($filter,['route' => FILTER_ROUTE,
                              'class'=>'form-inline','role'=>'form']) !!}
-        <div class="btn-group">
-        {!! link_to_route(CREATE_ROUTE,'New',[],
-                ['class' => 'btn btn-warning ']) !!}
-        @if (App\Profile::loginProfile()->show_trash == '0')
-            {!! link_to_route(SHOW_TRASH_ROUTE,'Show Trash',[INDEX_ROUTE],
-                              ['class'=>'btn btn-primary']) !!}
-        @else
-            {!! link_to_route(HIDE_TRASH_ROUTE,'Hide Trash',[INDEX_ROUTE],
-                              ['class'=>'btn btn-primary active'])!!}
-        @endif
-        {!! $records->render()!!}
-        </div>
-    <br/><br/>
+        @include ('partials.index_buttons')
+        <br/>
 
     <table class="table table-striped table-bordered table-compact table-hover">
-        <col style="width:6em;">
+        <col style="width:5.5em;">
+        <col style="width:4.5em;">
         <col style="width:5em;">
         <col >
         <col >
-        <col style="width:5em;">
+        <col style="width:3.5em;">
+        <col style="width:3.5em;">
+        <col style="width:3.5em;">
+        <col style="width:3.5em;">
+        <col style="width:3.5em;">
         <thead>
         <th>
             {!! link_to_route(SORT_ROUTE,'Reset',[],
@@ -50,8 +44,13 @@ const VIEW_NAME    = 'admin.users.index';
         <th class="text-right">
             {!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'id')!!}</th>
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'name')!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'display_name')!!}</th>
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'email')!!}</th>
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_admin','adm')!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_owner','own')!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_reviewer','rev')!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_approver','app')!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_signer','sig')!!}</th>
         <th>Roles</th>
         </thead>
         <tbody>
@@ -72,6 +71,12 @@ const VIEW_NAME    = 'admin.users.index';
                                                              'placeholder'=>'name filter...']) !!}
             </td>
             <td>
+                <!--- filter display_name Field --->
+                {!! Form::text('display_name', null, ['class' => 'form-control input-sm',
+                'style' => 'width:100%;',
+                'placeholder'=>'display_name filter...']) !!}
+            </td>
+            <td>
                 <!--- filter email Field --->
                 {!! Form::text('email', null, ['class' => 'form-control input-sm',
                                                          'style' => 'width:100%;',
@@ -84,6 +89,30 @@ const VIEW_NAME    = 'admin.users.index';
                                                              'placeholder'=>'adm filter...']) !!}
             </td>
             <td>
+                <!--- filter is_owner Field --->
+                {!! Form::text('is_owner', null, ['class' => 'form-control input-sm',
+                'style' => 'width:100%;',
+                'placeholder'=>'own filter...']) !!}
+            </td>
+            <td>
+                <!--- filter is_reviewer Field --->
+                {!! Form::text('is_reviewer', null, ['class' => 'form-control input-sm',
+                'style' => 'width:100%;',
+                'placeholder'=>'rev filter...']) !!}
+            </td>
+            <td>
+                <!--- filter is_approver Field --->
+                {!! Form::text('is_approver', null, ['class' => 'form-control input-sm',
+                'style' => 'width:100%;',
+                'placeholder'=>'app filter...']) !!}
+            </td>
+            <td>
+                <!--- filter is_signer Field --->
+                {!! Form::text('is_signer', null, ['class' => 'form-control input-sm',
+                'style' => 'width:100%;',
+                'placeholder'=>'sig filter...']) !!}
+            </td>
+            <td>
                 <!--- filter roles Field --->
                 {!! Form::text('roles', null, ['class' => 'form-control input-sm',
                                                          'style' => 'width:100%;',
@@ -91,26 +120,41 @@ const VIEW_NAME    = 'admin.users.index';
             </td>
         </tr>
 
-        @foreach($records as $record)
+        @foreach($models as $model)
             <tr>
                 <td>
-                    {!! link_to_route(SHOW_ROUTE,($record->trashed()?'Trash':'Show'),['id'=>$record->id],
-                                      ['class' => 'btn-sm '.($record->trashed()?'btn-danger':'btn-primary')]) !!}
+                    {!! link_to_route(SHOW_ROUTE,($model->trashed()?'Trash':'Show'),['id'=>$model->id],
+                                      ['class' => 'btn-sm '.($model->trashed()?'btn-danger':'btn-primary')]) !!}
                 </td>
                 <td class="text-right">
-                    {!! link_to_route(SHOW_ROUTE,$record->id,['id'=>$record->id]) !!}
+                    {!! link_to_route(SHOW_ROUTE,$model->id,['id'=>$model->id]) !!}
                 </td>
                 <td>
-                    {!! link_to_route(SHOW_ROUTE,$record->name,['id'=>$record->id]) !!}
+                    {!! link_to_route(SHOW_ROUTE,$model->name,['id'=>$model->id]) !!}
                 </td>
                 <td>
-                    {!! link_to('mailto:' . $record->email,$record->email) !!}
+                    {!! link_to_route(SHOW_ROUTE,$model->display_name,['id'=>$model->id]) !!}
+                </td>
+                <td>
+                    {!! link_to('mailto:' . $model->email,$model->email) !!}
                 </td>
                 <td class="text-center">
-                    {{ $record->is_admin?'X':'-'}}
+                    {{ $model->is_admin?'X':'-'}}
+                </td>
+                <td class="text-center">
+                    {{ $model->is_owner?'X':'-'}}
+                </td>
+                <td class="text-center">
+                    {{ $model->is_reviewer?'X':'-'}}
+                </td>
+                <td class="text-center">
+                    {{ $model->is_approver?'X':'-'}}
+                </td>
+                <td class="text-center">
+                    {{ $model->is_signer?'X':'-'}}
                 </td>
                 <td>
-                    {{ $record->StrRoles }}
+                    {{ $model->StrRoles }}
                 </td>
 
             </tr>
@@ -119,7 +163,7 @@ const VIEW_NAME    = 'admin.users.index';
         <tfoot>
         <tr>
             <td class="text-right">
-               <small>{{  $records->total() .' recs' }}</small>
+               <small>{{  $models->total() .' recs' }}</small>
             </td>
             <td colspan="10">
                 @if (App\Profile::OrderByLabel(VIEW_NAME) !='')
@@ -134,17 +178,6 @@ const VIEW_NAME    = 'admin.users.index';
         </tr>
         </tfoot>
     </table>
-    <div class="btn-group">
-        {!! link_to_route(CREATE_ROUTE,'New',[],
-                ['class' => 'btn btn-warning ']) !!}
-        @if (App\Profile::loginProfile()->show_trash == '0')
-            {!! link_to_route(SHOW_TRASH_ROUTE,'Show Trash',[INDEX_ROUTE],
-                              ['class'=>'btn btn-primary']) !!}
-        @else
-            {!! link_to_route(HIDE_TRASH_ROUTE,'Hide Trash',[INDEX_ROUTE],
-                              ['class'=>'btn btn-primary active'])!!}
-        @endif
-        {!! $records->render()!!}
-    </div>
+    @include ('partials.index_buttons')
     {!! Form::close() !!}
 @endsection

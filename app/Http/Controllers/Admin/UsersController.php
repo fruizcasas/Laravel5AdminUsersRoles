@@ -30,8 +30,31 @@ class UsersController extends Controller
     protected $edit_route = 'admin.users.edit';
 
 
-    protected $sort_fields = ['id', 'name', 'email','is_admin'];
-    protected $filter_fields = ['id', 'name', 'email','is_admin','roles'];
+    protected $sort_fields =
+        [
+            'id',
+            'name',
+            'display_name',
+            'email',
+            'is_admin',
+            'is_owner',
+            'is_reviewer',
+            'is_approver',
+            'is_signer',
+        ];
+    protected $filter_fields =
+        [
+            'id',
+            'name',
+            'display_name',
+            'email',
+            'is_admin',
+            'is_owner',
+            'is_reviewer',
+            'is_approver',
+            'is_signer',
+            'roles'
+        ];
 
     protected $show_trash = 'empty';
 
@@ -45,8 +68,7 @@ class UsersController extends Controller
 
     public function show_trash()
     {
-        if ($this->show_trash === 'empty')
-        {
+        if ($this->show_trash === 'empty') {
             $this->show_trash = Profile::loginProfile()->show_trash;
         }
         return $this->show_trash;
@@ -88,9 +110,9 @@ class UsersController extends Controller
     public function index()
     {
         $filter = $this->getFilter();
-        $records = $this->getModels($filter)->with('roles');
-        $records = $records->paginate(Profile::loginProfile()->per_page);
-        return view($this->index_view, compact('records', 'filter'));
+        $models = $this->getModels($filter)->with('roles');
+        $models = $models->paginate(Profile::loginProfile()->per_page);
+        return view($this->index_view, compact('models', 'filter'));
 
     }
 
@@ -263,9 +285,9 @@ class UsersController extends Controller
 
     public function getModels($filter = null)
     {
-        $records = User::sortable($this->index_view);
+        $models = User::sortable($this->index_view);
         if ($this->show_trash()) {
-            $records = $records->withTrashed();
+            $models = $models->withTrashed();
         }
         if (isset($filter)) {
             foreach ($this->filter_fields as $field) {
@@ -275,45 +297,46 @@ class UsersController extends Controller
                     foreach ($values as $value) {
                         if ($field == 'id') {
                             if ($first) {
-                                $records = $records->Where($field, $value);
+                                $models = $models->Where($field, $value);
                                 $first = false;
                             } else {
-                                $records = $records->orWhere($field, $value);
+                                $models = $models->orWhere($field, $value);
                             }
-                        } else if ($field == 'is_admin') {
-                                $value = (mb_strtolower($value) == 'x');
-                                if ($first) {
-                                    $records = $records->Where($field, $value);
-                                    $first = false;
-                                } else {
-                                    $records = $records->orWhere($field, $value);
-                                }
+                        } else if (in_array($field,
+                                            ['is_admin','is_owner','is_reviewer','is_approver','is_signer'])) {
+                            $value = (mb_strtolower($value) == 'x');
+                            if ($first) {
+                                $models = $models->Where($field, $value);
+                                $first = false;
+                            } else {
+                                $models = $models->orWhere($field, $value);
+                            }
                         } else if ($field == 'roles') {
                             $value = '%' . $value . '%';
                             if ($first) {
-                                $records = $records->whereHas('roles', function ($q) use($value) {
+                                $models = $models->whereHas('roles', function ($q) use ($value) {
                                     $q->where('name', 'like', $value);
                                 });
                                 $first = false;
                             } else {
-                                $records = $records->orWhereHas('roles', function ($q) use ($value) {
+                                $models = $models->orWhereHas('roles', function ($q) use ($value) {
                                     $q->where('name', 'like', $value);
                                 });
                             }
                         } else {
                             $value = '%' . $value . '%';
                             if ($first) {
-                                $records = $records->Where($field, 'LIKE', $value);
+                                $models = $models->Where($field, 'LIKE', $value);
                                 $first = false;
                             } else {
-                                $records = $records->orWhere($field, 'LIKE', $value);
+                                $models = $models->orWhere($field, 'LIKE', $value);
                             }
                         }
                     }
                 }
             }
         }
-        return $records;
+        return $models;
     }
 
     public function getModel($id)

@@ -13,7 +13,10 @@ class RoleSearchRequest extends Request {
 	 */
 	public function authorize()
 	{
-        return Auth::user()->is_admin;
+        if (Auth::check()) {
+            return Auth::user()->is_admin;
+        }
+        return false;
 	}
 
 	/**

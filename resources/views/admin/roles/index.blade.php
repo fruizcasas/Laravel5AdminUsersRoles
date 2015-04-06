@@ -22,19 +22,7 @@ const VIEW_NAME    = 'admin.roles.index';
 
     {!! Form::model($filter,['route' => FILTER_ROUTE,
                              'class'=>'form-inline','role'=>'form']) !!}
-        <div class="btn-group">
-        {!! link_to_route(CREATE_ROUTE,'New',[],
-                ['class' => 'btn btn-warning ']) !!}
-        @if (App\Profile::loginProfile()->show_trash == '0')
-            {!! link_to_route(SHOW_TRASH_ROUTE,'Show Trash',[INDEX_ROUTE],
-                              ['class'=>'btn btn-primary']) !!}
-        @else
-            {!! link_to_route(HIDE_TRASH_ROUTE,'Hide Trash',[INDEX_ROUTE],
-                              ['class'=>'btn btn-primary active'])!!}
-        @endif
-        {!! $models->render()!!}
-        </div>
-    <br/><br/>
+    @include ('partials.index_buttons')
 
     <table class="table table-striped table-bordered table-compact table-hover">
         <col style="width:6em;">
@@ -122,17 +110,6 @@ const VIEW_NAME    = 'admin.roles.index';
         </tr>
         </tfoot>
     </table>
-    <div class="btn-group">
-        {!! link_to_route(CREATE_ROUTE,'New',[],
-                ['class' => 'btn btn-warning ']) !!}
-        @if (App\Profile::loginProfile()->show_trash == '0')
-            {!! link_to_route(SHOW_TRASH_ROUTE,'Show Trash',[INDEX_ROUTE],
-                              ['class'=>'btn btn-primary']) !!}
-        @else
-            {!! link_to_route(HIDE_TRASH_ROUTE,'Hide Trash',[INDEX_ROUTE],
-                              ['class'=>'btn btn-primary active'])!!}
-        @endif
-        {!! $models->render()!!}
-    </div>
+    @include ('partials.index_buttons')
     {!! Form::close() !!}
 @endsection
