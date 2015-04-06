@@ -23,19 +23,13 @@ const VIEW_NAME    = 'admin.users.edit';
                 {!! Form::model($model,['method' =>'PUT',
                         'route'  => [UPDATE_ROUTE, $model->id],
                         'class'=>'form-horizontal']) !!}
-
                     @include('partials.edit_buttons')
-
                     @include('admin.users._form',['readonly' => false])
-
                     @include('partials.edit_buttons')
-
                 {!! Form::close() !!}
-                @if($errors->any())
-                    <div class="panel-footer">
-                        @include('partials.errors')
-                    </div>
-                @endif
+                <div class="panel-footer">
+                    @include('partials.errors')
+                </div>
             </div>
         </div>
     </div>

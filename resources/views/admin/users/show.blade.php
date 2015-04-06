@@ -16,7 +16,6 @@ const VIEW_NAME    = 'admin.users.show';
 
 
 @section('content')
-
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-primary">
@@ -26,7 +25,6 @@ const VIEW_NAME    = 'admin.users.show';
             </div>
         </div>
     </div>
-
 @endsection
 
 @section('scripts')

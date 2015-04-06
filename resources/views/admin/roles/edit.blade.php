@@ -15,7 +15,6 @@ const VIEW_NAME    = 'admin.roles.edit';
 @endsection
 
 
-
 @section('content')
 
     <div class="row">
