@@ -28,7 +28,7 @@ class UsersController extends Controller
     protected $create_route = 'admin.users.create';
     protected $show_route = 'admin.users.show';
     protected $edit_route = 'admin.users.edit';
-
+    protected $trash_route = 'admin.users.trash';
 
     protected $sort_fields =
         [
@@ -56,23 +56,37 @@ class UsersController extends Controller
             'roles'
         ];
 
-    protected $show_trash = 'empty';
-
-
     public function __construct()
     {
         $this->middleware('admin');
-        $this->show_trash = 'empty';
     }
 
 
     public function show_trash()
     {
-        if ($this->show_trash === 'empty') {
-            $this->show_trash = Profile::loginProfile()->show_trash;
-        }
-        return $this->show_trash;
+        return Session($this->index_view . '.trash', false);
     }
+
+    public function trash($value = false)
+    {
+        if (isset($value))
+        {
+            if ($value)
+            {
+                $value = true;
+            }
+            else
+            {
+                $value = false;
+            }
+        } else
+        {
+            $value = false;
+        }
+        Session( [ $this->index_view.'.trash' => $value] );
+        return redirect(route($this->index_route));
+    }
+
 
     public function filter(SearchRequest $request)
     {
@@ -81,6 +95,7 @@ class UsersController extends Controller
         }
         return redirect(route($this->index_route));
     }
+
 
     public function sort($column = null, $order = null)
     {
@@ -124,7 +139,7 @@ class UsersController extends Controller
     public function create()
     {
         $model = new User();
-        $roles = Role::lists('name', 'id');
+        $roles = Role::lists('acronym', 'id');
         $model_roles = [];
         return view($this->create_view, compact(['model', 'roles', 'model_roles']));
     }
@@ -139,7 +154,7 @@ class UsersController extends Controller
     {
         try {
             $model = $this->getModel($id);
-            $roles = Role::lists('name', 'id');
+            $roles = Role::lists('acronym', 'id');
             $model_roles = $model->roles->lists('id');
             return view($this->show_view, compact(['model', 'roles', 'model_roles']));
         } catch (Exception $e) {
@@ -157,7 +172,7 @@ class UsersController extends Controller
     public function edit($id)
     {
         $model = $this->getModel($id);
-        $roles = Role::lists('name', 'id');
+        $roles = Role::lists('acronym', 'id');
         $model_roles = $model->roles->lists('id');
         return view($this->edit_view, compact(['model', 'roles', 'model_roles']));
     }
@@ -315,12 +330,12 @@ class UsersController extends Controller
                             $value = '%' . $value . '%';
                             if ($first) {
                                 $models = $models->whereHas('roles', function ($q) use ($value) {
-                                    $q->where('name', 'like', $value);
+                                    $q->where('acronym', 'like', $value);
                                 });
                                 $first = false;
                             } else {
                                 $models = $models->orWhereHas('roles', function ($q) use ($value) {
-                                    $q->where('name', 'like', $value);
+                                    $q->where('acronym', 'like', $value);
                                 });
                             }
                         } else {

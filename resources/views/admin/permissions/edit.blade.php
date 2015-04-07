@@ -1,13 +1,14 @@
 <?php
-const VIEW_NAME    = 'admin.users.edit';
+const VIEW_NAME    = 'admin.permissions.edit';
 ?>
 
-@include('admin.users._routes')
+@include('admin.permissions._routes')
 
 @extends ('app')
 
 @section('headings')
-    <h1>Edit User: {{ $model->name }}</h1>
+    <h1>Edit Permission: {{ $model->name }}-{{ $model->display_name }}</h1>
+
 @endsection
 
 @section('breadcrumbs')
@@ -24,7 +25,7 @@ const VIEW_NAME    = 'admin.users.edit';
                         'route'  => [UPDATE_ROUTE, $model->id],
                         'class'=>'form-horizontal']) !!}
                     @include('partials.crud.edit_buttons')
-                    @include('admin.users._form',['readonly' => false])
+                    @include('admin.permissions._form',['readonly' => false])
                     @include('partials.crud.edit_buttons')
                 {!! Form::close() !!}
                 <div class="panel-footer">

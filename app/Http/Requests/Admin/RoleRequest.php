@@ -1,7 +1,6 @@
 <?php namespace App\Http\Requests\Admin;
 
 use App\Http\Requests\Request;
-
 use Auth;
 
 class RoleRequest extends Request {
@@ -27,10 +26,10 @@ class RoleRequest extends Request {
 	public function rules()
 	{
 		return [
-            'name' => 'required|min:5',
-            'display_name' => 'required|min:5',
+            'name' => 'required|min:3',
+            'display_name' => 'required|min:3',
             'description' => '',
-            'acronym' => 'required|min:3|max:5',
+            'acronym' => 'required|min:3|max:6',
 		];
 	}
 

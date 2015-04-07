@@ -40,4 +40,17 @@ class Role extends Model {
         return $this->belongsToMany('App\Models\Admin\User')->withTimestamps();
     }
 
+    public function permissions()
+    {
+        return $this->belongsToMany('App\Models\Admin\Permission')->withTimestamps();
+    }
+
+
+    public function getShortDescriptionAttribute()
+    {
+        return str_limit($this->description,30);
+
+    }
+
 }
+

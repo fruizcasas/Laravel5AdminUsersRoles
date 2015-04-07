@@ -9,6 +9,4 @@ class RoleUser extends Model {
 
     protected $dates = ['deleted_at'];
 
-	//
-
 }

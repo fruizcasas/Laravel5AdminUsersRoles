@@ -24,20 +24,17 @@
         {!! $errors->first('display_name', '<p class="help-block error-msg">:message</p>') !!}
     </div>
 </div>
-<!--- acronym Field --->
-<div class="form-group {{$errors->first('acronym','has-error')}}">
-    {!! Form::label('acronym', 'Acronym:',['class' =>'col-sm-2 control-label text-right']) !!}
-    <div class="col-sm-2">
-        {!! Form::text('acronym',$model->acronym, [
-            'class' => 'form-control input-sm']+[(isset($readonly)?($readonly?'readonly':''):''),
-            'placeholder' => 'acronym',
-            'maxlength' => '6',
-            'style' => 'width:100%;']) !!}
-        {!! $errors->first('acronym', '<p class="help-block error-msg">:message</p>') !!}
+<!--- roles Field --->
+<div class="form-group {{$errors->first('roles','has-error')}}">
+    {!! Form::label('roles', 'Roles:',['class' =>'col-sm-2 control-label text-right']) !!}
+    <div class="col-sm-10">
+        {!! Form::select('roles',$roles,$model_roles,
+                    ['id'=>'roles','class'=>'form-control input-sm',
+                    'multiple'=>'multiple','name'=>'roles[]',
+                    (isset($readonly)?($readonly?'disabled':''):'')])!!}
+        {!! $errors->first('roles', '<p class="help-block error-msg">:message</p>') !!}
     </div>
 </div>
-
-
 <!--- description Field --->
 <div class="form-group {{$errors->first('description','has-error')}}">
     {!! Form::label('description', 'Description:',['class' =>'col-sm-2 control-label text-right']) !!}

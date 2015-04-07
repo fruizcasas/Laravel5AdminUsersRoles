@@ -13,10 +13,13 @@
 @section('content')
     <ul>
         <li>
-            <a href="{{ action('Admin\UsersController@index') }}">Users</a>
+            <a href="{{ route('admin.users.index') }}">Users</a>
         </li>
         <li>
-            <a href="{{ action('Admin\RolesController@index') }}">Roles</a>
+            <a href="{{ route('admin.roles.index') }}">Roles</a>
+        </li>
+        <li>
+            <a href="{{ route('admin.permissions.index') }}">Permissions</a>
         </li>
     </ul>
 

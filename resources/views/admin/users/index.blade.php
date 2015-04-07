@@ -21,8 +21,8 @@ const VIEW_NAME    = 'admin.users.index';
 
     {!! Form::model($filter,['route' => FILTER_ROUTE,
                              'class'=>'form-inline','role'=>'form']) !!}
-        @include ('partials.index_buttons')
-        <br/>
+        @include ('partials.crud.index_buttons')
+
 
     <table class="table table-striped table-bordered table-compact table-hover">
         <col style="width:5.5em;">
@@ -178,6 +178,6 @@ const VIEW_NAME    = 'admin.users.index';
         </tr>
         </tfoot>
     </table>
-    @include ('partials.index_buttons')
+    @include ('partials.crud.index_buttons')
     {!! Form::close() !!}
 @endsection

@@ -31,6 +31,7 @@ class RoleSearchRequest extends Request {
             'name' => '',
             'display_name' => '',
             'acronym' =>'',
+            'description' =>''
 		];
 	}
 

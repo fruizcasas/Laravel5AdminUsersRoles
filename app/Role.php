@@ -1,12 +1,12 @@
 <?php namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Zizaco\Entrust\EntrustRole;
 
 /**
  * Class Role
  * @package App
  */
-class Role extends Model
+class Role extends EntrustRole
 {
 
     const ADMIN = 'admin';
@@ -14,29 +14,5 @@ class Role extends Model
     const REVIEWER = 'reviewer';
     const APPROVER = 'approver';
     const SIGNER = 'signer';
-
-
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
-    protected $table = 'roles';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['name'];
-
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function users()
-    {
-        return $this->belongsToMany('App\User')->withTimestamps();
-    }
 
 }

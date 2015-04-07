@@ -1,13 +1,13 @@
 <?php
-const VIEW_NAME    = 'admin.roles.create';
+const VIEW_NAME    = 'admin.permissions.create';
 ?>
 
-@include('admin.roles._routes')
+@include('admin.permissions._routes')
 
 @extends ('app')
 
 @section('headings')
-    <h1>Create Role</h1>
+    <h1>Create Permission</h1>
 @endsection
 
 @section('breadcrumbs')
@@ -22,7 +22,7 @@ const VIEW_NAME    = 'admin.roles.create';
         <div class="panel panel-primary">
             {!! Form::model($model,['route' =>STORE_ROUTE,'class'=>'form-horizontal']) !!}
                 @include('partials.crud.create_buttons')
-                @include('admin.roles._form',['readonly' => false])
+                @include('admin.permissions._form',['readonly' => false])
                 @include('partials.crud.create_buttons')
             {!! Form::close() !!}
             @if($errors->any())
@@ -37,5 +37,11 @@ const VIEW_NAME    = 'admin.roles.create';
 @endsection
 
 @section('scripts')
+<script src="{{ asset('/js/select2.min.js') }}"></script>
+<script type="text/javascript">
+    $('#roles').select2({
+        placeholder: 'Select a role'
+    });
+</script>
 @endsection
 

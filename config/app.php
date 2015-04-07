@@ -156,6 +156,9 @@ return [
         // ...
         'DaveJamesMiller\Breadcrumbs\ServiceProvider',
 
+        //...
+        'Zizaco\Entrust\EntrustServiceProvider'
+
 
         // See into AppServiceProvider to add in dev mode
 
@@ -215,6 +218,9 @@ return [
         // ...
         'Form' => 'Illuminate\Html\FormFacade',
         'Html' => 'Illuminate\Html\HtmlFacade',
+
+        // ...
+        'Entrust' => 'Zizaco\Entrust\EntrustFacade',
 
         // DEV MODE
 

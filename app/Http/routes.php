@@ -106,6 +106,12 @@ Route::group(
                 'uses' => 'UsersController@filter'
             ]);
 
+        Route::get('/users/trash/{trash?}',
+            [
+                'as' => 'admin.users.trash',
+                'uses' => 'UsersController@trash'
+            ]);
+
         Route::get('/users/sort/{column?}/{order?}',
             [
                 'as' => 'admin.users.sort',
@@ -138,6 +144,12 @@ Route::group(
                 'uses' => 'RolesController@filter'
             ]);
 
+        Route::get('/roles/trash/{trash?}',
+            [
+                'as' => 'admin.roles.trash',
+                'uses' => 'RolesController@trash'
+            ]);
+
         Route::get('/roles/sort/{column?}/{order?}',
             [
                 'as' => 'admin.roles.sort',
@@ -158,6 +170,43 @@ Route::group(
 
         Route::resource('/roles', 'RolesController');
 
+        /*
+        |--------------------------------------------------------------------------
+        | Admin/Permissions Routes
+        |--------------------------------------------------------------------------
+        */
+
+        Route::post('/permissions/filter',
+            [
+                'as' => 'admin.permissions.filter',
+                'uses' => 'PermissionsController@filter'
+            ]);
+
+        Route::get('/permissions/trash/{trash?}',
+            [
+                'as' => 'admin.permissions.trash',
+                'uses' => 'PermissionsController@trash'
+            ]);
+
+        Route::get('/permissions/sort/{column?}/{order?}',
+            [
+                'as' => 'admin.permissions.sort',
+                'uses' => 'PermissionsController@sort'
+            ]);
+
+        Route::delete('/permissions/{permissions}/forcedelete',
+            [
+                'as' => 'admin.permissions.forcedelete',
+                'uses' => 'PermissionsController@forcedelete'
+            ]);
+
+        Route::post('/permissions/{permissions}/restore',
+            [
+                'as' => 'admin.permissions.restore',
+                'uses' => 'PermissionsController@restore'
+            ]);
+
+        Route::resource('/permissions', 'PermissionsController');
 
     });
 

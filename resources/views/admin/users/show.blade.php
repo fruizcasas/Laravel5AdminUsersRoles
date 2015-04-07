@@ -19,9 +19,28 @@ const VIEW_NAME    = 'admin.users.show';
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-primary">
-                @include('partials.show_buttons')
+                @include('partials.crud.show_buttons')
                 @include('admin.users._form',['readonly' => true])
-                @include('partials.show_buttons')
+                @include('partials.crud.show_buttons')
+            </div>
+            <div class="col-sm-10 col-sm-offset-2">
+                <h3>Permissions</h3>
+                <table class="table table-hover table-bordered table-condensed">
+                <thead>
+                    <tr>
+                        <th>Permission</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($model->permissions() as $permission)
+                    <tr>
+                        <td>{{$permission->name}}</td>
+                        <td>{{$permission->display_name}}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+                </table>
             </div>
         </div>
     </div>

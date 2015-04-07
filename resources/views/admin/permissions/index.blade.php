@@ -1,18 +1,18 @@
 <?php
-const VIEW_NAME    = 'admin.roles.index';
+const VIEW_NAME    = 'admin.permissions.index';
 ?>
 
-@include('admin.roles._routes')
+@include('admin.permissions._routes')
 
 @extends ('app')
 
 @section('headings')
-    <h1>Roles</h1>
+    <h1>Permissions</h1>
 @endsection
 
 
 @section('breadcrumbs')
-    {!! Breadcrumbs::render('admin.roles') !!}
+    {!! Breadcrumbs::render('admin.permissions') !!}
 @endsection
 
 
@@ -37,8 +37,8 @@ const VIEW_NAME    = 'admin.roles.index';
             {!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'id')!!}</th>
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'name')!!}</th>
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'display_name')!!}</th>
-        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'acronym')!!}</th>
         <th>Description</th>
+        <th>Roles</th>
         </thead>
         <tbody>
         <tr>
@@ -64,17 +64,18 @@ const VIEW_NAME    = 'admin.roles.index';
                                                              'placeholder'=>'display name filter...']) !!}
             </td>
             <td>
-                <!--- filter acronym Field --->
-                {!! Form::text('acronym', null, ['class' => 'form-control input-sm',
-                                                         'style' => 'width:100%;',
-                                                             'placeholder'=>'acronym filter...']) !!}
-            </td>
-            <td>
                 <!--- filter description Field --->
                 {!! Form::text('description', null, ['class' => 'form-control input-sm',
                                                          'style' => 'width:100%;',
                                                              'placeholder'=>'description filter...']) !!}
             </td>
+            <td>
+                <!--- filter roles Field --->
+                {!! Form::text('roles', null, ['class' => 'form-control input-sm',
+                                                         'style' => 'width:100%;',
+                                                             'placeholder'=>'roles filter...']) !!}
+            </td>
+
         </tr>
 
         @foreach($models as $model)
@@ -93,12 +94,11 @@ const VIEW_NAME    = 'admin.roles.index';
                     {!! link_to_route(SHOW_ROUTE,$model->display_name,['id'=>$model->id]) !!}
                 </td>
                 <td>
-                    {!! link_to_route(SHOW_ROUTE,$model->acronym,['id'=>$model->id]) !!}
-                </td>
-                <td>
                     {{ $model->ShortDescription}}
                 </td>
-
+                <td>
+                    {{ $model->StrRoles }}
+                </td>
             </tr>
         @endforeach
         </tbody>

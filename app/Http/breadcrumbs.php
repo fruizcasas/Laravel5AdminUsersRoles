@@ -98,4 +98,39 @@ Breadcrumbs::register('admin.roles.show', function($breadcrumbs)
     $breadcrumbs->push('Show', route('admin.roles.show'));
 });
 
+/*
+|--------------------------------------------------------------------------
+| home / admin / permissions Breadcrumb
+|--------------------------------------------------------------------------
+*/
+
+// Home > Admin -> Permissions
+Breadcrumbs::register('admin.permissions', function($breadcrumbs)
+{
+    $breadcrumbs->parent('admin');
+    $breadcrumbs->push('Permissions', route('admin.permissions.index'));
+});
+
+// Home > Admin -> permissions -> Create
+Breadcrumbs::register('admin.permissions.create', function($breadcrumbs)
+{
+    $breadcrumbs->parent('admin.permissions');
+    $breadcrumbs->push('Create', route('admin.permissions.create'));
+});
+
+// Home > Admin -> permissions -> Edit
+Breadcrumbs::register('admin.permissions.edit', function($breadcrumbs)
+{
+    $breadcrumbs->parent('admin.permissions');
+    $breadcrumbs->push('Edit', route('admin.permissions.edit'));
+});
+
+// Home > Admin -> permissions -> Show
+Breadcrumbs::register('admin.permissions.show', function($breadcrumbs)
+{
+    $breadcrumbs->parent('admin.permissions');
+    $breadcrumbs->push('Show', route('admin.permissions.show'));
+});
+
+
 

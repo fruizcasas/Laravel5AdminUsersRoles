@@ -27,28 +27,42 @@ class RolesController extends Controller {
     protected $create_route = 'admin.roles.create';
     protected $show_route = 'admin.roles.show';
     protected $edit_route = 'admin.roles.edit';
+    protected $trash_route = 'admin.roles.trash';
 
 
     protected $sort_fields = ['id', 'name', 'display_name','acronym'];
-    protected $filter_fields = ['id', 'name', 'display_name','acronym'];
-
-    protected $show_trash = 'empty';
+    protected $filter_fields = ['id', 'name', 'display_name','acronym','description'];
 
 
     public function __construct()
     {
         $this->middleware('admin');
-        $this->show_trash = 'empty';
     }
 
 
     public function show_trash()
     {
-        if ($this->show_trash === 'empty')
+        return Session($this->index_view . '.trash', false);
+    }
+
+    public function trash($value = false)
+    {
+        if (isset($value))
         {
-            $this->show_trash = Profile::loginProfile()->show_trash;
+            if ($value)
+            {
+                $value = true;
+            }
+            else
+            {
+                $value = false;
+            }
+        } else
+        {
+            $value = false;
         }
-        return $this->show_trash;
+        Session( [ $this->index_view.'.trash' => $value] );
+        return redirect(route($this->index_route));
     }
 
     public function filter(SearchRequest $request)
@@ -243,9 +257,9 @@ class RolesController extends Controller {
 
     public function getModels($filter = null)
     {
-        $records = Role::sortable($this->index_view);
+        $models = Role::sortable($this->index_view);
         if ($this->show_trash()) {
-            $records = $records->withTrashed();
+            $models = $models->withTrashed();
         }
         if (isset($filter)) {
             foreach ($this->filter_fields as $field) {
@@ -255,25 +269,25 @@ class RolesController extends Controller {
                     foreach ($values as $value) {
                         if ($field == 'id') {
                             if ($first) {
-                                $records = $records->Where($field, $value);
+                                $models = $models->Where($field, $value);
                                 $first = false;
                             } else {
-                                $records = $records->orWhere($field, $value);
+                                $models = $models->orWhere($field, $value);
                             }
                         } else {
                             $value = '%' . $value . '%';
                             if ($first) {
-                                $records = $records->Where($field, 'LIKE', $value);
+                                $models = $models->Where($field, 'LIKE', $value);
                                 $first = false;
                             } else {
-                                $records = $records->orWhere($field, 'LIKE', $value);
+                                $models = $models->orWhere($field, 'LIKE', $value);
                             }
                         }
                     }
                 }
             }
         }
-        return $records;
+        return $models;
     }
 
     public function getModel($id)
@@ -291,3 +305,4 @@ class RolesController extends Controller {
     }
 
 }
+

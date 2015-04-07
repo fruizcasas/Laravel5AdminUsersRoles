@@ -24,6 +24,5 @@ const DELETE_ROUTE   = 'admin.roles.forcedelete';
 const FILTER_ROUTE = 'admin.roles.filter';
 const SORT_ROUTE   = 'admin.roles.sort';
 
-const HIDE_TRASH_ROUTE = 'profile.resettrash';
-const SHOW_TRASH_ROUTE = 'profile.settrash';
+const SHOW_TRASH_ROUTE = 'admin.roles.trash';
 

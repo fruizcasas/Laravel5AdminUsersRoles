@@ -8,7 +8,8 @@
 		"laravel/framework": "5.0.*",
 		"davejamesmiller/laravel-breadcrumbs": "~3.0",
 		"illuminate/html": "v5.0.0",
-		"laracasts/flash": "~1.3"
+		"laracasts/flash": "~1.3",
+		"zizaco/entrust": "dev-laravel-5"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0",

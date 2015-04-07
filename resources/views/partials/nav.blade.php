@@ -67,6 +67,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ route('admin.users.index') }}">Users</a></li>
                                 <li><a href="{{ route('admin.roles.index') }}">Roles</a></li>
+                                <li><a href="{{ route('admin.permissions.index') }}">Permissions</a></li>
                             </ul>
                         </li>
                     @endif

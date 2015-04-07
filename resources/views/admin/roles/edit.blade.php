@@ -23,9 +23,9 @@ const VIEW_NAME    = 'admin.roles.edit';
                 {!! Form::model($model,['method' =>'PUT',
                         'route'  => [UPDATE_ROUTE, $model->id],
                         'class'=>'form-horizontal']) !!}
-                    @include('partials.edit_buttons')
+                    @include('partials.crud.edit_buttons')
                     @include('admin.roles._form',['readonly' => false])
-                    @include('partials.edit_buttons')
+                    @include('partials.crud.edit_buttons')
                 {!! Form::close() !!}
                 <div class="panel-footer">
                     @include('partials.errors')

@@ -21,9 +21,9 @@ const VIEW_NAME    = 'admin.users.create';
     <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-primary">
             {!! Form::model($model,['route' =>STORE_ROUTE,'class'=>'form-horizontal']) !!}
-                @include('partials.create_buttons')
+                @include('partials.crud.create_buttons')
                 @include('admin.users._form',['readonly' => false])
-                @include('partials.create_buttons')
+                @include('partials.crud.create_buttons')
             {!! Form::close() !!}
             @if($errors->any())
             <div class="panel-footer">

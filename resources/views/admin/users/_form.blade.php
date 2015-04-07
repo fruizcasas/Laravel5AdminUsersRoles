@@ -97,7 +97,7 @@
                 {!! $errors->first('comments', '<p class="help-block error-msg">:message</p>') !!}
             </div>
         </div>
-        @include('partials.timestamps',['model'=>$model])
+        @include('partials.crud.timestamps',['model'=>$model])
     </div>
 </div>
 

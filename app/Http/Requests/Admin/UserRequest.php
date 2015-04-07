@@ -1,7 +1,6 @@
 <?php namespace App\Http\Requests\Admin;
 
 use App\Http\Requests\Request;
-
 use Auth;
 
 class UserRequest extends Request {
