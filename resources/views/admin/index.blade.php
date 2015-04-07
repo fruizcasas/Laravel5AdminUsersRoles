@@ -21,6 +21,9 @@
         <li>
             <a href="{{ route('admin.permissions.index') }}">Permissions</a>
         </li>
+        <li>
+            <a href="{{ route('admin.departments.index') }}">Departments</a>
+        </li>
     </ul>
 
 @endsection

@@ -5,58 +5,34 @@ use App\Http\Controllers\Controller;
 
 use App\Profile;
 use DB;
-use Auth;
 use Exception;
 
-use App\Http\Requests\Admin\UserRequest as ModelRequest;
+use App\Http\Requests\Admin\DepartmentRequest as ModelRequest;
 use App\Http\Requests\Admin\DeleteRequest as DeleteRequest;
-use App\Http\Requests\Admin\UserSearchRequest as SearchRequest;
-use App\Models\Admin\User;
-use App\Models\Admin\Role;
+use App\Http\Requests\Admin\DepartmentSearchRequest as SearchRequest;
 use App\Models\Admin\Department;
+use App\Models\Admin\User;
 
 
-class UsersController extends Controller
-{
+class DepartmentsController extends Controller {
 
-    protected $model_name = 'User';
-    protected $index_view = 'admin.users.index';
-    protected $create_view = 'admin.users.create';
-    protected $show_view = 'admin.users.show';
-    protected $edit_view = 'admin.users.edit';
 
-    protected $index_route = 'admin.users.index';
-    protected $create_route = 'admin.users.create';
-    protected $show_route = 'admin.users.show';
-    protected $edit_route = 'admin.users.edit';
-    protected $trash_route = 'admin.users.trash';
+    protected $model_name = 'Department';
+    protected $index_view = 'admin.departments.index';
+    protected $create_view = 'admin.departments.create';
+    protected $show_view = 'admin.departments.show';
+    protected $edit_view = 'admin.departments.edit';
 
-    protected $sort_fields =
-        [
-            'id',
-            'name',
-            'display_name',
-            'email',
-            'is_admin',
-            'is_owner',
-            'is_reviewer',
-            'is_approver',
-            'is_signer',
-        ];
-    protected $filter_fields =
-        [
-            'id',
-            'name',
-            'display_name',
-            'email',
-            'is_admin',
-            'is_owner',
-            'is_reviewer',
-            'is_approver',
-            'is_signer',
-            'roles',
-            'departments',
-        ];
+    protected $index_route = 'admin.departments.index';
+    protected $create_route = 'admin.departments.create';
+    protected $show_route = 'admin.departments.show';
+    protected $edit_route = 'admin.departments.edit';
+    protected $trash_route = 'admin.departments.trash';
+
+
+    protected $sort_fields = ['id', 'name', 'display_name'];
+    protected $filter_fields = ['id', 'name', 'display_name','description'];
+
 
     public function __construct()
     {
@@ -71,19 +47,23 @@ class UsersController extends Controller
 
     public function trash($value = false)
     {
-        if (isset($value)) {
-            if ($value) {
+        if (isset($value))
+        {
+            if ($value)
+            {
                 $value = true;
-            } else {
+            }
+            else
+            {
                 $value = false;
             }
-        } else {
+        } else
+        {
             $value = false;
         }
-        Session([$this->index_view . '.trash' => $value]);
+        Session( [ $this->index_view.'.trash' => $value] );
         return redirect(route($this->index_route));
     }
-
 
     public function filter(SearchRequest $request)
     {
@@ -92,7 +72,6 @@ class UsersController extends Controller
         }
         return redirect(route($this->index_route));
     }
-
 
     public function sort($column = null, $order = null)
     {
@@ -122,7 +101,7 @@ class UsersController extends Controller
     public function index()
     {
         $filter = $this->getFilter();
-        $models = $this->getModels($filter)->with('roles')->with('departments');
+        $models = $this->getModels($filter);
         $models = $models->paginate(Profile::loginProfile()->per_page);
         return view($this->index_view, compact('models', 'filter'));
 
@@ -135,19 +114,8 @@ class UsersController extends Controller
      */
     public function create()
     {
-        $model = new User();
-        $roles = Role::lists('acronym', 'id');
-        $model_roles = [];
-        $departments = Department::lists('name', 'id');
-        $model_departments = [];
-        return view($this->create_view,
-            compact([
-                'model',
-                'roles',
-                'model_roles',
-                'departments',
-                'model_departments',
-            ]));
+        $model = new Department();
+        return view($this->create_view, compact(['model']));
     }
 
     /**
@@ -160,18 +128,7 @@ class UsersController extends Controller
     {
         try {
             $model = $this->getModel($id);
-            $roles = Role::lists('acronym', 'id');
-            $model_roles = $model->roles->lists('id');
-            $departments = Department::lists('name', 'id');
-            $model_departments = $model->departments->lists('id');
-            return view($this->show_view,
-                compact([
-                    'model',
-                    'roles',
-                    'model_roles',
-                    'departments',
-                    'model_departments',
-                ]));
+            return view($this->show_view, compact('model'));
         } catch (Exception $e) {
             flash()->warning("$this->model_name $id not found");
             return $this->index();
@@ -187,18 +144,7 @@ class UsersController extends Controller
     public function edit($id)
     {
         $model = $this->getModel($id);
-        $roles = Role::lists('acronym', 'id');
-        $model_roles = $model->roles->lists('id');
-        $departments = Department::lists('name', 'id');
-        $model_departments = $model->departments->lists('id');
-        return view($this->edit_view,
-            compact([
-                'model',
-                'roles',
-                'model_roles',
-                'departments',
-                'model_departments',
-            ]));
+        return view($this->edit_view, compact(['model']));
     }
 
 
@@ -210,14 +156,10 @@ class UsersController extends Controller
     public function store(ModelRequest $request)
     {
         try {
-            $roles = $request->input('roles', []);
-            $departments = $request->input('departments', []);
-            $model = new User($request->all());
+            $model = new Department($request->all());
             try {
                 DB::beginTransaction();
                 $model->save();
-                $model->roles()->sync($roles);
-                $model->departments()->sync($departments);
                 DB::commit();
                 flash()->info("$this->model_name saved");
                 return redirect(route($this->show_route, [$model->id]));
@@ -227,11 +169,7 @@ class UsersController extends Controller
             }
         } catch (Exception $e) {
             $errors = [];
-            if ($e->getCode() == 23000) {
-                $errors['email'] = "Duplicate email";
-            } else {
-                flash()->error($e->getMessage());
-            }
+            flash()->error($e->getMessage());
             return $request->response($errors);
         }
     }
@@ -245,14 +183,10 @@ class UsersController extends Controller
     public function update($id, ModelRequest $request)
     {
         try {
-            $roles = $request->input('roles', []);
-            $departments = $request->input('departments', []);
             $model = $this->getModel($id);
             try {
                 DB::beginTransaction();
                 $model->update($request->all());
-                $model->roles()->sync($roles);
-                $model->departments()->sync($departments);
                 DB::commit();
                 flash()->info("$this->model_name saved");
                 return redirect(route($this->show_route, [$model->id]));
@@ -262,11 +196,7 @@ class UsersController extends Controller
             }
         } catch (Exception $e) {
             $errors = [];
-            if ($e->getCode() == 23000) {
-                $errors['email'] = "Duplicate email";
-            } else {
-                flash()->error($e->getMessage());
-            }
+            flash()->error($e->getMessage());
             return $request->response($errors);
         }
     }
@@ -314,8 +244,6 @@ class UsersController extends Controller
             $model = $this->getModel($id);
             DB::transaction(
                 function () use ($model) {
-                    $model->departments()->sync([]);
-                    $model->roles()->sync([]);
                     $model->forcedelete();
                 });
             flash()->info("$this->model_name removed");
@@ -329,7 +257,7 @@ class UsersController extends Controller
 
     public function getModels($filter = null)
     {
-        $models = User::sortable($this->index_view);
+        $models = Department::sortable($this->index_view);
         if ($this->show_trash()) {
             $models = $models->withTrashed();
         }
@@ -345,39 +273,6 @@ class UsersController extends Controller
                                 $first = false;
                             } else {
                                 $models = $models->orWhere($field, $value);
-                            }
-                        } else if (in_array($field,
-                            ['is_admin', 'is_owner', 'is_reviewer', 'is_approver', 'is_signer'])) {
-                            $value = (mb_strtolower($value) == 'x');
-                            if ($first) {
-                                $models = $models->Where($field, $value);
-                                $first = false;
-                            } else {
-                                $models = $models->orWhere($field, $value);
-                            }
-                        } else if ($field == 'roles') {
-                            $value = '%' . $value . '%';
-                            if ($first) {
-                                $models = $models->whereHas('roles', function ($q) use ($value) {
-                                    $q->where('acronym', 'like', $value);
-                                });
-                                $first = false;
-                            } else {
-                                $models = $models->orWhereHas('roles', function ($q) use ($value) {
-                                    $q->where('acronym', 'like', $value);
-                                });
-                            }
-                        } else if ($field == 'departments') {
-                            $value = '%' . $value . '%';
-                            if ($first) {
-                                $models = $models->whereHas('departments', function ($q) use ($value) {
-                                    $q->where('name', 'like', $value);
-                                });
-                                $first = false;
-                            } else {
-                                $models = $models->orWhereHas('departments', function ($q) use ($value) {
-                                    $q->where('name', 'like', $value);
-                                });
                             }
                         } else {
                             $value = '%' . $value . '%';
@@ -409,5 +304,5 @@ class UsersController extends Controller
         return $values;
     }
 
-
 }
+

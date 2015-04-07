@@ -1,3 +1,4 @@
+
 <div class="panel-body">
     <div class="form-horizontal">
 
@@ -84,6 +85,17 @@
                             'multiple'=>'multiple','name'=>'roles[]',
                             (isset($readonly)?($readonly?'disabled':''):'')])!!}
                 {!! $errors->first('roles', '<p class="help-block error-msg">:message</p>') !!}
+            </div>
+        </div>
+        <!--- departments Field --->
+        <div class="form-group {{$errors->first('departments','has-error')}}">
+            {!! Form::label('departments', 'Departments:',['class' =>'col-sm-2 control-label text-right']) !!}
+            <div class="col-sm-10">
+                {!! Form::select('departments',$departments,$model_departments,
+                            ['id'=>'departments','class'=>'form-control input-sm',
+                            'multiple'=>'multiple','name'=>'departments[]',
+                            (isset($readonly)?($readonly?'disabled':''):'')])!!}
+                {!! $errors->first('departments', '<p class="help-block error-msg">:message</p>') !!}
             </div>
         </div>
         <!--- comments Field --->

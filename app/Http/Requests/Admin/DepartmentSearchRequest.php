@@ -3,7 +3,8 @@
 use App\Http\Requests\Request;
 use Auth;
 
-class UserSearchRequest extends Request {
+
+class DepartmentSearchRequest extends Request {
 
 	/**
 	 * Determine if the user is authorized to make this request.
@@ -27,11 +28,9 @@ class UserSearchRequest extends Request {
 	{
 		return [
             'id' => '',
-			'name' => '',
-            'email' => '',
-            'is_admin' =>'',
-            'roles' => '',
-            'departments' => '',
+            'name' => '',
+            'display_name' => '',
+            'description' =>''
 		];
 	}
 

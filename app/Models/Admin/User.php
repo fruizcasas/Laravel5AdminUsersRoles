@@ -95,4 +95,25 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return implode(',',$trim_roles);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function departments()
+    {
+        return $this->belongsToMany('App\Models\Admin\Department')->withTimestamps();
+    }
+
+
+    public function getStrDepartmentsAttribute()
+    {
+        $departments = $this->departments()->lists('name');
+        $trim_departments = [];
+        foreach($departments as $department)
+        {
+            $trim_departments[] = str_limit($department,3,'');
+        }
+        return implode(',',$trim_departments);
+    }
+
+
 }

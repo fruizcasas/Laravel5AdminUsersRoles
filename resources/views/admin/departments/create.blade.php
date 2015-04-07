@@ -1,13 +1,13 @@
 <?php
-const VIEW_NAME    = 'admin.users.create';
+const VIEW_NAME    = 'admin.departments.create';
 ?>
 
-@include('admin.users._routes')
+@include('admin.departments._routes')
 
 @extends ('app')
 
 @section('headings')
-    <h1>Create User</h1>
+    <h1>Create Department</h1>
 @endsection
 
 @section('breadcrumbs')
@@ -22,7 +22,7 @@ const VIEW_NAME    = 'admin.users.create';
         <div class="panel panel-primary">
             {!! Form::model($model,['route' =>STORE_ROUTE,'class'=>'form-horizontal']) !!}
                 @include('partials.crud.create_buttons')
-                @include('admin.users._form',['readonly' => false])
+                @include('admin.departments._form',['readonly' => false])
                 @include('partials.crud.create_buttons')
             {!! Form::close() !!}
             @if($errors->any())
@@ -37,14 +37,5 @@ const VIEW_NAME    = 'admin.users.create';
 @endsection
 
 @section('scripts')
-<script src="{{ asset('/js/select2.min.js') }}"></script>
-<script type="text/javascript">
-    $('#roles').select2({
-        placeholder: 'Select a role'
-    });
-    $('#departments').select2({
-        placeholder: 'Select a department'
-    });
-</script>
 @endsection
 

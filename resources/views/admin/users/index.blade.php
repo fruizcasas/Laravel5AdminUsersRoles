@@ -52,6 +52,7 @@ const VIEW_NAME    = 'admin.users.index';
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_approver','app')!!}</th>
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_signer','sig')!!}</th>
         <th>Roles</th>
+        <th>Departments</th>
         </thead>
         <tbody>
         <tr>
@@ -118,6 +119,12 @@ const VIEW_NAME    = 'admin.users.index';
                                                          'style' => 'width:100%;',
                                                              'placeholder'=>'roles filter...']) !!}
             </td>
+            <td>
+                <!--- filter departments Field --->
+                {!! Form::text('departments', null, ['class' => 'form-control input-sm',
+                                                         'style' => 'width:100%;',
+                                                             'placeholder'=>'departments filter...']) !!}
+            </td>
         </tr>
 
         @foreach($models as $model)
@@ -155,6 +162,9 @@ const VIEW_NAME    = 'admin.users.index';
                 </td>
                 <td>
                     {{ $model->StrRoles }}
+                </td>
+                <td>
+                    {{ $model->StrDepartments }}
                 </td>
 
             </tr>

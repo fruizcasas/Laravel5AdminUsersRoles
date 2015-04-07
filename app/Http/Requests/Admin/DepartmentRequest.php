@@ -3,7 +3,7 @@
 use App\Http\Requests\Request;
 use Auth;
 
-class UserSearchRequest extends Request {
+class DepartmentRequest extends Request {
 
 	/**
 	 * Determine if the user is authorized to make this request.
@@ -16,7 +16,7 @@ class UserSearchRequest extends Request {
             return Auth::user()->is_admin;
         }
         return false;
-	}
+    }
 
 	/**
 	 * Get the validation rules that apply to the request.
@@ -26,12 +26,9 @@ class UserSearchRequest extends Request {
 	public function rules()
 	{
 		return [
-            'id' => '',
-			'name' => '',
-            'email' => '',
-            'is_admin' =>'',
-            'roles' => '',
-            'departments' => '',
+            'name' => 'required|min:2',
+            'display_name' => 'required|min:2',
+            'description' => '',
 		];
 	}
 

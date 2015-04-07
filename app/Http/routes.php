@@ -201,6 +201,45 @@ Route::group(
 
         Route::resource('/permissions', 'PermissionsController');
 
+        /*
+        |--------------------------------------------------------------------------
+        | Admin/Departments Routes
+        |--------------------------------------------------------------------------
+        */
+
+        Route::post('/departments/filter',
+            [
+                'as' => 'admin.departments.filter',
+                'uses' => 'DepartmentsController@filter'
+            ]);
+
+        Route::get('/departments/trash/{trash?}',
+            [
+                'as' => 'admin.departments.trash',
+                'uses' => 'DepartmentsController@trash'
+            ]);
+
+        Route::get('/departments/sort/{column?}/{order?}',
+            [
+                'as' => 'admin.departments.sort',
+                'uses' => 'DepartmentsController@sort'
+            ]);
+
+        Route::delete('/departments/{departments}/forcedelete',
+            [
+                'as' => 'admin.departments.forcedelete',
+                'uses' => 'DepartmentsController@forcedelete'
+            ]);
+
+        Route::post('/departments/{departments}/restore',
+            [
+                'as' => 'admin.departments.restore',
+                'uses' => 'DepartmentsController@restore'
+            ]);
+
+        Route::resource('/departments', 'DepartmentsController');
+
+
     });
 
 /*

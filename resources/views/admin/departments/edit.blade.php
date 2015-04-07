@@ -1,13 +1,13 @@
 <?php
-const VIEW_NAME    = 'admin.users.edit';
+const VIEW_NAME    = 'admin.departments.edit';
 ?>
 
-@include('admin.users._routes')
+@include('admin.departments._routes')
 
 @extends ('app')
 
 @section('headings')
-    <h1>Edit User: {{ $model->name }}</h1>
+    <h1>Edit Department: {{ $model->name }}</h1>
 @endsection
 
 @section('breadcrumbs')
@@ -24,7 +24,7 @@ const VIEW_NAME    = 'admin.users.edit';
                         'route'  => [UPDATE_ROUTE, $model->id],
                         'class'=>'form-horizontal']) !!}
                     @include('partials.crud.edit_buttons')
-                    @include('admin.users._form',['readonly' => false])
+                    @include('admin.departments._form',['readonly' => false])
                     @include('partials.crud.edit_buttons')
                 {!! Form::close() !!}
                 <div class="panel-footer">
@@ -37,15 +37,5 @@ const VIEW_NAME    = 'admin.users.edit';
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('/js/select2.min.js') }}"></script>
-    <script type="text/javascript">
-        $('#roles').select2({
-            placeholder: 'Select a role'
-        });
-        $('#departments').select2({
-            placeholder: 'Select a department'
-        });
-
-    </script>
 @endsection
 

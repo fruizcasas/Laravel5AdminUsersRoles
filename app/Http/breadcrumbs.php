@@ -132,5 +132,39 @@ Breadcrumbs::register('admin.permissions.show', function($breadcrumbs)
     $breadcrumbs->push('Show', route('admin.permissions.show'));
 });
 
+/*
+|--------------------------------------------------------------------------
+| home / admin / departments Breadcrumb
+|--------------------------------------------------------------------------
+*/
+
+// Home > Admin -> Departments
+Breadcrumbs::register('admin.departments', function($breadcrumbs)
+{
+    $breadcrumbs->parent('admin');
+    $breadcrumbs->push('Departments', route('admin.departments.index'));
+});
+
+// Home > Admin -> departments -> Create
+Breadcrumbs::register('admin.departments.create', function($breadcrumbs)
+{
+    $breadcrumbs->parent('admin.departments');
+    $breadcrumbs->push('Create', route('admin.departments.create'));
+});
+
+// Home > Admin -> departments -> Edit
+Breadcrumbs::register('admin.departments.edit', function($breadcrumbs)
+{
+    $breadcrumbs->parent('admin.departments');
+    $breadcrumbs->push('Edit', route('admin.departments.edit'));
+});
+
+// Home > Admin -> departments -> Show
+Breadcrumbs::register('admin.departments.show', function($breadcrumbs)
+{
+    $breadcrumbs->parent('admin.departments');
+    $breadcrumbs->push('Show', route('admin.departments.show'));
+});
+
 
 
