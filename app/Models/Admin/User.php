@@ -65,7 +65,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         {
             foreach($role->permissions as $permission)
             {
-                if (! $permissions->has($permission->id))
+                if (! $permissions->contains('id',$permission->id))
                 {
                     $permissions->add($permission);
                 }
