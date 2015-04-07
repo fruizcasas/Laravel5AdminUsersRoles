@@ -17,6 +17,7 @@
 						</div>
 					@endif
 
+                    <p class="text-center"><small>Free registration is limited for emails of our own domain. Sorry for inconveniences</small></p>
 					<form class="form-horizontal" role="form" method="POST" action="{{ url('/auth/register') }}">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <p style="text-align: center;">
@@ -29,6 +30,13 @@
 								<input type="text" class="form-control" name="name" value="{{ old('name') }}">
 							</div>
 						</div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Display Name</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="display_name" value="{{ old('display_name') }}">
+                            </div>
+                        </div>
 
 						<div class="form-group">
 							<label class="col-md-4 control-label">E-Mail Address</label>

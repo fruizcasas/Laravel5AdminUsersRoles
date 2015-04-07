@@ -29,24 +29,17 @@ Route::get('home',
 
 Route::get('profile',
     [
-        'as' => 'profile.edit', 'uses' => 'ProfileController@edit'
+        'as' => 'profile.edit',
+        'uses' => 'ProfileController@edit',
+        'middleware' => 'auth'
     ]);
 
 Route::put('profile',
     [
-        'as' => 'profile.update', 'uses' => 'ProfileController@update'
+        'as' => 'profile.update',
+        'uses' => 'ProfileController@update',
+        'middleware' => 'auth'
     ]);
-
-Route::get('profile/settrash/{route?}',
-    [
-        'as' => 'profile.settrash', 'uses' => 'ProfileController@setTrash'
-    ]);
-
-Route::get('profile/resettrash/{route?}',
-    [
-        'as' => 'profile.resettrash', 'uses' => 'ProfileController@resetTrash'
-    ]);
-
 
 /*
 |--------------------------------------------------------------------------

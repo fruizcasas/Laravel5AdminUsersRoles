@@ -13,7 +13,7 @@ class Profile extends Model
     /**
      *
      */
-    const DEFAULT_PER_PAGE= 15;
+    const DEFAULT_PER_PAGE = 15;
     /*
      *
      */
@@ -62,7 +62,7 @@ class Profile extends Model
      *
      * @var array
      */
-    protected $fillable = ['per_page', 'theme', 'show_trash','filters'];
+    protected $fillable = ['per_page', 'theme', 'show_trash', 'filters'];
 
 
     /**
@@ -80,12 +80,16 @@ class Profile extends Model
 
     static public function loginProfile()
     {
-        static $login_profile = null;
-        if (!isset($login_profile))
-        {
-            if (Auth::user()) {
-                $login_profile = Auth::user()->profile()->first();
+        if (Auth::user()) {
+            if (Auth::user()->profile()->count() == 0)
+            {
+                Auth::user()->profile()->save(Profile::defaultRecord());
             }
+            $login_profile = Auth::user()->profile->first();
+        }
+        else
+        {
+            $login_profile = Profile::defaultRecord();
         }
         return $login_profile;
     }
@@ -106,7 +110,7 @@ class Profile extends Model
     public function getOrderBy($view)
     {
         $order_by = unserialize($this->order_by);
-        $values=[];
+        $values = [];
         if (isset($order_by[$view])) {
             $values = $order_by[$view];
         }
@@ -117,7 +121,7 @@ class Profile extends Model
      * @param $view
      * @param $values
      */
-    public function setOrderBy($view,$values)
+    public function setOrderBy($view, $values)
     {
         $order_by = unserialize($this->order_by);
         $order_by[$view] = $values;
@@ -128,7 +132,7 @@ class Profile extends Model
     public static function OrderByLabel($view)
     {
         $result = [];
-        $order_by= Profile::loginProfile()->getOrderBy($view);
+        $order_by = Profile::loginProfile()->getOrderBy($view);
         if (is_array($order_by)) {
             foreach ($order_by as $column => $order) {
                 if ($column) {
@@ -136,7 +140,7 @@ class Profile extends Model
                 }
             }
         }
-        return implode(',',$result);
+        return implode(',', $result);
     }
 
 
@@ -145,11 +149,11 @@ class Profile extends Model
      * @param $column
      * @return string
      */
-    public function getOrderByValue($view,$column)
+    public function getOrderByValue($view, $column)
     {
-        $values=$this->getOrderBy($view);
+        $values = $this->getOrderBy($view);
         $value = "desc";
-        if (array_has($values,$column)) {
+        if (array_has($values, $column)) {
             $value = $values[$column];
         }
         return $value;
@@ -160,21 +164,17 @@ class Profile extends Model
      * @param $column
      * @param $value
      */
-    public function setOrderByValue($view,$column,$value)
+    public function setOrderByValue($view, $column, $value)
     {
-        if (!isset($value))
-        {
-            $value='desc';
-        }
-        else if ($value !== 'asc')
-        {
-            $value='desc';
+        if (!isset($value)) {
+            $value = 'desc';
+        } else if ($value !== 'asc') {
+            $value = 'desc';
         }
         $values = $this->getOrderBy($view);
         $values[$column] = $value;
-        $this->setOrderBy($view,$values);
+        $this->setOrderBy($view, $values);
     }
-
 
 
     /**
@@ -184,7 +184,7 @@ class Profile extends Model
     public function getFilters($view)
     {
         $filters = unserialize($this->filters);
-        $values=[];
+        $values = [];
         if (isset($filters[$view])) {
             $values = $filters[$view];
         }
@@ -195,7 +195,7 @@ class Profile extends Model
      * @param $view
      * @param $values
      */
-    public function setFilters($view,$values)
+    public function setFilters($view, $values)
     {
         $filters = unserialize($this->filters);
         $filters[$view] = $values;
@@ -207,14 +207,12 @@ class Profile extends Model
     {
         $filters = Profile::loginProfile()->getFilters($view);
         $values = [];
-        foreach ($filters as $key => $value)
-        {
-            if (trim($value) != '')
-            {
+        foreach ($filters as $key => $value) {
+            if (trim($value) != '') {
                 $values[] = "$key= $value";
             }
         }
-        return implode(' | ',$values);
+        return implode(' | ', $values);
     }
 
 
@@ -223,9 +221,9 @@ class Profile extends Model
      * @param $field
      * @return string
      */
-    public function getFilterValue($view,$field)
+    public function getFilterValue($view, $field)
     {
-        $values=$this->getFilters($view);
+        $values = $this->getFilters($view);
         $value = "";
         if (isset($values[$field])) {
             $value = $values[$field];
@@ -238,10 +236,10 @@ class Profile extends Model
      * @param $field
      * @param $value
      */
-    public function setFilterValue($view,$field,$value)
+    public function setFilterValue($view, $field, $value)
     {
         $values = $this->getFilters($view);
         $values[$field] = $value;
-        $this->setFilters($view,$values);
+        $this->setFilters($view, $values);
     }
 }
