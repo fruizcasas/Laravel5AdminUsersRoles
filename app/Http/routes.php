@@ -99,6 +99,12 @@ Route::group(
                 'uses' => 'UsersController@filter'
             ]);
 
+        Route::get('/users/excel',
+            [
+                'as' => 'admin.users.excel',
+                'uses' => 'UsersController@excel'
+            ]);
+
         Route::get('/users/trash/{trash?}',
             [
                 'as' => 'admin.users.trash',
@@ -136,6 +142,13 @@ Route::group(
                 'as' => 'admin.roles.filter',
                 'uses' => 'RolesController@filter'
             ]);
+
+        Route::get('/roles/excel',
+            [
+                'as' => 'admin.roles.excel',
+                'uses' => 'RolesController@excel'
+            ]);
+
 
         Route::get('/roles/trash/{trash?}',
             [
@@ -175,6 +188,14 @@ Route::group(
                 'uses' => 'PermissionsController@filter'
             ]);
 
+        Route::get('/permissions/excel',
+            [
+                'as' => 'admin.permissions.excel',
+                'uses' => 'PermissionsController@excel'
+            ]);
+
+
+
         Route::get('/permissions/trash/{trash?}',
             [
                 'as' => 'admin.permissions.trash',
@@ -211,6 +232,12 @@ Route::group(
             [
                 'as' => 'admin.departments.filter',
                 'uses' => 'DepartmentsController@filter'
+            ]);
+
+        Route::get('/departments/excel',
+            [
+                'as' => 'admin.departments.excel',
+                'uses' => 'DepartmentsController@excel'
             ]);
 
         Route::get('/departments/trash/{trash?}',

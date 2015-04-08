@@ -12,5 +12,8 @@
         @endif
     @endif
     {!! $models->render()!!}
+    &nbsp;
+    {!! link_to_route(EXCEL_ROUTE,'Excel',[],
+            ['class' => 'btn-sm btn-success ']) !!}
 </div>
 <br/>

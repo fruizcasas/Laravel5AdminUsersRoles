@@ -7,6 +7,7 @@ use App\Profile;
 use DB;
 use Auth;
 use Exception;
+use Excel;
 
 use App\Http\Requests\Admin\UserRequest as ModelRequest;
 use App\Http\Requests\Admin\DeleteRequest as DeleteRequest;
@@ -115,6 +116,22 @@ class UsersController extends Controller
         return redirect(route($this->index_route));
     }
 
+    public function excel($format = 'xlsx')
+    {
+        $filter = $this->getFilter();
+        $models = $this->getModels($filter);
+        Excel::create('Users', function ($excel) use ($models) {
+
+            // Our first sheet
+            $excel->sheet(str_plural($this->model_name),
+                function ($sheet) use ($models) {
+                    $sheet->fromModel($models->get())
+                        ->setAutoFilter();
+                });
+
+
+        })->export($format);
+    }
 
     /**
      * @return \Illuminate\View\View
@@ -127,6 +144,8 @@ class UsersController extends Controller
         return view($this->index_view, compact('models', 'filter'));
 
     }
+
+
 
     /**
      * Show the form for creating a new resource.

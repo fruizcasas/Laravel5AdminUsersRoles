@@ -18,6 +18,7 @@ const DELETE_ROUTE   = 'admin.permissions.forcedelete';
 
 const FILTER_ROUTE = 'admin.permissions.filter';
 const SORT_ROUTE   = 'admin.permissions.sort';
+const EXCEL_ROUTE   = 'admin.permissions.excel';
 
 const SHOW_TRASH_ROUTE = 'admin.permissions.trash';
 

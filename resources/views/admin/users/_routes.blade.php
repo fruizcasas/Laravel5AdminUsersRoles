@@ -23,6 +23,8 @@ const DELETE_ROUTE   = 'admin.users.forcedelete';
 
 const FILTER_ROUTE = 'admin.users.filter';
 const SORT_ROUTE   = 'admin.users.sort';
+const EXCEL_ROUTE   = 'admin.users.excel';
+
 
 const SHOW_TRASH_ROUTE = 'admin.users.trash';
 

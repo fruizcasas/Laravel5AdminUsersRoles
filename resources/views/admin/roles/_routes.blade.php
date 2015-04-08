@@ -23,6 +23,7 @@ const DELETE_ROUTE   = 'admin.roles.forcedelete';
 
 const FILTER_ROUTE = 'admin.roles.filter';
 const SORT_ROUTE   = 'admin.roles.sort';
+const EXCEL_ROUTE   = 'admin.roles.excel';
 
 const SHOW_TRASH_ROUTE = 'admin.roles.trash';
 

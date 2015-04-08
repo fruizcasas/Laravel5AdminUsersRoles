@@ -9,7 +9,9 @@
 		"davejamesmiller/laravel-breadcrumbs": "~3.0",
 		"illuminate/html": "v5.0.0",
 		"laracasts/flash": "~1.3",
-		"zizaco/entrust": "dev-laravel-5"
+		"zizaco/entrust": "dev-laravel-5",
+		"maatwebsite/excel": "~2.0.0",
+		"dompdf/dompdf": "0.6.*"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0",

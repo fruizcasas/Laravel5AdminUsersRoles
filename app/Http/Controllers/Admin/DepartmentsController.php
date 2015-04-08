@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Profile;
 use DB;
 use Exception;
+use Excel;
 
 use App\Http\Requests\Admin\DepartmentRequest as ModelRequest;
 use App\Http\Requests\Admin\DeleteRequest as DeleteRequest;
@@ -93,6 +94,24 @@ class DepartmentsController extends Controller {
 
         return redirect(route($this->index_route));
     }
+
+    public function excel($format = 'xlsx')
+    {
+        $filter = $this->getFilter();
+        $models = $this->getModels($filter);
+        Excel::create(str_plural($this->model_name), function ($excel) use ($models) {
+
+            // Our first sheet
+            $excel->sheet(str_plural($this->model_name),
+                function ($sheet) use ($models) {
+                    $sheet->fromModel($models->get())
+                        ->setAutoFilter();
+                });
+
+
+        })->export($format);
+    }
+
 
 
     /**

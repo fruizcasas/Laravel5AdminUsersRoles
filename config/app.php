@@ -157,7 +157,10 @@ return [
         'DaveJamesMiller\Breadcrumbs\ServiceProvider',
 
         //...
-        'Zizaco\Entrust\EntrustServiceProvider'
+        'Zizaco\Entrust\EntrustServiceProvider',
+
+        // ..
+        'Maatwebsite\Excel\ExcelServiceProvider',
 
 
         // See into AppServiceProvider to add in dev mode
@@ -221,6 +224,9 @@ return [
 
         // ...
         'Entrust' => 'Zizaco\Entrust\EntrustFacade',
+
+        // ...
+        'Excel' => 'Maatwebsite\Excel\Facades\Excel',
 
         // DEV MODE
 

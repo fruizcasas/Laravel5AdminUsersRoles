@@ -12,14 +12,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($model->permissions() as $permission)
+                @foreach($model->permissions as $permission)
                     <tr>
-                        <td>
-                        {!! link_to_route('admin.permissions.show',$permission->name,['id'=>$permission->id]) !!}
-                        </td>
-                        <td>
-                            {!! link_to_route('admin.permissions.show',$permission->display_name,['id'=>$permission->id]) !!}
-                        </td>
+                        <td>{{$permission->name}}</td>
+                        <td>{{$permission->display_name}}</td>
                     </tr>
                 @endforeach
                 </tbody>

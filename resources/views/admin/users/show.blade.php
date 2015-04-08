@@ -41,6 +41,7 @@ const VIEW_NAME = 'admin.users.show';
                         </div>
                     </div>
                 </div>
+
                 @include('partials.crud.show_buttons')
             </div>
         </div>

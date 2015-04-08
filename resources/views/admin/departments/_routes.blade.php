@@ -23,6 +23,8 @@ const DELETE_ROUTE   = 'admin.departments.forcedelete';
 
 const FILTER_ROUTE = 'admin.departments.filter';
 const SORT_ROUTE   = 'admin.departments.sort';
+const EXCEL_ROUTE   = 'admin.departments.excel';
+
 
 const SHOW_TRASH_ROUTE = 'admin.departments.trash';
 
