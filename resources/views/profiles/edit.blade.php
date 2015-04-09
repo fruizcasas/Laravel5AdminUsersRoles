@@ -11,7 +11,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-10 col-md-offset-1">
+    <div class="col-md-8 col-md-offset-2">
         {!! Form::model($model,['method' => 'PUT',
         'route'  => ['profile.update'],
         'class'=>'form-horizontal']) !!}
@@ -21,8 +21,8 @@
                 </div>
                 <div class="panel-footer">
                     <div class="form-group">
-                        <div class="col-sm-2 col-sm-offset-2">
-                            <button type="submit" class="btn btn-primary">Update</button>
+                        <div class="col-sm-3 col-sm-offset-4">
+                            <button type="submit" class="btn btn-warning">Update</button>
                         </div>
                     </div>
                     @include('partials.errors')

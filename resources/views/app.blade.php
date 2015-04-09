@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Aurinka</title>
 
+    <link rel="icon" href="{{asset('/images/laravel-icon.png')}}">
 
     <link href="{{ asset('/css/themes/' . (App\Profile::loginProfile()?App\Profile::loginProfile()->theme:App\Profile::DEFAULT_THEME) . '/bootstrap.css') }}"
           rel="stylesheet">

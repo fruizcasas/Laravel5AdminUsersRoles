@@ -10,6 +10,7 @@ use Exception;
 use Excel;
 
 use App\Http\Requests\Admin\UserRequest as ModelRequest;
+use App\Http\Requests\Admin\UserNewRequest as ModelNewRequest;
 use App\Http\Requests\Admin\DeleteRequest as DeleteRequest;
 use App\Http\Requests\Admin\UserSearchRequest as SearchRequest;
 use App\Models\Admin\User;
@@ -154,7 +155,14 @@ class UsersController extends Controller
      */
     public function create()
     {
-        $model = new User();
+        $model = new User(
+            [
+            'is_admin' => false,
+                'is_owner' => false,
+                'is_reviewer' => false,
+                'is_approver' => false,
+                'is_signed' => false,
+            ]);
         $roles = Role::lists('acronym', 'id');
         $model_roles = [];
         $departments = Department::lists('name', 'id');
@@ -226,7 +234,7 @@ class UsersController extends Controller
      *
      * @return Response
      */
-    public function store(ModelRequest $request)
+    public function store(ModelNewRequest $request)
     {
         try {
             $roles = $request->input('roles', []);

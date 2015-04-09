@@ -33,4 +33,5 @@ class ProfileController extends Controller
         flash()->info('The profile has been updated');
         return redirect(route('home'));
     }
+
 }

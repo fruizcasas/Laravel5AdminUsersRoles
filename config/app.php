@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------
@@ -161,6 +161,11 @@ return [
 
         // ..
         'Maatwebsite\Excel\ExcelServiceProvider',
+
+        // ...
+        'Spatie\Backup\BackupServiceProvider',
+
+
 
 
         // See into AppServiceProvider to add in dev mode
