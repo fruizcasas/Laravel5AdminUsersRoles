@@ -14,6 +14,7 @@ class CreateDepartmentUserPivotTable extends Migration {
 	{
 		Schema::create('department_user', function(Blueprint $table)
 		{
+            $table->increments('id');
 			$table->integer('department_id')->unsigned()->index();
 			$table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
 			$table->integer('user_id')->unsigned()->index();

@@ -1,6 +1,14 @@
+<?php
+
+// -----------------
+// View Name Prefix
+// -----------------
+$VN = 'views/profiles/_form.';
+?>
+
 <!--- per_page Field --->
 <div class="form-group {{$errors->first('per_page','has-error')}}">
-    {!! Form::label('per_page', 'Lines per page:',['class' =>'col-sm-4 control-label text-right']) !!}
+    {!! Form::label('per_page', trans($VN.'per_page'),['class' =>'col-sm-4 control-label text-right']) !!}
     <div class="col-sm-3">
         {!! Form::selectRange('per_page',5,100, $model->per_page,
                         ['class' => 'form-control input-sm','style' => 'width:100%;']) !!}
@@ -10,7 +18,7 @@
 
 <!--- show_trash Field --->
 <div class="form-group {{$errors->first('show_trash','has-error')}}">
-    {!! Form::label('show_trash', 'Show Trash:',['class' =>'col-sm-4 control-label text-right']) !!}
+    {!! Form::label('show_trash', trans($VN.'show_trash'),['class' =>'col-sm-4 control-label text-right']) !!}
     <div class="col-sm-2">
         {!! Form::select('show_trash',['1' =>'Yes','0' => 'No'], $model->show_trash,
                         ['class' => 'form-control input-sm','style' => 'width:100%;']) !!}
@@ -20,7 +28,7 @@
 
 <!--- theme Field --->
 <div class="form-group {{$errors->first('theme','has-error')}}">
-    {!! Form::label('theme', 'Theme:',['class' =>'col-sm-4 control-label text-right']) !!}
+    {!! Form::label('theme', trans($VN.'theme'),['class' =>'col-sm-4 control-label text-right']) !!}
     <div class="col-sm-3">
         {!! Form::select('theme',$themes, $model->theme,
                         ['class' => 'form-control input-sm','style' => 'width:100%;']) !!}

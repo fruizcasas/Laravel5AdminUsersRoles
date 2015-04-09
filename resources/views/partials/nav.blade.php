@@ -1,3 +1,20 @@
+<?php
+
+// -----------------
+// View Name Prefix
+// -----------------
+$VN = 'views/partials/nav.';
+
+// -----------------
+// Get Locale
+// -----------------
+
+$locale = Cookie::get('locale', Config::get('locale'));
+if (!in_array($locale, ['en', 'es'])) {
+    $locale = 'en';
+}
+?>
+
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -9,17 +26,18 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="/home">
-                L5 AUR
+                {{trans($VN.'app_name')}}
             </a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
             @if (Auth::check())
                 <ul class="nav navbar-nav">
                     @if(Auth::user()->is_owner)
                         <li class="dropdown">
                             <a href="{{ route('owner.index') }}" class="dropdown-toggle" data-toggle="dropdown"
-                               role="button" aria-expanded="false">Owner<span class="caret"></span></a>
+                               role="button" aria-expanded="false">{{trans($VN.'owner')}}<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ route('owner.index') }}">Item1</a></li>
                                 <li><a href="{{ route('owner.index') }}">Item2</a></li>
@@ -30,7 +48,7 @@
                     @if(Auth::user()->is_reviewer)
                         <li class="dropdown">
                             <a href="{{ route('reviewer.index') }}" class="dropdown-toggle" data-toggle="dropdown"
-                               role="button" aria-expanded="false">Reviewer<span class="caret"></span></a>
+                               role="button" aria-expanded="false">{{trans($VN.'reviewer')}}<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ route('reviewer.index') }}">Item1</a></li>
                                 <li><a href="{{ route('reviewer.index') }}">Item2</a></li>
@@ -41,7 +59,7 @@
                     @if(Auth::user()->is_approver)
                         <li class="dropdown">
                             <a href="{{ route('approver.index') }}" class="dropdown-toggle" data-toggle="dropdown"
-                               role="button" aria-expanded="false">Approver<span class="caret"></span></a>
+                               role="button" aria-expanded="false">{{trans($VN.'approver')}}<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ route('approver.index') }}">Item1</a></li>
                                 <li><a href="{{ route('approver.index') }}">Item2</a></li>
@@ -52,23 +70,11 @@
                     @if(Auth::user()->is_signer)
                         <li class="dropdown">
                             <a href="{{ route('signer.index') }}" class="dropdown-toggle" data-toggle="dropdown"
-                               role="button" aria-expanded="false">Signer<span class="caret"></span></a>
+                               role="button" aria-expanded="false">{{trans($VN.'signer')}}<span
+                                        class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ route('signer.index') }}">Item1</a></li>
                                 <li><a href="{{ route('signer.index') }}">Item2</a></li>
-                            </ul>
-                        </li>
-                    @endif
-
-                    @if(Auth::user()->is_admin)
-                        <li class="dropdown">
-                            <a href="{{ route('admin.index') }}" class="dropdown-toggle" data-toggle="dropdown"
-                               role="button" aria-expanded="false">Admin<span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ route('admin.users.index') }}">Users</a></li>
-                                <li><a href="{{ route('admin.roles.index') }}">Roles</a></li>
-                                <li><a href="{{ route('admin.permissions.index') }}">Permissions</a></li>
-                                <li><a href="{{ route('admin.departments.index') }}">Departments</a></li>
                             </ul>
                         </li>
                     @endif
@@ -79,20 +85,46 @@
 
             <ul class="nav navbar-nav navbar-right">
                 @if (Auth::guest())
-                    <li><a href="{{ url('/auth/login') }}">Login</a></li>
-                    <li><a href="{{ url('/auth/register') }}">Register</a></li>
+                    <li><a href="{{ url('/auth/login') }}">{{trans($VN.'login')}}</a></li>
+                    <li><a href="{{ url('/auth/register') }}">{{trans($VN.'register')}}</a></li>
                 @else
+                    @if(Auth::user()->is_admin)
+                        <li class="dropdown">
+                            <a href="{{ route('admin.index') }}" class="dropdown-toggle" data-toggle="dropdown"
+                               role="button" aria-expanded="false">{{trans($VN.'admin')}}<span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="{{ route('admin.users.index') }}">{{trans($VN.'users')}}</a></li>
+                                <li><a href="{{ route('admin.roles.index') }}">{{trans($VN.'roles')}}</a></li>
+                                <li><a href="{{ route('admin.permissions.index') }}">{{trans($VN.'permissions')}}</a></li>
+                                <li><a href="{{ route('admin.departments.index') }}">{{trans($VN.'departments')}}</a></li>
+                            </ul>
+                        </li>
+                    @endif
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                           aria-expanded="false">{{ (Auth::user()->display_name .'('. Auth::user()->name .')') }} <span class="caret"></span></a>
+                           aria-expanded="false">{{ (Auth::user()->display_name .'('. Auth::user()->name .')') }}
+                            <span
+                                    class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="{{ url('/auth/logout') }}">Logout</a></li>
+                            <li><a href="{{ url('/auth/logout') }}">{{trans($VN.'logout')}}</a></li>
                             <li class="divider"></li>
-                            <li><a href="{{ route('profile.edit') }}">Profile</a></li>
+                            <li><a href="{{ route('profile.edit') }}">{{trans($VN.'profile')}}</a></li>
                         </ul>
                     </li>
                 @endif
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                       role="button" aria-expanded="false"><img
+                                src="{{asset('/images/flags/'. $locale .'.png') }}"/></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="{{route('locale.setlocale',['en']) }}"><img
+                                        src="{{asset('/images/flags/en.png') }}"/> English</a></li>
+                        <li><a href="{{route('locale.setlocale',['es']) }}"><img
+                                        src="{{asset('/images/flags/es.png') }}"/> Español</a></li>
+                    </ul>
+                </li>
             </ul>
+
         </div>
     </div>
 </nav>

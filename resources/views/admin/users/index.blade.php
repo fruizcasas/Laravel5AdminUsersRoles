@@ -1,4 +1,9 @@
 <?php
+
+// -----------------
+// View Name Prefix
+// -----------------
+$VN = 'views/admin/users/index.';
 const VIEW_NAME    = 'admin.users.index';
 ?>
 
@@ -7,7 +12,7 @@ const VIEW_NAME    = 'admin.users.index';
 @extends ('app')
 
 @section('headings')
-    <h1>Users</h1>
+    <h1>{{trans($VN.'users')}}</h1>
 @endsection
 
 
@@ -37,27 +42,27 @@ const VIEW_NAME    = 'admin.users.index';
         <col style="width:3.5em;">
         <thead>
         <th>
-            {!! link_to_route(SORT_ROUTE,'Reset',[],
+            {!! link_to_route(SORT_ROUTE,trans($VN.'reset'),[],
                         ['class' => 'btn-sm btn-primary']) !!}
 
         </th>
         <th class="text-right">
-            {!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'id')!!}</th>
-        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'name')!!}</th>
-        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'display_name')!!}</th>
-        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'email')!!}</th>
-        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_admin','adm')!!}</th>
-        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_owner','own')!!}</th>
-        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_reviewer','rev')!!}</th>
-        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_approver','app')!!}</th>
-        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_signer','sig')!!}</th>
-        <th>Roles</th>
-        <th>Departments</th>
+            {!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'id',trans($VN.'id'))!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'name',trans($VN.'name'))!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'display_name',trans($VN.'display_name'))!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'email',trans($VN.'email'))!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_admin',trans($VN.'adm'))!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_owner',trans($VN.'own'))!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_reviewer',trans($VN.'rev'))!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_approver',trans($VN.'app'))!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_signer',trans($VN.'sig'))!!}</th>
+        <th>{{trans($VN.'roles')}}</th>
+        <th>{{trans($VN.'departments')}}</th>
         </thead>
         <tbody>
         <tr>
             <td>
-                {!! Form::submit('Filter',['class'=>"btn-sm btn-primary"]) !!}
+                {!! Form::submit(trans($VN.'filter'),['class'=>"btn-sm btn-primary"]) !!}
             </td>
             <td>
                 <!--- filter id Field --->
@@ -130,7 +135,7 @@ const VIEW_NAME    = 'admin.users.index';
         @foreach($models as $model)
             <tr>
                 <td>
-                    {!! link_to_route(SHOW_ROUTE,($model->trashed()?'Trash':'Show'),['id'=>$model->id],
+                    {!! link_to_route(SHOW_ROUTE,($model->trashed()?trans($VN.'trash'):trans($VN.'show')),['id'=>$model->id],
                                       ['class' => 'btn-sm '.($model->trashed()?'btn-danger':'btn-primary')]) !!}
                 </td>
                 <td class="text-right">
@@ -173,15 +178,14 @@ const VIEW_NAME    = 'admin.users.index';
         <tfoot>
         <tr>
             <td class="text-right">
-               <small>{{  $models->total() .' recs' }}</small>
+               <small>{{  $models->total() .' rec' }}</small>
             </td>
             <td colspan="10">
                 @if (App\Profile::OrderByLabel(VIEW_NAME) !='')
-                    <small>Order by: <strong>{{ App\Profile::OrderByLabel(VIEW_NAME) }}</strong></small>
-                @endif
+                    <small>{{trans($VN.'order_by')}}<strong>{{ App\Profile::OrderByLabel(VIEW_NAME) }}</strong></small>                @endif
                 &nbsp;
                 @if (App\Profile::FilterByLabel(VIEW_NAME) !='')
-                    <small>Filter by: <strong>{{ App\Profile::FilterByLabel(VIEW_NAME) }}</strong></small>
+                    <small>{{trans($VN.'filter_by')}} <strong>{{ App\Profile::FilterByLabel(VIEW_NAME) }}</strong></small>
                 @endif
 
             </td>

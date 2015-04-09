@@ -1,7 +1,6 @@
 <?php namespace App\Http\Middleware;
 
 use Closure;
-use Session;
 use App;
 use Config;
 
@@ -16,7 +15,8 @@ class Locale {
      */
     public function handle($request, Closure $next)
     {
-        $locale = Session::get('locale', Config::get('app.locale'));
+
+        $locale = $request->cookie('locale', Config::get('app.locale'));
         App::setLocale($locale);
 
         return $next($request);

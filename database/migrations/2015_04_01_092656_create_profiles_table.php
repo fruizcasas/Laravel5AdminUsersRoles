@@ -14,11 +14,14 @@ class CreateProfilesTable extends Migration {
 	{
 		Schema::create('profiles', function(Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->integer('per_page');
-            $table->string('theme');
-            $table->text('filters');
+            $table->integer('user_id')->unsigned()->index();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('per_page')->nullable();
+            $table->boolean('show_trash')->nullable();;
+            $table->string('theme')->nullable();
+            $table->text('filters')->nullable();
+            $table->text('order_by')->nullable();;
+            $table->softDeletes();
             $table->timestamps();
         });
 	}

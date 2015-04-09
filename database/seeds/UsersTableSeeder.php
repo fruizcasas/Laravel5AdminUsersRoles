@@ -3,7 +3,6 @@
 use Illuminate\Database\Seeder;
 
 use App\Models\Admin\User;
-use App\Models\Admin\Role;
 
 
 class UsersTableSeeder extends Seeder
@@ -11,19 +10,15 @@ class UsersTableSeeder extends Seeder
 
     public function run()
     {
-        $role = Role::firstOrCreate(['name' => 'admin']);
-
-        $user = User::where('email', 'fruiz@gmail.com')->first();
+        $user = User::where('email', 'admin@admin.com')->first();
         if (!$user) {
             $user = User::Create([
-                'name' => 'Fernando RUIZ CASAS (Admin)',
-                'email' => 'fruiz@gmail.com',
-                'password' => bcrypt('password'),
+                'name' => 'administrator',
+                'email' => 'admin@admin.com',
+                'password' => bcrypt('admin'),
                 'is_admin' => true,
             ]);
         }
-
-        $role->users()->sync([$user->id]);
     }
 
 }

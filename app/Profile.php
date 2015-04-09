@@ -75,6 +75,7 @@ class Profile extends Model
         $profile['theme'] = Profile::DEFAULT_THEME;
         $profile['show_trash'] = Profile::DEFAULT_SHOW_TRASH;
         $profile['filters'] = '';
+        $profile['order_by'] = '';
         return $profile;
     }
 

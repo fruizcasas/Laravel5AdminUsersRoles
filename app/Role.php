@@ -10,9 +10,9 @@ class Role extends EntrustRole
 {
 
     const ADMIN = 'admin';
-    const OWNER = 'owner';
+    const AUTHOR = 'author';
     const REVIEWER = 'reviewer';
     const APPROVER = 'approver';
-    const SIGNER = 'signer';
+    const PUBLISHER = 'publisher';
 
 }

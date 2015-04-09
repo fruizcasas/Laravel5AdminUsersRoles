@@ -1,7 +1,15 @@
+<?php
+
+// -----------------
+// View Name Prefix
+// -----------------
+$VN = 'views/profiles/edit.';
+?>
+
 @extends('app')
 
 @section('headings')
-    <h1>Profile: {{ App\Profile::loginProfile()->user->name }}</h1>
+    <h1>{{trans($VN.'profile')}} {{ App\Profile::loginProfile()->user->name }}</h1>
 @endsection
 
 
@@ -22,7 +30,7 @@
                 <div class="panel-footer">
                     <div class="form-group">
                         <div class="col-sm-3 col-sm-offset-4">
-                            <button type="submit" class="btn btn-warning">Update</button>
+                            <button type="submit" class="btn btn-warning">{{trans($VN.'update')}}</button>
                         </div>
                     </div>
                     @include('partials.errors')

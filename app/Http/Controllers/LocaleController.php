@@ -4,7 +4,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use App;
+use URL;
+use Cookie;
 
 class LocaleController extends Controller {
 
@@ -14,7 +15,7 @@ class LocaleController extends Controller {
         {
             $locale = 'en';
         }
-        App::setlocale(session('locale',$locale));
-        return redirect(route('home'));
+        Cookie::queue('locale', $locale);
+        return redirect(url(URL::previous()));
     }
 }
