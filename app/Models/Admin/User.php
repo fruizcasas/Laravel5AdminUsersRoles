@@ -35,15 +35,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 */
 	protected $fillable = [
         'name',
+        'acronym',
         'email',
-        'password',
-        'is_admin',
         'display_name',
+        'password',
         'comments',
-        'is_owner',
+        'is_admin',
+        'is_author',
         'is_reviewer',
         'is_approver',
-        'is_signer',
+        'is_publisher',
     ];
 
 	/**
@@ -106,7 +107,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getStrDepartmentsAttribute()
     {
-        $departments = $this->departments()->lists('name');
+        $departments = $this->departments()->lists('acronym');
         $trim_departments = [];
         foreach($departments as $department)
         {

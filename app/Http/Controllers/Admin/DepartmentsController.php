@@ -31,8 +31,8 @@ class DepartmentsController extends Controller {
     protected $trash_route = 'admin.departments.trash';
 
 
-    protected $sort_fields = ['id', 'name', 'display_name'];
-    protected $filter_fields = ['id', 'name', 'display_name','description'];
+    protected $sort_fields = ['id', 'name','acronym', 'display_name'];
+    protected $filter_fields = ['id', 'name', 'acronym', 'display_name','description'];
 
 
     public function __construct()

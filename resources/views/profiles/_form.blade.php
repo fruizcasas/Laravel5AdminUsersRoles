@@ -9,7 +9,7 @@ $VN = 'views/profiles/_form.';
 <!--- per_page Field --->
 <div class="form-group {{$errors->first('per_page','has-error')}}">
     {!! Form::label('per_page', trans($VN.'per_page'),['class' =>'col-sm-4 control-label text-right']) !!}
-    <div class="col-sm-3">
+    <div class="col-sm-2">
         {!! Form::selectRange('per_page',5,100, $model->per_page,
                         ['class' => 'form-control input-sm','style' => 'width:100%;']) !!}
         {!! $errors->first('per_page', '<p class="help-block error-msg">:message</p>') !!}

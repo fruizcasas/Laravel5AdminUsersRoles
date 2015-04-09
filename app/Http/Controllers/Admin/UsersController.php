@@ -37,25 +37,27 @@ class UsersController extends Controller
         [
             'id',
             'name',
+            'acronym',
             'display_name',
             'email',
             'is_admin',
-            'is_owner',
+            'is_author',
             'is_reviewer',
             'is_approver',
-            'is_signer',
+            'is_publisher',
         ];
     protected $filter_fields =
         [
             'id',
             'name',
+            'acronym',
             'display_name',
             'email',
             'is_admin',
-            'is_owner',
+            'is_author',
             'is_reviewer',
             'is_approver',
-            'is_signer',
+            'is_publisher',
             'roles',
             'departments',
         ];
@@ -157,11 +159,11 @@ class UsersController extends Controller
     {
         $model = new User(
             [
-            'is_admin' => false,
-                'is_owner' => false,
+                'is_admin' => false,
+                'is_author' => false,
                 'is_reviewer' => false,
                 'is_approver' => false,
-                'is_signed' => false,
+                'is_publisher' => false,
             ]);
         $roles = Role::lists('acronym', 'id');
         $model_roles = [];
@@ -374,7 +376,7 @@ class UsersController extends Controller
                                 $models = $models->orWhere($field, $value);
                             }
                         } else if (in_array($field,
-                            ['is_admin', 'is_owner', 'is_reviewer', 'is_approver', 'is_signer'])) {
+                            ['is_admin', 'is_author', 'is_reviewer', 'is_approver', 'is_publisher'])) {
                             $value = (mb_strtolower($value) == 'x');
                             if ($first) {
                                 $models = $models->Where($field, $value);

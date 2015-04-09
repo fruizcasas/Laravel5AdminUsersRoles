@@ -25,12 +25,14 @@ const VIEW_NAME    = 'admin.permissions.edit';
                         'route'  => [UPDATE_ROUTE, $model->id],
                         'class'=>'form-horizontal']) !!}
                     @include('partials.crud.edit_buttons')
+                @if($errors->any())
+                    <div class="panel-footer">
+                        @include('partials.errors')
+                    </div>
+                @endif
                     @include('admin.permissions._form',['readonly' => false])
-                    @include('partials.crud.edit_buttons')
+                    @include('partials.crud.bottom_buttons')
                 {!! Form::close() !!}
-                <div class="panel-footer">
-                    @include('partials.errors')
-                </div>
             </div>
         </div>
     </div>

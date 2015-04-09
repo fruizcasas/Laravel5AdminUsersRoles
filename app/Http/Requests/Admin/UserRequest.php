@@ -27,6 +27,7 @@ class UserRequest extends Request {
 	{
 		return [
 			'name' => 'required|min:5|max:10',
+            'acronym' => 'required|min:3|max:6',
             'email' => 'required|email',
             'display_name' => 'required',
 		];

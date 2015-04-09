@@ -56,13 +56,34 @@ Route::put('profile',
 
 /*
 |--------------------------------------------------------------------------
+| Profile Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::get('password',
+    [
+        'as' => 'password.edit',
+        'uses' => 'PasswordController@edit',
+        'middleware' => 'auth'
+    ]);
+
+Route::put('password',
+    [
+        'as' => 'password.update',
+        'uses' => 'PasswordController@update',
+        'middleware' => 'auth'
+    ]);
+
+
+/*
+|--------------------------------------------------------------------------
 | Main Routes
 |--------------------------------------------------------------------------
 */
 
-Route::get('owner',
+Route::get('author',
     [
-        'as' => 'owner.index', 'uses' => 'OwnerController@index'
+        'as' => 'author.index', 'uses' => 'AuthorController@index'
     ]);
 
 Route::get('reviewer',
@@ -77,7 +98,7 @@ Route::get('approver',
 
 Route::get('signer',
     [
-        'as' => 'signer.index', 'uses' => 'SignerController@index'
+        'as' => 'publisher.index', 'uses' => 'PublisherController@index'
     ]);
 
 /*

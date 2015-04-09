@@ -35,6 +35,7 @@ const VIEW_NAME    = 'admin.users.index';
         <col style="width:5em;">
         <col >
         <col >
+        <col >
         <col style="width:3.5em;">
         <col style="width:3.5em;">
         <col style="width:3.5em;">
@@ -49,13 +50,14 @@ const VIEW_NAME    = 'admin.users.index';
         <th class="text-right">
             {!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'id',trans($VN.'id'))!!}</th>
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'name',trans($VN.'name'))!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'acronym',trans($VN.'acronym'))!!}</th>
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'display_name',trans($VN.'display_name'))!!}</th>
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'email',trans($VN.'email'))!!}</th>
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_admin',trans($VN.'adm'))!!}</th>
-        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_owner',trans($VN.'own'))!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_author',trans($VN.'aut'))!!}</th>
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_reviewer',trans($VN.'rev'))!!}</th>
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_approver',trans($VN.'app'))!!}</th>
-        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_signer',trans($VN.'sig'))!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_publisher',trans($VN.'pub'))!!}</th>
         <th>{{trans($VN.'roles')}}</th>
         <th>{{trans($VN.'departments')}}</th>
         </thead>
@@ -77,6 +79,12 @@ const VIEW_NAME    = 'admin.users.index';
                                                              'placeholder'=>'name filter...']) !!}
             </td>
             <td>
+                <!--- filter acronym Field --->
+                {!! Form::text('acronym', null, ['class' => 'form-control input-sm',
+                                                         'style' => 'width:100%;',
+                                                             'placeholder'=>'acronym filter...']) !!}
+            </td>
+            <td>
                 <!--- filter display_name Field --->
                 {!! Form::text('display_name', null, ['class' => 'form-control input-sm',
                 'style' => 'width:100%;',
@@ -95,10 +103,10 @@ const VIEW_NAME    = 'admin.users.index';
                                                              'placeholder'=>'adm filter...']) !!}
             </td>
             <td>
-                <!--- filter is_owner Field --->
-                {!! Form::text('is_owner', null, ['class' => 'form-control input-sm',
+                <!--- filter is_author Field --->
+                {!! Form::text('is_author', null, ['class' => 'form-control input-sm',
                 'style' => 'width:100%;',
-                'placeholder'=>'own filter...']) !!}
+                'placeholder'=>'aut filter...']) !!}
             </td>
             <td>
                 <!--- filter is_reviewer Field --->
@@ -113,10 +121,10 @@ const VIEW_NAME    = 'admin.users.index';
                 'placeholder'=>'app filter...']) !!}
             </td>
             <td>
-                <!--- filter is_signer Field --->
-                {!! Form::text('is_signer', null, ['class' => 'form-control input-sm',
+                <!--- filter is_publisher Field --->
+                {!! Form::text('is_publisher', null, ['class' => 'form-control input-sm',
                 'style' => 'width:100%;',
-                'placeholder'=>'sig filter...']) !!}
+                'placeholder'=>'pub filter...']) !!}
             </td>
             <td>
                 <!--- filter roles Field --->
@@ -145,6 +153,9 @@ const VIEW_NAME    = 'admin.users.index';
                     {!! link_to_route(SHOW_ROUTE,$model->name,['id'=>$model->id]) !!}
                 </td>
                 <td>
+                    {!! link_to_route(SHOW_ROUTE,$model->acronym,['id'=>$model->id]) !!}
+                </td>
+                <td>
                     {!! link_to_route(SHOW_ROUTE,$model->display_name,['id'=>$model->id]) !!}
                 </td>
                 <td>
@@ -154,7 +165,7 @@ const VIEW_NAME    = 'admin.users.index';
                     {{ $model->is_admin?'X':'-'}}
                 </td>
                 <td class="text-center">
-                    {{ $model->is_owner?'X':'-'}}
+                    {{ $model->is_author?'X':'-'}}
                 </td>
                 <td class="text-center">
                     {{ $model->is_reviewer?'X':'-'}}
@@ -163,7 +174,7 @@ const VIEW_NAME    = 'admin.users.index';
                     {{ $model->is_approver?'X':'-'}}
                 </td>
                 <td class="text-center">
-                    {{ $model->is_signer?'X':'-'}}
+                    {{ $model->is_publisher?'X':'-'}}
                 </td>
                 <td>
                     {{ $model->StrRoles }}

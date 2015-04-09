@@ -1,5 +1,5 @@
 <?php
-const VIEW_NAME    = 'admin.permissions.create';
+const VIEW_NAME = 'admin.permissions.create';
 ?>
 
 @include('admin.permissions._routes')
@@ -21,15 +21,15 @@ const VIEW_NAME    = 'admin.permissions.create';
     <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-primary">
             {!! Form::model($model,['route' =>STORE_ROUTE,'class'=>'form-horizontal']) !!}
-                @include('partials.crud.create_buttons')
-                @include('admin.permissions._form',['readonly' => false])
-                @include('partials.crud.create_buttons')
-            {!! Form::close() !!}
+            @include('partials.crud.create_buttons')
             @if($errors->any())
-            <div class="panel-footer">
-                @include('partials.errors')
-            </div>
+                <div class="panel-footer">
+                    @include('partials.errors')
+                </div>
             @endif
+            @include('admin.permissions._form',['readonly' => false])
+            @include('partials.crud.bottom_buttons')
+            {!! Form::close() !!}
         </div>
     </div>
 </div>
@@ -37,11 +37,11 @@ const VIEW_NAME    = 'admin.permissions.create';
 @endsection
 
 @section('scripts')
-<script src="{{ asset('/js/select2.min.js') }}"></script>
-<script type="text/javascript">
-    $('#roles').select2({
-        placeholder: 'Select a role'
-    });
-</script>
+    <script src="{{ asset('/js/select2.min.js') }}"></script>
+    <script type="text/javascript">
+        $('#roles').select2({
+            placeholder: 'Select a role'
+        });
+    </script>
 @endsection
 

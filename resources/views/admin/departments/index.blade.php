@@ -36,6 +36,7 @@ const VIEW_NAME    = 'admin.departments.index';
         <th class="text-right">
             {!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'id')!!}</th>
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'name')!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'acronym')!!}</th>
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'display_name')!!}</th>
         <th>Description</th>
         </thead>
@@ -55,6 +56,12 @@ const VIEW_NAME    = 'admin.departments.index';
                 {!! Form::text('name', null, ['class' => 'form-control input-sm',
                                                          'style' => 'width:100%;',
                                                              'placeholder'=>'name filter...']) !!}
+            </td>
+            <td>
+                <!--- filter acronym Field --->
+                {!! Form::text('acronym', null, ['class' => 'form-control input-sm',
+                                                         'style' => 'width:100%;',
+                                                             'placeholder'=>'acronym filter...']) !!}
             </td>
             <td>
                 <!--- filter display_name Field --->
@@ -81,6 +88,9 @@ const VIEW_NAME    = 'admin.departments.index';
                 </td>
                 <td>
                     {!! link_to_route(SHOW_ROUTE,$model->name,['id'=>$model->id]) !!}
+                </td>
+                <td>
+                    {!! link_to_route(SHOW_ROUTE,$model->acronym,['id'=>$model->id]) !!}
                 </td>
                 <td>
                     {!! link_to_route(SHOW_ROUTE,$model->display_name,['id'=>$model->id]) !!}

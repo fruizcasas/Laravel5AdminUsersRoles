@@ -47,7 +47,7 @@ const VIEW_NAME    = 'admin.roles.show';
                     </div>
                 </div>
 
-             @include('partials.crud.show_buttons')
+             @include('partials.crud.bottom_buttons')
             </div>
         </div>
     </div>

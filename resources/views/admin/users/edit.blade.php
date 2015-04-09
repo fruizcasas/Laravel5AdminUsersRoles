@@ -1,5 +1,5 @@
 <?php
-const VIEW_NAME    = 'admin.users.edit';
+const VIEW_NAME = 'admin.users.edit';
 ?>
 
 @include('admin.users._routes')
@@ -23,13 +23,15 @@ const VIEW_NAME    = 'admin.users.edit';
                 {!! Form::model($model,['method' =>'PUT',
                         'route'  => [UPDATE_ROUTE, $model->id],
                         'class'=>'form-horizontal']) !!}
-                    @include('partials.crud.edit_buttons')
-                    @include('admin.users._form',['readonly' => false])
-                    @include('partials.crud.edit_buttons')
+                @include('partials.crud.edit_buttons')
+                @if($errors->any())
+                    <div class="panel-footer">
+                        @include('partials.errors')
+                    </div>
+                @endif
+                @include('admin.users._form',['readonly' => false])
+                @include('partials.crud.bottom_buttons')
                 {!! Form::close() !!}
-                <div class="panel-footer">
-                    @include('partials.errors')
-                </div>
             </div>
         </div>
     </div>

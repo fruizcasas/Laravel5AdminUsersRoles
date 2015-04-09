@@ -28,8 +28,13 @@ class UserSearchRequest extends Request {
 		return [
             'id' => '',
 			'name' => '',
+            'acronym' => '',
             'email' => '',
             'is_admin' =>'',
+            'is_author' =>'',
+            'is_reviewer' =>'',
+            'is_approver' =>'',
+            'is_publisher' =>'',
             'roles' => '',
             'departments' => '',
 		];

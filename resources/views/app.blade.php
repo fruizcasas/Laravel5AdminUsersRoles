@@ -4,11 +4,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Aurinka</title>
+    <title>ISO Aurinka</title>
 
     <link rel="icon" href="{{asset('/images/laravel-icon.png')}}">
 
-    <link href="{{ asset('/css/themes/' . (App\Profile::loginProfile()?App\Profile::loginProfile()->theme:App\Profile::DEFAULT_THEME) . '/bootstrap.css') }}"
+    <link href="{{ asset('/css/themes/' .
+                    (App\Profile::loginProfile()?
+                        App\Profile::loginProfile()->theme:
+                        App\Profile::DEFAULT_THEME) . '/bootstrap.css') }}"
           rel="stylesheet">
     <link href="{{ asset('/css/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/custom.css') }}" rel="stylesheet">
@@ -26,9 +29,10 @@
 <body>
 <div class="container">
     @include('partials.nav')
-    <div id="TOP" class="page-heading"></div>
+    <div id="top"></div>
     @yield('headings')
     @yield('breadcrumbs')
+    <div id="top"/>
     @include('partials.messages')
     @include('flash::message')
     @yield('content')

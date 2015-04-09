@@ -3,26 +3,26 @@
 // -----------------
 // View Name Prefix
 // -----------------
-$VN = 'views/profiles/edit.';
+$VN = 'views/password/edit.';
 ?>
 
 @extends('app')
 
 @section('headings')
-    <h1>{{trans($VN.'profile')}} {{ App\Profile::loginProfile()->user->name }}</h1>
+    <h1>{{trans($VN.'password')}} {{ App\Profile::loginProfile()->user->name }}</h1>
 @endsection
 
 
 @section('breadcrumbs')
-    {!! Breadcrumbs::render('profile') !!}
+    {!! Breadcrumbs::render('password') !!}
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-md-8 col-md-offset-2">
-        {!! Form::model($model,['method' => 'PUT',
-        'route'  => ['profile.update'],
-        'class'=>'form-horizontal']) !!}
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            {!! Form::open(['method' => 'PUT',
+            'route'  => ['password.update'],
+            'class'=>'form-horizontal']) !!}
             <div class="panel panel-primary">
                 <div class="panel-footer">
                     <div class="form-group">
@@ -36,10 +36,10 @@ $VN = 'views/profiles/edit.';
                     @include('partials.errors')
                 </div>
                 <div class="panel-body">
-                    @include('profiles._form')
+                    @include('password._form')
                 </div>
             </div>
-        {!! Form::close() !!}
+            {!! Form::close() !!}
+        </div>
     </div>
-</div>
 @stop

@@ -8,7 +8,7 @@
             <div class="col-sm-4">
                 {!! Form::text('name', $model->name, [
                     'class' => 'form-control input-sm' ]+[(isset($readonly)?($readonly?'readonly':''):''),
-                    'placeholder' => 'name',
+                    'placeholder' => 'enter a name',
                     'style' => 'width:100%;']) !!}
                 {!! $errors->first('name', '<p class="help-block error-msg">:message</p>') !!}
             </div>
@@ -19,9 +19,20 @@
             <div class="col-sm-4">
                 {!! Form::text('display_name', $model->display_name, [
                 'class' => 'form-control input-sm' ]+[(isset($readonly)?($readonly?'readonly':''):''),
-                'placeholder' => 'display name',
+                'placeholder' => 'enter a display name',
                 'style' => 'width:100%;']) !!}
                 {!! $errors->first('display_name', '<p class="help-block error-msg">:message</p>') !!}
+            </div>
+        </div>
+        <!--- acronym Field --->
+        <div class="form-group {{$errors->first('acronym','has-error')}}">
+            {!! Form::label('acronym', 'Acronym:',['class' =>'col-sm-2 control-label text-right']) !!}
+            <div class="col-sm-4">
+                {!! Form::text('acronym', $model->acronym, [
+                    'class' => 'form-control input-sm' ]+[(isset($readonly)?($readonly?'readonly':''):''),
+                    'placeholder' => 'enter acronym',
+                    'style' => 'width:100%;']) !!}
+                {!! $errors->first('acronym', '<p class="help-block error-msg">:message</p>') !!}
             </div>
         </div>
         <!--- email Field --->
@@ -37,12 +48,12 @@
         </div>
         <!--- is_admin , is_owner , is_reviewer Fields --->
         <div class="form-group {{$errors->first('is_admin','has-error')}}">
-            {!! Form::label('is_owner', 'Owner:',['class' =>'col-sm-2 control-label text-right']) !!}
+            {!! Form::label('is_author', 'Author:',['class' =>'col-sm-2 control-label text-right']) !!}
             <div class="col-sm-2">
-                {!! Form::select('is_owner',['1' =>'Yes','0' => 'No'], $model->is_owner, [
+                {!! Form::select('is_author',['1' =>'Yes','0' => 'No'], $model->is_author, [
                 'class' => 'form-control input-sm']+[(isset($readonly)?($readonly?'disabled':''):''),
                 'style' => 'width:100%;']) !!}
-                {!! $errors->first('is_owner', '<p class="help-block error-msg">:message</p>') !!}
+                {!! $errors->first('is_author', '<p class="help-block error-msg">:message</p>') !!}
             </div>
             {!! Form::label('is_reviewer', 'Reviewer:',['class' =>'col-sm-2 control-label text-right']) !!}
             <div class="col-sm-2">
@@ -68,12 +79,12 @@
                 'style' => 'width:100%;']) !!}
                 {!! $errors->first('is_approver', '<p class="help-block error-msg">:message</p>') !!}
             </div>
-            {!! Form::label('is_signer', 'Signer:',['class' =>'col-sm-2 control-label text-right']) !!}
+            {!! Form::label('is_publisher', 'Publisher:',['class' =>'col-sm-2 control-label text-right']) !!}
             <div class="col-sm-2">
-                {!! Form::select('is_signer',['1' =>'Yes','0' => 'No'], $model->is_signer, [
+                {!! Form::select('is_publisher',['1' =>'Yes','0' => 'No'], $model->is_publisher, [
                 'class' => 'form-control input-sm']+[(isset($readonly)?($readonly?'disabled':''):''),
                 'style' => 'width:100%;']) !!}
-                {!! $errors->first('is_signer', '<p class="help-block error-msg">:message</p>') !!}
+                {!! $errors->first('is_publisher', '<p class="help-block error-msg">:message</p>') !!}
             </div>
         </div>
         <!--- roles Field --->

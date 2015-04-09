@@ -21,7 +21,7 @@ const VIEW_NAME    = 'admin.departments.show';
             <div class="panel panel-primary">
              @include('partials.crud.show_buttons')
              @include('admin.departments._form',['readonly' => true])
-             @include('partials.crud.show_buttons')
+             @include('partials.crud.bottom_buttons')
             </div>
         </div>
     </div>

@@ -27,6 +27,7 @@ class UserNewRequest extends Request {
 	{
 		return [
 			'name' => 'unique:users|required|min:5|max:10',
+            'acronym' => 'unique:users|required|min:3|max:6',
             'email' => 'unique:users|required|email',
             'display_name' => 'required',
 		];

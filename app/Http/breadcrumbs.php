@@ -29,6 +29,18 @@ Breadcrumbs::register('profile', function($breadcrumbs) use ($VN)
 
 /*
 |--------------------------------------------------------------------------
+| home / password Breadcrumb
+|--------------------------------------------------------------------------
+*/
+Breadcrumbs::register('password', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('home');
+    $breadcrumbs->push(trans($VN.'password'), route('password.edit'));
+});
+
+
+/*
+|--------------------------------------------------------------------------
 | home / admin Breadcrumb
 |--------------------------------------------------------------------------
 */

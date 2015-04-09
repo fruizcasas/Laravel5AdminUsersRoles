@@ -1,5 +1,5 @@
 <?php
-const VIEW_NAME    = 'admin.departments.create';
+const VIEW_NAME = 'admin.departments.create';
 ?>
 
 @include('admin.departments._routes')
@@ -21,15 +21,15 @@ const VIEW_NAME    = 'admin.departments.create';
     <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-primary">
             {!! Form::model($model,['route' =>STORE_ROUTE,'class'=>'form-horizontal']) !!}
-                @include('partials.crud.create_buttons')
-                @include('admin.departments._form',['readonly' => false])
-                @include('partials.crud.create_buttons')
-            {!! Form::close() !!}
+            @include('partials.crud.create_buttons')
             @if($errors->any())
-            <div class="panel-footer">
-                @include('partials.errors')
-            </div>
+                <div class="panel-footer">
+                    @include('partials.errors')
+                </div>
             @endif
+            @include('admin.departments._form',['readonly' => false])
+            @include('partials.crud.bottom_buttons')
+            {!! Form::close() !!}
         </div>
     </div>
 </div>

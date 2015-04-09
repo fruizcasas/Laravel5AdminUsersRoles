@@ -34,13 +34,13 @@ if (!in_array($locale, ['en', 'es'])) {
 
             @if (Auth::check())
                 <ul class="nav navbar-nav">
-                    @if(Auth::user()->is_owner)
+                    @if(Auth::user()->is_author)
                         <li class="dropdown">
-                            <a href="{{ route('owner.index') }}" class="dropdown-toggle" data-toggle="dropdown"
-                               role="button" aria-expanded="false">{{trans($VN.'owner')}}<span class="caret"></span></a>
+                            <a href="{{ route('author.index') }}" class="dropdown-toggle" data-toggle="dropdown"
+                               role="button" aria-expanded="false">{{trans($VN.'author')}}<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ route('owner.index') }}">Item1</a></li>
-                                <li><a href="{{ route('owner.index') }}">Item2</a></li>
+                                <li><a href="{{ route('author.index') }}">Item1</a></li>
+                                <li><a href="{{ route('author.index') }}">Item2</a></li>
                             </ul>
                         </li>
                     @endif
@@ -67,14 +67,14 @@ if (!in_array($locale, ['en', 'es'])) {
                         </li>
                     @endif
 
-                    @if(Auth::user()->is_signer)
+                    @if(Auth::user()->is_publisher)
                         <li class="dropdown">
-                            <a href="{{ route('signer.index') }}" class="dropdown-toggle" data-toggle="dropdown"
-                               role="button" aria-expanded="false">{{trans($VN.'signer')}}<span
+                            <a href="{{ route('publisher.index') }}" class="dropdown-toggle" data-toggle="dropdown"
+                               role="button" aria-expanded="false">{{trans($VN.'publisher')}}<span
                                         class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ route('signer.index') }}">Item1</a></li>
-                                <li><a href="{{ route('signer.index') }}">Item2</a></li>
+                                <li><a href="{{ route('publisher.index') }}">Item1</a></li>
+                                <li><a href="{{ route('publisher.index') }}">Item2</a></li>
                             </ul>
                         </li>
                     @endif
@@ -109,6 +109,7 @@ if (!in_array($locale, ['en', 'es'])) {
                             <li><a href="{{ url('/auth/logout') }}">{{trans($VN.'logout')}}</a></li>
                             <li class="divider"></li>
                             <li><a href="{{ route('profile.edit') }}">{{trans($VN.'profile')}}</a></li>
+                            <li><a href="{{ route('password.edit') }}">{{trans($VN.'password')}}</a></li>
                         </ul>
                     </li>
                 @endif

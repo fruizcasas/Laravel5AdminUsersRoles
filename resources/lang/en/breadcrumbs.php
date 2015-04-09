@@ -3,6 +3,7 @@ return [
     // ----------------------------------------------
     'home' => 'Home',
     'profile' => 'Profile',
+    'password' => 'Password',
     'admin' => 'Admin',
     'create' => 'Create',
     'show' => 'Show',

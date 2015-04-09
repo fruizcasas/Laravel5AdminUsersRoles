@@ -3,10 +3,10 @@
 return [
     // ----------------------------------------------
     'app_name' => 'ISO Aurinka',
-    'owner' => 'Propietario',
+    'author' => 'Autor',
     'reviewer' => 'Revisor',
     'approver' => 'Aprobador',
-    'signer' => 'Firmante',
+    'publisher' => 'Publicador',
     'admin' => 'Administrador',
     'users' => 'Usuarios',
     'roles' => 'Roles',
@@ -16,5 +16,7 @@ return [
     'register' => 'Registro',
     'logout' => 'Desconexión',
     'profile' => 'Perfil',
+    'password' => 'Cambiar Password',
+
     // ----------------------------------------------
 ];

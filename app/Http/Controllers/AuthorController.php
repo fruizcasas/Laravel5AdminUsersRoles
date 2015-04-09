@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-class OwnerController extends Controller {
+class AuthorController extends Controller {
 
     /**
      * Create a new controller instance.

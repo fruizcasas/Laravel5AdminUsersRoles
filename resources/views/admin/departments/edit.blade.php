@@ -1,5 +1,5 @@
 <?php
-const VIEW_NAME    = 'admin.departments.edit';
+const VIEW_NAME = 'admin.departments.edit';
 ?>
 
 @include('admin.departments._routes')
@@ -17,22 +17,24 @@ const VIEW_NAME    = 'admin.departments.edit';
 
 @section('content')
 
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-primary">
-                {!! Form::model($model,['method' =>'PUT',
-                        'route'  => [UPDATE_ROUTE, $model->id],
-                        'class'=>'form-horizontal']) !!}
-                    @include('partials.crud.edit_buttons')
-                    @include('admin.departments._form',['readonly' => false])
-                    @include('partials.crud.edit_buttons')
-                {!! Form::close() !!}
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="panel panel-primary">
+            {!! Form::model($model,['method' =>'PUT',
+                    'route'  => [UPDATE_ROUTE, $model->id],
+                    'class'=>'form-horizontal']) !!}
+            @include('partials.crud.edit_buttons')
+            @if($errors->any())
                 <div class="panel-footer">
                     @include('partials.errors')
                 </div>
-            </div>
+            @endif
+            @include('admin.departments._form',['readonly' => false])
+            @include('partials.crud.edit_buttons')
+            {!! Form::close() !!}
         </div>
     </div>
+</div>
 
 @endsection
 

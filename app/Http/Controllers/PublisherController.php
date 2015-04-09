@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-class SignerController extends Controller {
+class PublisherController extends Controller {
 
 	//
 
