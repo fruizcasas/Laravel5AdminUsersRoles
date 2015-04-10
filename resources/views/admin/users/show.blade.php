@@ -17,7 +17,7 @@ const VIEW_NAME = 'admin.users.show';
 
 @section('content')
     <div class="row">
-        <div class="col-md-10 col-md-offset-1">
+        <div class="col-md-12 col-md-offset-0">
             <div class="panel panel-primary">
                 @include('partials.crud.show_buttons')
 

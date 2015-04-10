@@ -17,9 +17,9 @@ return [
     'pub' => 'pub',
     'roles' => 'Roles',
     'departments' => 'Departamentos',
-    'filter' => 'filtro',
+    'filter' => 'Filtrar',
     'trash' => 'papel.',
-    'show' => 'ver',
+    'show' => 'Mostrar',
     'order_by' => 'Ordenado por ',
     'filter_by' => 'Filtrado por ',
 

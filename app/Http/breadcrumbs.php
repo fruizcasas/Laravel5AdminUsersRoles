@@ -82,6 +82,14 @@ Breadcrumbs::register('admin.users.show', function($breadcrumbs) use ($VN)
     $breadcrumbs->push(trans($VN.'show'), route('admin.users.show'));
 });
 
+// Home > Admin -> Passwords -> Edit
+Breadcrumbs::register('admin.users.password', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin.users');
+    $breadcrumbs->push(trans($VN.'password'), route('admin.users.edit_password'));
+});
+
+
 /*
 |--------------------------------------------------------------------------
 | home / admin / roles Breadcrumb

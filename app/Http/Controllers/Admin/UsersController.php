@@ -7,12 +7,14 @@ use App\Profile;
 use DB;
 use Auth;
 use Exception;
+use Flash;
 use Excel;
 
 use App\Http\Requests\Admin\UserRequest as ModelRequest;
 use App\Http\Requests\Admin\UserNewRequest as ModelNewRequest;
 use App\Http\Requests\Admin\DeleteRequest as DeleteRequest;
 use App\Http\Requests\Admin\UserSearchRequest as SearchRequest;
+use App\Http\Requests\Admin\PasswordRequest as PasswordRequest;
 use App\Models\Admin\User;
 use App\Models\Admin\Role;
 use App\Models\Admin\Department;
@@ -26,6 +28,7 @@ class UsersController extends Controller
     protected $create_view = 'admin.users.create';
     protected $show_view = 'admin.users.show';
     protected $edit_view = 'admin.users.edit';
+    protected $edit_password_view = 'admin.users.edit_password';
 
     protected $index_route = 'admin.users.index';
     protected $create_route = 'admin.users.create';
@@ -46,6 +49,16 @@ class UsersController extends Controller
             'is_approver',
             'is_publisher',
         ];
+
+    protected $filter_boolean_fields =
+        [
+            'is_admin',
+            'is_author',
+            'is_reviewer',
+            'is_approver',
+            'is_publisher',
+        ];
+
     protected $filter_fields =
         [
             'id',
@@ -149,7 +162,6 @@ class UsersController extends Controller
     }
 
 
-
     /**
      * Show the form for creating a new resource.
      *
@@ -215,19 +227,24 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        $model = $this->getModel($id);
-        $roles = Role::lists('acronym', 'id');
-        $model_roles = $model->roles->lists('id');
-        $departments = Department::lists('name', 'id');
-        $model_departments = $model->departments->lists('id');
-        return view($this->edit_view,
-            compact([
-                'model',
-                'roles',
-                'model_roles',
-                'departments',
-                'model_departments',
-            ]));
+        try {
+            $model = $this->getModel($id);
+            $roles = Role::lists('acronym', 'id');
+            $model_roles = $model->roles->lists('id');
+            $departments = Department::lists('name', 'id');
+            $model_departments = $model->departments->lists('id');
+            return view($this->edit_view,
+                compact([
+                    'model',
+                    'roles',
+                    'model_roles',
+                    'departments',
+                    'model_departments',
+                ]));
+        } catch (Exception $e) {
+            flash()->warning("$this->model_name $id not found");
+            return $this->index();
+        }
     }
 
 
@@ -355,8 +372,50 @@ class UsersController extends Controller
         }
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function edit_password($id)
+    {
+        try {
+            $model = $this->getModel($id);
+            return view($this->edit_password_view, compact('model'));
+        } catch (Exception $e) {
+            flash()->warning("$this->model_name $id not found");
+            return $this->index();
+        }
+    }
 
-    public function getModels($filter = null)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function update_password($id, PasswordRequest $request)
+    {
+        try {
+            $model = $this->getModel($id);
+            try {
+                $model->password = bcrypt($request->input('password'));
+                $model->save();
+                Flash::info('Password Updated');
+                return redirect(route($this->show_route, [$model->id]));
+            } catch (Exception $e) {
+                throw $e;
+            }
+        } catch (Exception $e) {
+            $errors = [];
+            $errors [] = $e->getMessage();
+            return $request->response($errors);
+        }
+    }
+
+    public
+    function getModels($filter = null)
     {
         $models = User::sortable($this->index_view);
         if ($this->show_trash()) {
@@ -375,8 +434,7 @@ class UsersController extends Controller
                             } else {
                                 $models = $models->orWhere($field, $value);
                             }
-                        } else if (in_array($field,
-                            ['is_admin', 'is_author', 'is_reviewer', 'is_approver', 'is_publisher'])) {
+                        } else if (in_array($field,$this->filter_boolean_fields)) {
                             $value = (mb_strtolower($value) == 'x');
                             if ($first) {
                                 $models = $models->Where($field, $value);
@@ -400,12 +458,12 @@ class UsersController extends Controller
                             $value = '%' . $value . '%';
                             if ($first) {
                                 $models = $models->whereHas('departments', function ($q) use ($value) {
-                                    $q->where('name', 'like', $value);
+                                    $q->where('acronym', 'like', $value);
                                 });
                                 $first = false;
                             } else {
                                 $models = $models->orWhereHas('departments', function ($q) use ($value) {
-                                    $q->where('name', 'like', $value);
+                                    $q->where('acronym', 'like', $value);
                                 });
                             }
                         } else {
@@ -424,12 +482,14 @@ class UsersController extends Controller
         return $models;
     }
 
-    public function getModel($id)
+    public
+    function getModel($id)
     {
         return $this->getModels()->findOrFail($id);
     }
 
-    public function getFilter()
+    public
+    function getFilter()
     {
         $values = [];
         foreach ($this->filter_fields as $field) {

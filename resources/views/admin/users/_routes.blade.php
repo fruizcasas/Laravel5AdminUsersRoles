@@ -21,6 +21,10 @@ const TRASH_ROUTE   = 'admin.users.destroy';
 const RESTORE_ROUTE   = 'admin.users.restore';
 const DELETE_ROUTE   = 'admin.users.forcedelete';
 
+const EDIT_PASSWORD_ROUTE   = 'admin.users.edit_password';
+const UPDATE_PASSWORD_ROUTE   = 'admin.users.update_password';
+
+
 const FILTER_ROUTE = 'admin.users.filter';
 const SORT_ROUTE   = 'admin.users.sort';
 const EXCEL_ROUTE   = 'admin.users.excel';

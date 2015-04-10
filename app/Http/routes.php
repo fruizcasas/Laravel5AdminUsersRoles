@@ -163,6 +163,19 @@ Route::group(
                 'uses' => 'UsersController@restore'
             ]);
 
+        Route::get('/users/{users}/edit/password',
+            [
+                'as' => 'admin.users.edit_password',
+                'uses' => 'UsersController@edit_password'
+            ]);
+
+        Route::put('/users/{users}/password',
+            [
+                'as' => 'admin.users.update_password',
+                'uses' => 'UsersController@update_password'
+            ]);
+
+
         Route::resource('/users', 'UsersController');
 
         /*
