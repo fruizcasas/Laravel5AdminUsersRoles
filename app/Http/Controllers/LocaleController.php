@@ -15,7 +15,7 @@ class LocaleController extends Controller {
         {
             $locale = 'en';
         }
-        Cookie::queue('locale', $locale);
+        Cookie::queue('locale', $locale,120);
         return redirect(url(URL::previous()));
     }
 }

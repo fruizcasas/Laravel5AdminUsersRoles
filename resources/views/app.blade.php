@@ -8,11 +8,12 @@
 
     <link rel="icon" href="{{asset('/images/laravel-icon.png')}}">
 
-    <link href="{{ asset('/css/themes/' .
-                    (App\Profile::loginProfile()?
-                        App\Profile::loginProfile()->theme:
-                        App\Profile::DEFAULT_THEME) . '/bootstrap.css') }}"
-          rel="stylesheet">
+    <!--
+    <link href="{{ asset('/css/app.css')}}" rel="stylesheet">
+    -->
+
+    <link href="{{ asset('/css/themes/' .(App\Profile::loginProfile()->theme).'/bootstrap.css') }}"
+          rel="stylesheet" >
     <link href="{{ asset('/css/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/custom.css') }}" rel="stylesheet">
 

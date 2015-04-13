@@ -434,7 +434,7 @@ class UsersController extends Controller
                             } else {
                                 $models = $models->orWhere($field, $value);
                             }
-                        } else if (in_array($field,$this->filter_boolean_fields)) {
+                        } else if (in_array($field, $this->filter_boolean_fields)) {
                             $value = (mb_strtolower($value) == 'x');
                             if ($first) {
                                 $models = $models->Where($field, $value);

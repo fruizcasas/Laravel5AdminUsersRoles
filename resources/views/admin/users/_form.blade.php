@@ -26,7 +26,7 @@ $yes_no = ['0' => trans($VN.'no'), '1' => trans($VN.'yes')];
             @if (isset($readonly) && ($readonly))
                 <div class="col-sm-2">
                         {!! link_to_route(EDIT_PASSWORD_ROUTE,trans($VN.'change_password'),[$model->id],
-                                         ['class' => 'form-control btn btn-warning']) !!}
+                                         ['class' => 'btn-sm btn-warning']) !!}
                 </div>
             @endif
         </div>

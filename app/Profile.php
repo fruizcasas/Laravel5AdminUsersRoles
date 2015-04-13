@@ -79,20 +79,23 @@ class Profile extends Model
         return $profile;
     }
 
+    protected static $login_profile;
+
     static public function loginProfile()
     {
         if (Auth::user()) {
-            if (Auth::user()->profile()->count() == 0)
-            {
-                Auth::user()->profile()->save(Profile::defaultRecord());
+            if (! isset(Profile::$login_profile)) {
+                if (Auth::user()->profile()->count() == 0) {
+                    Auth::user()->profile()->save(Profile::defaultRecord());
+                }
+                Profile::$login_profile = Auth::user()->profile->first();
             }
-            $login_profile = Auth::user()->profile->first();
         }
         else
         {
-            $login_profile = Profile::defaultRecord();
+            Profile::$login_profile = Profile::defaultRecord();
         }
-        return $login_profile;
+        return Profile::$login_profile;
     }
 
 

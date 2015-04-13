@@ -4,6 +4,8 @@
 // View Name Prefix
 // -----------------
 $VN = 'views/profiles/_form.';
+$yes_no = ['0' => trans($VN.'no'), '1' => trans($VN.'yes')];
+
 ?>
 
 <!--- per_page Field --->
@@ -20,7 +22,7 @@ $VN = 'views/profiles/_form.';
 <div class="form-group {{$errors->first('show_trash','has-error')}}">
     {!! Form::label('show_trash', trans($VN.'show_trash'),['class' =>'col-sm-4 control-label text-right']) !!}
     <div class="col-sm-2">
-        {!! Form::select('show_trash',['1' =>'Yes','0' => 'No'], $model->show_trash,
+        {!! Form::select('show_trash',$yes_no, $model->show_trash,
                         ['class' => 'form-control input-sm','style' => 'width:100%;']) !!}
         {!! $errors->first('show_trash', '<p class="help-block error-msg">:message</p>') !!}
     </div>
@@ -28,10 +30,13 @@ $VN = 'views/profiles/_form.';
 
 <!--- theme Field --->
 <div class="form-group {{$errors->first('theme','has-error')}}">
-    {!! Form::label('theme', trans($VN.'theme'),['class' =>'col-sm-4 control-label text-right']) !!}
+    {!! Form::label('theme', trans($VN.'theme'),
+                        ['class' =>'col-sm-4 control-label text-right']) !!}
     <div class="col-sm-3">
         {!! Form::select('theme',$themes, $model->theme,
-                        ['class' => 'form-control input-sm','style' => 'width:100%;']) !!}
+                        ['class' => 'form-control input-sm',
+                        'onchange' =>'theme_changed()',
+                        'style' => 'width:100%;']) !!}
         {!! $errors->first('show_trash', '<p class="help-block error-msg">:message</p>') !!}
     </div>
 </div>
