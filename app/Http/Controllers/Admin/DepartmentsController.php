@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use App\Profile;
 use DB;
+use Flash;
 use Exception;
 use Excel;
 

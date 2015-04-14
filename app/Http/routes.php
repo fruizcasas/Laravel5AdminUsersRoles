@@ -242,7 +242,6 @@ Route::group(
             ]);
 
 
-
         Route::get('/permissions/trash/{trash?}',
             [
                 'as' => 'admin.permissions.trash',
@@ -313,8 +312,185 @@ Route::group(
 
         Route::resource('/departments', 'DepartmentsController');
 
+        /*
+        |--------------------------------------------------------------------------
+        | Admin/Folders Routes
+        |--------------------------------------------------------------------------
+        */
+
+        Route::post('/folders/filter',
+            [
+                'as' => 'admin.folders.filter',
+                'uses' => 'FoldersController@filter'
+            ]);
+
+        Route::get('/folders/excel',
+            [
+                'as' => 'admin.folders.excel',
+                'uses' => 'FoldersController@excel'
+            ]);
+
+        Route::get('/folders/trash/{trash?}',
+            [
+                'as' => 'admin.folders.trash',
+                'uses' => 'FoldersController@trash'
+            ]);
+
+        Route::get('/folders/sort/{column?}/{order?}',
+            [
+                'as' => 'admin.folders.sort',
+                'uses' => 'FoldersController@sort'
+            ]);
+
+        Route::delete('/folders/{folders}/forcedelete',
+            [
+                'as' => 'admin.folders.forcedelete',
+                'uses' => 'FoldersController@forcedelete'
+            ]);
+
+        Route::post('/folders/{folders}/restore',
+            [
+                'as' => 'admin.folders.restore',
+                'uses' => 'FoldersController@restore'
+            ]);
+
+        Route::resource('/folders', 'FoldersController');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Admin/Categories Routes
+        |--------------------------------------------------------------------------
+        */
+
+        Route::post('/categories/filter',
+            [
+                'as' => 'admin.categories.filter',
+                'uses' => 'CategoriesController@filter'
+            ]);
+
+        Route::get('/categories/excel',
+            [
+                'as' => 'admin.categories.excel',
+                'uses' => 'CategoriesController@excel'
+            ]);
+
+        Route::get('/categories/trash/{trash?}',
+            [
+                'as' => 'admin.categories.trash',
+                'uses' => 'CategoriesController@trash'
+            ]);
+
+        Route::get('/categories/sort/{column?}/{order?}',
+            [
+                'as' => 'admin.categories.sort',
+                'uses' => 'CategoriesController@sort'
+            ]);
+
+        Route::delete('/categories/{categories}/forcedelete',
+            [
+                'as' => 'admin.categories.forcedelete',
+                'uses' => 'CategoriesController@forcedelete'
+            ]);
+
+        Route::post('/categories/{categories}/restore',
+            [
+                'as' => 'admin.categories.restore',
+                'uses' => 'CategoriesController@restore'
+            ]);
+
+        Route::resource('/categories', 'CategoriesController');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Admin/Documents Routes
+        |--------------------------------------------------------------------------
+        */
+
+        Route::post('/documents/filter',
+            [
+                'as' => 'admin.documents.filter',
+                'uses' => 'DocumentsController@filter'
+            ]);
+
+        Route::get('/documents/excel',
+            [
+                'as' => 'admin.documents.excel',
+                'uses' => 'DocumentsController@excel'
+            ]);
+
+        Route::get('/documents/trash/{trash?}',
+            [
+                'as' => 'admin.documents.trash',
+                'uses' => 'DocumentsController@trash'
+            ]);
+
+        Route::get('/documents/sort/{column?}/{order?}',
+            [
+                'as' => 'admin.documents.sort',
+                'uses' => 'DocumentsController@sort'
+            ]);
+
+        Route::delete('/documents/{documents}/forcedelete',
+            [
+                'as' => 'admin.documents.forcedelete',
+                'uses' => 'DocumentsController@forcedelete'
+            ]);
+
+        Route::post('/documents/{documents}/restore',
+            [
+                'as' => 'admin.documents.restore',
+                'uses' => 'DocumentsController@restore'
+            ]);
+
+        Route::resource('/documents', 'DocumentsController');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Admin/Frontpages Routes
+        |--------------------------------------------------------------------------
+        */
+
+        Route::post('/frontpages/filter',
+            [
+                'as' => 'admin.frontpages.filter',
+                'uses' => 'FrontpagesController@filter'
+            ]);
+
+        Route::get('/frontpages/excel',
+            [
+                'as' => 'admin.frontpages.excel',
+                'uses' => 'FrontpagesController@excel'
+            ]);
+
+        Route::get('/frontpages/trash/{trash?}',
+            [
+                'as' => 'admin.frontpages.trash',
+                'uses' => 'FrontpagesController@trash'
+            ]);
+
+        Route::get('/frontpages/sort/{column?}/{order?}',
+            [
+                'as' => 'admin.frontpages.sort',
+                'uses' => 'FrontpagesController@sort'
+            ]);
+
+        Route::delete('/frontpages/{frontpages}/forcedelete',
+            [
+                'as' => 'admin.frontpages.forcedelete',
+                'uses' => 'FrontpagesController@forcedelete'
+            ]);
+
+        Route::post('/frontpages/{frontpages}/restore',
+            [
+                'as' => 'admin.frontpages.restore',
+                'uses' => 'FrontpagesController@restore'
+            ]);
+
+        Route::resource('/frontpages', 'FrontpagesController');
+
 
     });
+
 
 /*
 |--------------------------------------------------------------------------

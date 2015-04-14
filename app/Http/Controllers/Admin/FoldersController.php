@@ -7,7 +7,13 @@ use Illuminate\Http\Request;
 
 class FoldersController extends Controller {
 
-	/**
+    public function __construct()
+    {
+        $this->middleware('admin');
+    }
+
+
+    /**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response

@@ -22,10 +22,14 @@ class CreateFrontpagesTable extends Migration {
             $table->integer('total_pages')->nullable();
             $table->string('title');
             $table->string('reason_for_revision');
-            $table->integer('author_id')->unsigned();
-            $table->integer('reviewer_id')->unsigned();
-            $table->integer('approver_id')->unsigned();
-            $table->integer('publisher_id')->unsigned();
+            $table->integer('author_id')->unsigned()->nullable()->index();
+            $table->foreign('author_id')->references('id')->on('users')->onDelete('set null');
+            $table->integer('reviewer_id')->unsigned()->nullable()->index();
+            $table->foreign('reviewer_id')->references('id')->on('users')->onDelete('set null');
+            $table->integer('approver_id')->unsigned()->nullable()->index();
+            $table->foreign('approver_id')->references('id')->on('users')->onDelete('set null');
+            $table->integer('publisher_id')->unsigned()->nullable()->index();
+            $table->foreign('publisher_id')->references('id')->on('users')->onDelete('set null');
             $table->text('description')->nullable();
             $table->softDeletes();
             $table->timestamps();

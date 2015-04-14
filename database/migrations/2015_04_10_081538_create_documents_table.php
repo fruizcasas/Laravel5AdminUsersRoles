@@ -16,7 +16,8 @@ class CreateDocumentsTable extends Migration {
             $table->increments('id');
             $table->string('name');
             $table->string('title');
-            $table->integer('user_id')->unsigned();
+            $table->integer('user_id')->unsigned()->nullable()->index();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->string('mime')->nullable();
             $table->string('storage_path');
             $table->text('description')->nullable();

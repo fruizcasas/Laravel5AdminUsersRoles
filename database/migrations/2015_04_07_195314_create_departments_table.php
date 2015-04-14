@@ -17,7 +17,8 @@ class CreateDepartmentsTable extends Migration {
             $table->string('name')->unique();
             $table->string('acronym')->nullable();
             $table->string('display_name')->nullable();
-            $table->integer('department_id')->unsigned()->nullable();
+            $table->integer('department_id')->unsigned()->nullable()->index();
+            $table->foreign('department_id')->references('id')->on('departments')->onDelete('set null');
             $table->text('description')->nullable();
             $table->softDeletes();
             $table->timestamps();

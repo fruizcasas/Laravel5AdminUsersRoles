@@ -3,11 +3,8 @@
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-/**
- * App\Models\Admin\RoleUser
- *
- */
-class RoleUser extends Model {
+
+class CategoryFrontpage extends Model {
 
     use SoftDeletes;
 
