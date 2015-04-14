@@ -1,4 +1,10 @@
 <?php
+
+// -----------------
+// View Name Prefix
+// -----------------
+$VN = 'views/admin/departments/create.';
+
 const VIEW_NAME = 'admin.departments.create';
 ?>
 
@@ -7,7 +13,7 @@ const VIEW_NAME = 'admin.departments.create';
 @extends ('app')
 
 @section('headings')
-    <h1>Create Department</h1>
+    <h1> {{trans($VN.'title')}}</h1>
 @endsection
 
 @section('breadcrumbs')

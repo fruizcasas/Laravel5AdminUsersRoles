@@ -1,4 +1,9 @@
 <?php
+
+// -----------------
+// View Name Prefix
+// -----------------
+$VN = 'views/admin/departments/index.';
 const VIEW_NAME    = 'admin.departments.index';
 ?>
 
@@ -7,7 +12,7 @@ const VIEW_NAME    = 'admin.departments.index';
 @extends ('app')
 
 @section('headings')
-    <h1>Departments</h1>
+    <h1>{{trans($VN.'title')}}</h1>
 @endsection
 
 
@@ -29,58 +34,58 @@ const VIEW_NAME    = 'admin.departments.index';
         <col style="width:5em;">
         <thead>
         <th>
-            {!! link_to_route(SORT_ROUTE,'Reset',[],
+            {!! link_to_route(SORT_ROUTE,trans($VN.'reset'),[],
                         ['class' => 'btn-sm btn-primary']) !!}
 
         </th>
         <th class="text-right">
-            {!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'id')!!}</th>
-        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'name')!!}</th>
-        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'acronym')!!}</th>
-        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'display_name')!!}</th>
+            {!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'id',trans($VN.'id'))!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'name',trans($VN.'name'))!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'acronym',trans($VN.'acronym'))!!}</th>
+        <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'display_name',trans($VN.'display_name'))!!}</th>
         <th>Description</th>
         </thead>
         <tbody>
         <tr>
             <td>
-                {!! Form::submit('Filter',['class'=>"btn-sm btn-primary"]) !!}
+                {!! Form::submit(trans($VN.'filter'),['class'=>"btn-sm btn-primary"]) !!}
             </td>
             <td>
                 <!--- filter id Field --->
                 {!! Form::text('id', null, ['class' => 'form-control input-sm',
                                                        'style' => 'width:100%;',
-                                                       'placeholder'=>'id filter...']) !!}
+                                                       'placeholder'=>trans($VN.'id')]) !!}
             </td>
             <td>
                 <!--- filter name Field --->
                 {!! Form::text('name', null, ['class' => 'form-control input-sm',
                                                          'style' => 'width:100%;',
-                                                             'placeholder'=>'name filter...']) !!}
+                                                             'placeholder'=>trans($VN.'name')]) !!}
             </td>
             <td>
                 <!--- filter acronym Field --->
                 {!! Form::text('acronym', null, ['class' => 'form-control input-sm',
                                                          'style' => 'width:100%;',
-                                                             'placeholder'=>'acronym filter...']) !!}
+                                                             'placeholder'=>trans($VN.'acronym')]) !!}
             </td>
             <td>
                 <!--- filter display_name Field --->
                 {!! Form::text('display_name', null, ['class' => 'form-control input-sm',
                                                          'style' => 'width:100%;',
-                                                             'placeholder'=>'display name filter...']) !!}
+                                                             'placeholder'=>trans($VN.'display_name')]) !!}
             </td>
             <td>
                 <!--- filter description Field --->
                 {!! Form::text('description', null, ['class' => 'form-control input-sm',
                                                          'style' => 'width:100%;',
-                                                             'placeholder'=>'description filter...']) !!}
+                                                             'placeholder'=>trans($VN.'description')]) !!}
             </td>
         </tr>
 
         @foreach($models as $model)
             <tr>
                 <td>
-                    {!! link_to_route(SHOW_ROUTE,($model->trashed()?'Trash':'Show'),['id'=>$model->id],
+                    {!! link_to_route(SHOW_ROUTE,($model->trashed()?trans($VN.'trash'):trans($VN.'show')),['id'=>$model->id],
                                       ['class' => 'btn-sm '.($model->trashed()?'btn-danger':'btn-primary')]) !!}
                 </td>
                 <td class="text-right">
@@ -109,11 +114,11 @@ const VIEW_NAME    = 'admin.departments.index';
             </td>
             <td colspan="10">
                 @if (App\Profile::OrderByLabel(VIEW_NAME) !='')
-                    <small>Order by: <strong>{{ App\Profile::OrderByLabel(VIEW_NAME) }}</strong></small>
+                    <small>{{trans($VN.'order_by')}}: <strong>{{ App\Profile::OrderByLabel(VIEW_NAME) }}</strong></small>
                 @endif
                 &nbsp;
                 @if (App\Profile::FilterByLabel(VIEW_NAME) !='')
-                    <small>Filter by: <strong>{{ App\Profile::FilterByLabel(VIEW_NAME) }}</strong></small>
+                    <small>{{trans($VN.'filer_by')}}: <strong>{{ App\Profile::FilterByLabel(VIEW_NAME) }}</strong></small>
                 @endif
 
             </td>

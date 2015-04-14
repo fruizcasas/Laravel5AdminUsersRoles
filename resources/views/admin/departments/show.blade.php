@@ -1,4 +1,10 @@
 <?php
+
+// -----------------
+// View Name Prefix
+// -----------------
+$VN = 'views/admin/departments/show.';
+
 const VIEW_NAME    = 'admin.departments.show';
 ?>
 
@@ -7,7 +13,7 @@ const VIEW_NAME    = 'admin.departments.show';
 @extends ('app')
 
 @section('headings')
-    <h1>Department: {{ $model->name }}</h1>
+    <h1>{{trans($VN.'title')}}: {{ $model->name }}</h1>
 @endsection
 
 @section('breadcrumbs')

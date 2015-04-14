@@ -54,7 +54,7 @@ class Category extends Model {
     protected $fillable = ['name','acronym', 'display_name','description'];
 
 
-    public function Path(string $glue = '/')
+    public function Path($glue = '/')
     {
         $result = $this->name;
         $category = $this;

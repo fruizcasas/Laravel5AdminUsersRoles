@@ -1,4 +1,10 @@
 <?php
+
+// -----------------
+// View Name Prefix
+// -----------------
+$VN = 'views/admin/departments/edit.';
+
 const VIEW_NAME = 'admin.departments.edit';
 ?>
 
@@ -7,7 +13,7 @@ const VIEW_NAME = 'admin.departments.edit';
 @extends ('app')
 
 @section('headings')
-    <h1>Edit Department: {{ $model->name }}</h1>
+    <h1>{{trans($VN.'title')}}: {{ $model->name }}</h1>
 @endsection
 
 @section('breadcrumbs')
@@ -30,7 +36,7 @@ const VIEW_NAME = 'admin.departments.edit';
                 </div>
             @endif
             @include('admin.departments._form',['readonly' => false])
-            @include('partials.crud.edit_buttons')
+            @include('partials.crud.bottom_buttons')
             {!! Form::close() !!}
         </div>
     </div>

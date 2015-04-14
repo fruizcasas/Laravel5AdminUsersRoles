@@ -156,7 +156,7 @@ class UsersController extends Controller
     {
         $filter = $this->getFilter();
         $models = $this->getModels($filter)->with('roles')->with('departments');
-        $models = $models->paginate(Profile::loginProfile()->per_page);
+        $models = $models->paginate(Profile::loginProfile()->per_page,['*'],'UsersPage');
         return view($this->index_view, compact('models', 'filter'));
 
     }
