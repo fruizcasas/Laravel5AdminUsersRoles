@@ -1,6 +1,8 @@
 <?php namespace App\Http\Requests\Admin;
 
 use App\Http\Requests\Request;
+use Auth;
+
 
 class CategorySearchRequest extends Request {
 
@@ -11,6 +13,9 @@ class CategorySearchRequest extends Request {
 	 */
 	public function authorize()
 	{
+        if (Auth::check()) {
+            return Auth::user()->is_admin;
+        }
 		return false;
 	}
 
@@ -21,9 +26,13 @@ class CategorySearchRequest extends Request {
 	 */
 	public function rules()
 	{
-		return [
-			//
-		];
+        return [
+            'id' => '',
+            'name' => '',
+            'display_name' => '',
+            'acronym' =>'',
+            'description' =>''
+        ];
 	}
 
 }

@@ -192,5 +192,149 @@ Breadcrumbs::register('admin.departments.show', function($breadcrumbs) use ($VN)
     $breadcrumbs->push(trans($VN.'show'), route('admin.departments.show'));
 });
 
+/*
+|--------------------------------------------------------------------------
+| home / admin / categories Breadcrumb
+|--------------------------------------------------------------------------
+*/
+
+// Home > Admin -> Categories
+Breadcrumbs::register('admin.categories', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin');
+    $breadcrumbs->push(trans($VN.'categories'), route('admin.categories.index'));
+});
+
+// Home > Admin -> categories -> Create
+Breadcrumbs::register('admin.categories.create', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin.categories');
+    $breadcrumbs->push(trans($VN.'create'), route('admin.categories.create'));
+});
+
+// Home > Admin -> categories -> Edit
+Breadcrumbs::register('admin.categories.edit', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin.categories');
+    $breadcrumbs->push(trans($VN.'edit'), route('admin.categories.edit'));
+});
+
+// Home > Admin -> categories -> Show
+Breadcrumbs::register('admin.categories.show', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin.categories');
+    $breadcrumbs->push(trans($VN.'show'), route('admin.categories.show'));
+});
+
+/*
+|--------------------------------------------------------------------------
+| home / admin / folders Breadcrumb
+|--------------------------------------------------------------------------
+*/
+
+// Home > Admin -> Folders
+Breadcrumbs::register('admin.folders', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin');
+    $breadcrumbs->push(trans($VN.'folders'), route('admin.folders.index'));
+});
+
+// Home > Admin -> folders -> Create
+Breadcrumbs::register('admin.folders.create', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin.folders');
+    $breadcrumbs->push(trans($VN.'create'), route('admin.folders.create'));
+});
+
+// Home > Admin -> folders -> Edit
+Breadcrumbs::register('admin.folders.edit', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin.folders');
+    $breadcrumbs->push(trans($VN.'edit'), route('admin.folders.edit'));
+});
+
+// Home > Admin -> folders -> Show
+Breadcrumbs::register('admin.folders.show', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin.folders');
+    $breadcrumbs->push(trans($VN.'show'), route('admin.folders.show'));
+});
+
+/*
+|--------------------------------------------------------------------------
+| home / admin / documents Breadcrumb
+|--------------------------------------------------------------------------
+*/
+
+// Home > Admin -> Documents
+Breadcrumbs::register('admin.documents', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin');
+    $breadcrumbs->push(trans($VN.'documents'), route('admin.documents.index'));
+});
+
+// Home > Admin -> documents -> Create
+Breadcrumbs::register('admin.documents.create', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin.documents');
+    $breadcrumbs->push(trans($VN.'create'), route('admin.documents.create'));
+});
+
+// Home > Admin -> documents -> Edit
+Breadcrumbs::register('admin.documents.edit', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin.documents');
+    $breadcrumbs->push(trans($VN.'edit'), route('admin.documents.edit'));
+});
+
+// Home > Admin -> documents -> Show
+Breadcrumbs::register('admin.documents.show', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin.documents');
+    $breadcrumbs->push(trans($VN.'show'), route('admin.documents.show'));
+});
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| home / admin / frontpages Breadcrumb
+|--------------------------------------------------------------------------
+*/
+
+// Home > Admin -> Frontpages
+Breadcrumbs::register('admin.frontpages', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin');
+    $breadcrumbs->push(trans($VN.'frontpages'), route('admin.frontpages.index'));
+});
+
+// Home > Admin -> frontpages -> Create
+Breadcrumbs::register('admin.frontpages.create', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin.frontpages');
+    $breadcrumbs->push(trans($VN.'create'), route('admin.frontpages.create'));
+});
+
+// Home > Admin -> frontpages -> Edit
+Breadcrumbs::register('admin.frontpages.edit', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin.frontpages');
+    $breadcrumbs->push(trans($VN.'edit'), route('admin.frontpages.edit'));
+});
+
+// Home > Admin -> frontpages -> Show
+Breadcrumbs::register('admin.frontpages.show', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin.frontpages');
+    $breadcrumbs->push(trans($VN.'show'), route('admin.frontpages.show'));
+});
+
+
+
+
+
+
 
 

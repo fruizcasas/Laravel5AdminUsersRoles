@@ -5,18 +5,19 @@ use App\Http\Controllers\Controller;
 
 use App\Profile;
 use DB;
-use Flash;
 use Exception;
+use Flash;
 use Excel;
 
 use App\Http\Requests\Admin\DepartmentRequest as ModelRequest;
+use App\Http\Requests\Admin\DepartmentNewRequest as ModelNewRequest;
 use App\Http\Requests\Admin\DeleteRequest as DeleteRequest;
 use App\Http\Requests\Admin\DepartmentSearchRequest as SearchRequest;
 use App\Models\Admin\Department;
-use App\Models\Admin\User;
 
 
-class DepartmentsController extends Controller {
+class DepartmentsController extends Controller
+{
 
 
     protected $model_name = 'Department';
@@ -32,8 +33,26 @@ class DepartmentsController extends Controller {
     protected $trash_route = 'admin.departments.trash';
 
 
-    protected $sort_fields = ['id', 'name','acronym', 'display_name'];
-    protected $filter_fields = ['id', 'name', 'acronym', 'display_name','description'];
+    protected $sort_fields =
+        [
+            'id',
+            'name',
+            'acronym',
+            'display_name'
+        ];
+
+    protected $filter_boolean_fields =
+        [
+        ];
+
+    protected $filter_fields =
+        [
+            'id',
+            'name',
+            'acronym',
+            'display_name',
+            'description'
+        ];
 
 
     public function __construct()
@@ -49,21 +68,16 @@ class DepartmentsController extends Controller {
 
     public function trash($value = false)
     {
-        if (isset($value))
-        {
-            if ($value)
-            {
+        if (isset($value)) {
+            if ($value) {
                 $value = true;
-            }
-            else
-            {
+            } else {
                 $value = false;
             }
-        } else
-        {
+        } else {
             $value = false;
         }
-        Session( [ $this->index_view.'.trash' => $value] );
+        Session([$this->index_view . '.trash' => $value]);
         return redirect(route($this->index_route));
     }
 
@@ -112,7 +126,6 @@ class DepartmentsController extends Controller {
 
         })->export($format);
     }
-
 
 
     /**

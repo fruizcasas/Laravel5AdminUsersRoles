@@ -37,6 +37,6 @@ $yes_no = ['0' => trans($VN.'no'), '1' => trans($VN.'yes')];
                         ['class' => 'form-control input-sm',
                         'onchange' =>'theme_changed()',
                         'style' => 'width:100%;']) !!}
-        {!! $errors->first('show_trash', '<p class="help-block error-msg">:message</p>') !!}
+        {!! $errors->first('theme', '<p class="help-block error-msg">:message</p>') !!}
     </div>
 </div>

@@ -26,8 +26,8 @@ class UserNewRequest extends Request {
 	public function rules()
 	{
 		return [
-			'name' => 'unique:users|required|min:5|max:10',
-            'acronym' => 'unique:users|required|min:3|max:6',
+			'name' => 'unique:users|required|min:3|max:10',
+            'acronym' => 'unique:users|required|min:2|max:10',
             'email' => 'unique:users|required|email',
             'display_name' => 'required',
 		];

@@ -28,6 +28,7 @@ class DepartmentSearchRequest extends Request {
 	{
 		return [
             'id' => '',
+            'acronym' => '',
             'name' => '',
             'display_name' => '',
             'description' =>''

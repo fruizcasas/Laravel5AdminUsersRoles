@@ -5,7 +5,6 @@ use App\Http\Controllers\Controller;
 
 use App\Profile;
 use DB;
-use Auth;
 use Exception;
 use Flash;
 use Excel;
@@ -36,6 +35,8 @@ class UsersController extends Controller
     protected $edit_route = 'admin.users.edit';
     protected $trash_route = 'admin.users.trash';
 
+    protected $resource_name = 'controllers/admin/users.';
+
     protected $sort_fields =
         [
             'id',
@@ -43,15 +44,6 @@ class UsersController extends Controller
             'acronym',
             'display_name',
             'email',
-            'is_admin',
-            'is_author',
-            'is_reviewer',
-            'is_approver',
-            'is_publisher',
-        ];
-
-    protected $filter_boolean_fields =
-        [
             'is_admin',
             'is_author',
             'is_reviewer',
@@ -73,6 +65,20 @@ class UsersController extends Controller
             'is_publisher',
             'roles',
             'departments',
+        ];
+
+    protected $filter_numeric_fields =
+        [
+            'id',
+        ];
+
+    protected $filter_boolean_fields =
+        [
+            'is_admin',
+            'is_author',
+            'is_reviewer',
+            'is_approver',
+            'is_publisher',
         ];
 
     public function __construct()
@@ -101,7 +107,6 @@ class UsersController extends Controller
         return redirect(route($this->index_route));
     }
 
-
     public function filter(SearchRequest $request)
     {
         foreach ($this->filter_fields as $field) {
@@ -109,7 +114,6 @@ class UsersController extends Controller
         }
         return redirect(route($this->index_route));
     }
-
 
     public function sort($column = null, $order = null)
     {
@@ -136,7 +140,7 @@ class UsersController extends Controller
     {
         $filter = $this->getFilter();
         $models = $this->getModels($filter);
-        Excel::create('Users', function ($excel) use ($models) {
+        Excel::create(str_plural($this->model_name), function ($excel) use ($models) {
 
             // Our first sheet
             $excel->sheet(str_plural($this->model_name),
@@ -156,11 +160,9 @@ class UsersController extends Controller
     {
         $filter = $this->getFilter();
         $models = $this->getModels($filter)->with('roles')->with('departments');
-        $models = $models->paginate(Profile::loginProfile()->per_page,['*'],'UsersPage');
+        $models = $models->paginate(Profile::loginProfile()->per_page);
         return view($this->index_view, compact('models', 'filter'));
-
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -214,7 +216,7 @@ class UsersController extends Controller
                     'model_departments',
                 ]));
         } catch (Exception $e) {
-            flash()->warning("$this->model_name $id not found");
+            Flash::warning(trans($this->resource_name . 'not_found', ['model' => $this->model_name, 'id' => $id]));
             return $this->index();
         }
     }
@@ -242,7 +244,7 @@ class UsersController extends Controller
                     'model_departments',
                 ]));
         } catch (Exception $e) {
-            flash()->warning("$this->model_name $id not found");
+            Flash::warning(trans($this->resource_name . 'not_found', ['model' => $this->model_name, 'id' => $id]));
             return $this->index();
         }
     }
@@ -265,7 +267,7 @@ class UsersController extends Controller
                 $model->roles()->sync($roles);
                 $model->departments()->sync($departments);
                 DB::commit();
-                flash()->info("$this->model_name saved");
+                Flash::info(trans($this->resource_name . 'saved', ['model' => $this->model_name]));
                 return redirect(route($this->show_route, [$model->id]));
             } catch (Exception $e) {
                 DB::rollBack();
@@ -274,9 +276,9 @@ class UsersController extends Controller
         } catch (Exception $e) {
             $errors = [];
             if ($e->getCode() == 23000) {
-                $errors['email'] = "Duplicate email";
+                $errors['email'] = trans($this->resource_name . 'duplicated_email');
             } else {
-                flash()->error($e->getMessage());
+                Flash::error($e->getMessage());
             }
             return $request->response($errors);
         }
@@ -300,7 +302,7 @@ class UsersController extends Controller
                 $model->roles()->sync($roles);
                 $model->departments()->sync($departments);
                 DB::commit();
-                flash()->info("$this->model_name saved");
+                Flash::info(trans($this->resource_name . 'saved', ['model' => $this->model_name]));
                 return redirect(route($this->show_route, [$model->id]));
             } catch (Exception $e) {
                 DB::rollBack();
@@ -309,9 +311,9 @@ class UsersController extends Controller
         } catch (Exception $e) {
             $errors = [];
             if ($e->getCode() == 23000) {
-                $errors['email'] = "Duplicate email";
+                $errors['email'] = trans($this->resource_name . 'duplicated_email');
             } else {
-                flash()->error($e->getMessage());
+                Flash::error($e->getMessage());
             }
             return $request->response($errors);
         }
@@ -328,14 +330,14 @@ class UsersController extends Controller
         try {
             $model = $this->getModel($id);
             $model->delete();
-            flash()->info("$this->model_name sent to trash");
+            Flash::info(trans($this->resource_name . 'sent_to_trash', ['model' => $this->model_name]));
             if ($this->show_trash()) {
                 return redirect(route($this->show_route, [$id]));
             } else {
                 return redirect(route($this->index_route));
             }
         } catch (Exception $e) {
-            flash()->error($e->getMessage());
+            Flash::error($e->getMessage());
             return $request->response([]);
         }
     }
@@ -346,10 +348,10 @@ class UsersController extends Controller
         try {
             $model = $this->getModel($id);
             $model->restore();
-            flash()->info("$this->model_name restored");
+            Flash::info(trans($this->resource_name . 'restored', ['model' => $this->model_name]));
             return redirect(route($this->show_route, [$id]));
         } catch (Exception $e) {
-            flash()->error($e->getMessage());
+            Flash::error($e->getMessage());
             return $request->response([]);
         }
     }
@@ -364,10 +366,10 @@ class UsersController extends Controller
                     $model->roles()->sync([]);
                     $model->forcedelete();
                 });
-            flash()->info("$this->model_name removed");
+            Flash::info(trans($this->resource_name . 'deleted', ['model' => $this->model_name]));
             return redirect(route($this->index_route));
         } catch (Exception $e) {
-            flash()->error($e->getMessage());
+            Flash::error($e->getMessage());
             return $request->response([]);
         }
     }
@@ -384,7 +386,7 @@ class UsersController extends Controller
             $model = $this->getModel($id);
             return view($this->edit_password_view, compact('model'));
         } catch (Exception $e) {
-            flash()->warning("$this->model_name $id not found");
+            Flash::warning(trans($this->resource_name . 'not_found', ['model' => $this->model_name, 'id' => $id]));
             return $this->index();
         }
     }
@@ -402,7 +404,7 @@ class UsersController extends Controller
             try {
                 $model->password = bcrypt($request->input('password'));
                 $model->save();
-                Flash::info('Password Updated');
+                Flash::info(trans($this->resource_name . 'password_updated'));
                 return redirect(route($this->show_route, [$model->id]));
             } catch (Exception $e) {
                 throw $e;
@@ -414,8 +416,7 @@ class UsersController extends Controller
         }
     }
 
-    public
-    function getModels($filter = null)
+    public function getModels($filter = null)
     {
         $models = User::sortable($this->index_view);
         if ($this->show_trash()) {
@@ -427,7 +428,7 @@ class UsersController extends Controller
                     $values = explode(',', $filter[$field]);
                     $first = true;
                     foreach ($values as $value) {
-                        if ($field == 'id') {
+                        if (in_array($field, $this->filter_numeric_fields)) {
                             if ($first) {
                                 $models = $models->Where($field, $value);
                                 $first = false;
@@ -435,7 +436,7 @@ class UsersController extends Controller
                                 $models = $models->orWhere($field, $value);
                             }
                         } else if (in_array($field, $this->filter_boolean_fields)) {
-                            $value = (mb_strtolower($value) == 'x');
+                            $value = (strtolower($value) == 'x');
                             if ($first) {
                                 $models = $models->Where($field, $value);
                                 $first = false;
@@ -482,14 +483,12 @@ class UsersController extends Controller
         return $models;
     }
 
-    public
-    function getModel($id)
+    public function getModel($id)
     {
         return $this->getModels()->findOrFail($id);
     }
 
-    public
-    function getFilter()
+    public function getFilter()
     {
         $values = [];
         foreach ($this->filter_fields as $field) {

@@ -3,7 +3,7 @@
 use App\Http\Requests\Request;
 use Auth;
 
-class DepartmentRequest extends Request {
+class DepartmentNewRequest extends Request {
 
 	/**
 	 * Determine if the user is authorized to make this request.
@@ -15,8 +15,8 @@ class DepartmentRequest extends Request {
         if (Auth::check()) {
             return Auth::user()->is_admin;
         }
-        return false;
-    }
+		return false;
+	}
 
 	/**
 	 * Get the validation rules that apply to the request.
@@ -26,11 +26,11 @@ class DepartmentRequest extends Request {
 	public function rules()
 	{
 		return [
-            'name' => 'required|min:2',
-            'acronym' => 'required|min:2',
-            'display_name' => 'required|min:2',
+            'name' => 'unique:departments|required|min:2|max:10',
+            'acronym' => 'unique:departments|required|min:2|max:10',
+            'display_name' => 'required',
             'description' => '',
-		];
+        ];
 	}
 
 }

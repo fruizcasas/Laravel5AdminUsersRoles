@@ -4,18 +4,20 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Profile;
-use Auth;
+use DB;
 use Exception;
 use Flash;
 use Excel;
+
 use App\Http\Requests\Admin\CategoryRequest as ModelRequest;
+use App\Http\Requests\Admin\CategoryNewRequest as ModelNewRequest;
 use App\Http\Requests\Admin\DeleteRequest as DeleteRequest;
 use App\Http\Requests\Admin\CategorySearchRequest as SearchRequest;
 use App\Models\Admin\Category;
 
 
-class CategoriesController extends Controller {
-
+class CategoriesController extends Controller
+{
 
     protected $model_name = 'Category';
     protected $index_view = 'admin.categories.index';
@@ -29,14 +31,67 @@ class CategoriesController extends Controller {
     protected $edit_route = 'admin.categories.edit';
     protected $trash_route = 'admin.categories.trash';
 
+    protected $resource_name = 'controllers/admin/categories.';
 
-    protected $sort_fields = ['id', 'name','acronym', 'display_name'];
-    protected $filter_fields = ['id', 'name', 'acronym', 'display_name','description'];
+    protected $sort_fields =
+        [
+            'id',
+            'name',
+            'acronym',
+            'display_name',
+        ];
+
+    protected $filter_fields =
+        [
+            'id',
+            'name',
+            'acronym',
+            'display_name',
+            'description',
+        ];
+
+    protected $filter_numeric_fields =
+        [
+            'id',
+        ];
+
+
+    protected $filter_boolean_fields =
+        [
+        ];
 
 
     public function __construct()
     {
         $this->middleware('admin');
+        $root = Category::withTrashed()->find(Category::ROOT_CATEGORY);
+        if (! $root)
+        {
+            $root = new Category();
+            $root->name = '*';
+            $root->acronym = '*';
+            $root->display_name = '*';
+            $root->category_id = null;
+            $root->save();
+            $root->id = Category::ROOT_CATEGORY;
+            $root->save();
+        }
+        else
+        {
+            if ($root->trashed())
+            {
+                $root->restore();
+            };
+            if ($root->category_id != null)
+            {
+                $root->category_id = null;
+                $root->save();
+            }
+        }
+        $more = Category::withTrashed()->whereCategoryId(null)->where('id','<>',Category::ROOT_CATEGORY);
+        if ($more->count()>0) {
+            $more->update(['category_id' => Category::ROOT_CATEGORY]);
+        }
     }
 
 
@@ -47,21 +102,16 @@ class CategoriesController extends Controller {
 
     public function trash($value = false)
     {
-        if (isset($value))
-        {
-            if ($value)
-            {
+        if (isset($value)) {
+            if ($value) {
                 $value = true;
-            }
-            else
-            {
+            } else {
                 $value = false;
             }
-        } else
-        {
+        } else {
             $value = false;
         }
-        Session( [ $this->index_view.'.trash' => $value] );
+        Session([$this->index_view . '.trash' => $value]);
         return redirect(route($this->index_route));
     }
 
@@ -111,8 +161,6 @@ class CategoriesController extends Controller {
         })->export($format);
     }
 
-
-
     /**
      * @return \Illuminate\View\View
      */
@@ -122,7 +170,6 @@ class CategoriesController extends Controller {
         $models = $this->getModels($filter);
         $models = $models->paginate(Profile::loginProfile()->per_page);
         return view($this->index_view, compact('models', 'filter'));
-
     }
 
     /**
@@ -132,8 +179,13 @@ class CategoriesController extends Controller {
      */
     public function create()
     {
+        $categories = Category::ListCategories();
         $model = new Category();
-        return view($this->create_view, compact(['model']));
+        return view($this->create_view,
+            compact([
+                'model',
+                'categories',
+            ]));
     }
 
     /**
@@ -145,10 +197,14 @@ class CategoriesController extends Controller {
     public function show($id)
     {
         try {
+            $categories = Category::ListCategories();
             $model = $this->getModel($id);
-            return view($this->show_view, compact('model'));
+            return view($this->show_view, compact([
+                'model',
+                'categories',
+            ]));
         } catch (Exception $e) {
-            flash()->warning("$this->model_name $id not found");
+            Flash::warning(trans($this->resource_name . 'not_found', ['model' => $this->model_name, 'id' => $id]));
             return $this->index();
         }
     }
@@ -161,8 +217,27 @@ class CategoriesController extends Controller {
      */
     public function edit($id)
     {
-        $model = $this->getModel($id);
-        return view($this->edit_view, compact(['model']));
+        if ($id == Category::ROOT_CATEGORY)
+        {
+            $categories = Category::ListCategories();
+            $model = $this->getModel($id);
+            Flash::warning(trans($this->resource_name . 'forbidden'));
+            return view($this->show_view, compact([
+                'model',
+                'categories',
+            ]));
+        }
+        try {
+            $model = $this->getModel($id);
+            $categories = Category::ListCategories([$model->id]);
+            return view($this->edit_view, compact([
+                'model',
+                'categories',
+            ]));
+        } catch (Exception $e) {
+            Flash::warning(trans($this->resource_name . 'not_found', ['model' => $this->model_name, 'id' => $id]));
+            return $this->index();
+        }
     }
 
 
@@ -171,15 +246,18 @@ class CategoriesController extends Controller {
      *
      * @return Response
      */
-    public function store(ModelRequest $request)
+    public function store(ModelNewRequest $request)
     {
         try {
             $model = new Category($request->all());
             try {
+                DB::connection()->enableQueryLog();
                 DB::beginTransaction();
+                $category_id = $request->input('category_id', null);
+                $model->category_id = $category_id;
                 $model->save();
                 DB::commit();
-                flash()->info("$this->model_name saved");
+                Flash::info(trans($this->resource_name . 'saved', ['model' => $this->model_name]));
                 return redirect(route($this->show_route, [$model->id]));
             } catch (Exception $e) {
                 DB::rollBack();
@@ -187,7 +265,9 @@ class CategoriesController extends Controller {
             }
         } catch (Exception $e) {
             $errors = [];
-            flash()->error($e->getMessage());
+            $errors [] = DB::getQueryLog();
+            DB::connection()->disableQueryLog();
+            Flash::error($e->getMessage());
             return $request->response($errors);
         }
     }
@@ -203,10 +283,14 @@ class CategoriesController extends Controller {
         try {
             $model = $this->getModel($id);
             try {
+                DB::connection()->enableQueryLog();
                 DB::beginTransaction();
+                $category_id = $request->input('category_id', null);
+                $model->category_id = $category_id;
                 $model->update($request->all());
                 DB::commit();
-                flash()->info("$this->model_name saved");
+                DB::connection()->disableQueryLog();
+                Flash::info(trans($this->resource_name . 'saved', ['model' => $this->model_name]));
                 return redirect(route($this->show_route, [$model->id]));
             } catch (Exception $e) {
                 DB::rollBack();
@@ -214,7 +298,9 @@ class CategoriesController extends Controller {
             }
         } catch (Exception $e) {
             $errors = [];
-            flash()->error($e->getMessage());
+            DB::connection()->disableQueryLog();
+            dd(DB::getQueryLog());
+            Flash::error($e->getMessage());
             return $request->response($errors);
         }
     }
@@ -227,17 +313,28 @@ class CategoriesController extends Controller {
      */
     public function destroy($id, DeleteRequest $request)
     {
+        if ($id == Category::ROOT_CATEGORY)
+        {
+            $categories = Category::ListCategories();
+            $model = $this->getModel($id);
+            Flash::warning(trans($this->resource_name . 'forbidden'));
+            return view($this->show_view, compact([
+                'model',
+                'categories',
+            ]));
+        }
+
         try {
             $model = $this->getModel($id);
             $model->delete();
-            flash()->info("$this->model_name sent to trash");
+            Flash::info(trans($this->resource_name . 'sent_to_trash', ['model' => $this->model_name]));
             if ($this->show_trash()) {
                 return redirect(route($this->show_route, [$id]));
             } else {
                 return redirect(route($this->index_route));
             }
         } catch (Exception $e) {
-            flash()->error($e->getMessage());
+            Flash::error($e->getMessage());
             return $request->response([]);
         }
     }
@@ -248,10 +345,10 @@ class CategoriesController extends Controller {
         try {
             $model = $this->getModel($id);
             $model->restore();
-            flash()->info("$this->model_name restored");
+            Flash::info(trans($this->resource_name . 'restored', ['model' => $this->model_name]));
             return redirect(route($this->show_route, [$id]));
         } catch (Exception $e) {
-            flash()->error($e->getMessage());
+            Flash::error($e->getMessage());
             return $request->response([]);
         }
     }
@@ -264,10 +361,10 @@ class CategoriesController extends Controller {
                 function () use ($model) {
                     $model->forcedelete();
                 });
-            flash()->info("$this->model_name removed");
+            Flash::info(trans($this->resource_name . 'deleted', ['model' => $this->model_name]));
             return redirect(route($this->index_route));
         } catch (Exception $e) {
-            flash()->error($e->getMessage());
+            Flash::error($e->getMessage());
             return $request->response([]);
         }
     }
@@ -285,7 +382,15 @@ class CategoriesController extends Controller {
                     $values = explode(',', $filter[$field]);
                     $first = true;
                     foreach ($values as $value) {
-                        if ($field == 'id') {
+                        if (in_array($field, $this->filter_numeric_fields)) {
+                            if ($first) {
+                                $models = $models->Where($field, $value);
+                                $first = false;
+                            } else {
+                                $models = $models->orWhere($field, $value);
+                            }
+                        } else if (in_array($field, $this->filter_boolean_fields)) {
+                            $value = (strtolower($value) == 'x');
                             if ($first) {
                                 $models = $models->Where($field, $value);
                                 $first = false;

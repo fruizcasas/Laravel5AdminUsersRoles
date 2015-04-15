@@ -12,5 +12,9 @@ return [
     'roles' => 'Roles',
     'permissions' => 'Permissions',
     'departments' => 'Departments',
+    'categories' => 'Categories',
+    'folders' => 'Folders',
+    'documents' => 'Documents',
+    'frontpages' => 'Frontpages',
     // ----------------------------------------------
 ];

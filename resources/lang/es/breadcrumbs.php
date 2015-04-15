@@ -3,6 +3,7 @@ return [
     // ----------------------------------------------
     'home' => 'Inicio',
     'profile' => 'Perfil',
+    'password' => 'Contraseña',
     'admin' => 'Administrador',
     'create' => 'Crear',
     'show' => 'Mostrar',
@@ -11,5 +12,10 @@ return [
     'roles' => 'Roles',
     'permissions' => 'Permisos',
     'departments' => 'Departamentos',
+    'categories' => 'Categorias',
+    'folders' => 'Carpetas',
+    'documents' => 'Documentos',
+    'frontpages' => 'Portadas',
+
     // ----------------------------------------------
 ];
