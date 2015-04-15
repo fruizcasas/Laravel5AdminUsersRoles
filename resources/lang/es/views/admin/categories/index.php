@@ -9,6 +9,8 @@ return [
     'name' => 'Nombre',
     'acronym' => 'Siglas',
     'display_name' => 'Nombre pantalla',
+    'parent' => 'Padre',
+    'path' => 'Camino',
     'description' =>'Descripción',
     'filter' => 'Filtrar',
     'trash' => 'Papel.',

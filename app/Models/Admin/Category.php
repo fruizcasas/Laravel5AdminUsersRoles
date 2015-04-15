@@ -29,6 +29,7 @@ use App\Traits\SortableTrait;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Category whereUpdatedAt($value)
  * @method static \App\Models\Admin\Category sortable($view)
  */
+
 class Category extends Model
 {
 
@@ -80,7 +81,6 @@ class Category extends Model
     public function getShortDescriptionAttribute()
     {
         return str_limit($this->description, 30);
-
     }
 
     static public function getCategories($id, $indent,$path)
@@ -103,13 +103,11 @@ class Category extends Model
         $categories = static::getCategories(Category::ROOT_CATEGORY, 1,'*');
         foreach ($categories as $category) {
             if (!in_array($category['id'], $excluded)) {
-                // $result[$category['id']] = str_repeat('-', $category['indent']) . $category['name'];
                 $result[$category['id']] = $category['name'];
             }
         }
         return $result;
     }
-
 }
 
 

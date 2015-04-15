@@ -9,6 +9,7 @@ return [
     'name' => 'Name',
     'acronym' => 'Acronym',
     'display_name' => 'Display Name',
+    'parent' => 'Parent',
     'path' => 'Path',
     'description' => 'Description',
     'filter' => 'Filter',

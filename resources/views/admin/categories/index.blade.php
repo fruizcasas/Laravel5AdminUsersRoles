@@ -4,7 +4,7 @@
 // View Name Prefix
 // -----------------
 $VN = 'views/admin/categories/index.';
-const VIEW_NAME    = 'admin.categories.index';
+const VIEW_NAME = 'admin.categories.index';
 ?>
 
 @include('admin.categories._routes')
@@ -43,6 +43,7 @@ const VIEW_NAME    = 'admin.categories.index';
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'name',trans($VN.'name'))!!}</th>
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'acronym',trans($VN.'acronym'))!!}</th>
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'display_name',trans($VN.'display_name'))!!}</th>
+        <th>{{trans($VN.'parent')}}</th>
         <th>{{trans($VN.'path')}}</th>
         <th>{{trans($VN.'description')}}</th>
         </thead>
@@ -76,6 +77,10 @@ const VIEW_NAME    = 'admin.categories.index';
                                                              'placeholder'=>trans($VN.'display_name')]) !!}
             </td>
             <td>
+
+            </td>
+            <td>
+
             </td>
             <td>
                 <!--- filter description Field --->
@@ -104,6 +109,11 @@ const VIEW_NAME    = 'admin.categories.index';
                     {!! link_to_route(SHOW_ROUTE,$model->display_name,['id'=>$model->id]) !!}
                 </td>
                 <td>
+                    @if($model->parent)
+                        {!! link_to_route(SHOW_ROUTE,$model->parent->name,['id'=>$model->parent->id]) !!}
+                    @endif
+                </td>
+                <td>
                     {{ $model->Path()}}
                 </td>
                 <td>
@@ -116,15 +126,17 @@ const VIEW_NAME    = 'admin.categories.index';
         <tfoot>
         <tr>
             <td class="text-right">
-               <small>{{  $models->total() .' recs' }}</small>
+                <small>{{  $models->total() .' recs' }}</small>
             </td>
             <td colspan="10">
                 @if (App\Profile::OrderByLabel(VIEW_NAME) !='')
-                    <small>{{trans($VN.'order_by')}}: <strong>{{ App\Profile::OrderByLabel(VIEW_NAME) }}</strong></small>
+                    <small>{{trans($VN.'order_by')}}: <strong>{{ App\Profile::OrderByLabel(VIEW_NAME) }}</strong>
+                    </small>
                 @endif
                 &nbsp;
                 @if (App\Profile::FilterByLabel(VIEW_NAME) !='')
-                    <small>{{trans($VN.'filer_by')}}: <strong>{{ App\Profile::FilterByLabel(VIEW_NAME) }}</strong></small>
+                    <small>{{trans($VN.'filter_by')}}: <strong>{{ App\Profile::FilterByLabel(VIEW_NAME) }}</strong>
+                    </small>
                 @endif
 
             </td>
