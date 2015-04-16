@@ -60,7 +60,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     protected $dates = ['deleted_at'];
 
-	use Authenticatable, CanResetPassword;
+    const ROOT_USER = 0;
+
+
+    use Authenticatable, CanResetPassword;
 
 	/**
 	 * The database table used by the model.
@@ -94,6 +97,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @var array
 	 */
 	protected $hidden = ['password', 'remember_token'];
+
+    public function children()
+    {
+        return $this->hasMany('App\Models\Admin\ScUser','user_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo('App\Models\Admin\SpUser','user_id');
+    }
+
 
     public function roles()
     {
@@ -156,6 +170,57 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
         return implode(', ',$trim_departments);
     }
+
+    static public function getUsers($id, $indent,$path)
+    {
+        $result = [];
+        if ($indent<15) {
+            $users = User::withTrashed()->whereUserId($id)->orderBy('name')->get();
+            foreach ($users as $user) {
+                $result[] = ['indent' => $indent, 'path' => $path.'.'.$user->name,'name' => $user->name, 'display_name' => $user->display_name, 'id' => $user->id, 'parent' => $id];
+                $result = array_merge($result, static::GetUsers($user->id, $indent + 1,$path.'.'.$user->name));
+            }
+        }
+        return $result;
+    }
+
+    static public function ListUsers($excluded = [])
+    {
+        $result = [];
+        $result[User::ROOT_USER] = '*';
+        $users = static::getUsers(User::ROOT_USER, 1,'*');
+        foreach ($users as $user) {
+            if (!in_array($user['id'], $excluded)) {
+                $result[$user['id']] = $user['path'];
+            }
+        }
+        return $result;
+    }
+
+    static protected $treeResult = '';
+
+    static function treeUsers($route_show,$id, $indent,$name)
+    {
+        if ($indent<15) {
+            $users = User::withTrashed()->whereUserId($id)->orderBy('name')->get();
+            if ($users->count() > 0) {
+                static::$treeResult .= PHP_EOL . '<ul>';
+                foreach ($users as $user) {
+                    static::$treeResult .= PHP_EOL . '<li>' . link_to_route($route_show,$user->name,['id'=> $user->id]) .' - '. ($user->trashed()?'<del>'.e($user->display_name).'</del>':e($user->display_name));
+                    static::treeUsers($route_show,$user->id, $indent + 1, $user->name);
+                    static::$treeResult .= PHP_EOL . '</li>';
+                }
+                static::$treeResult .= PHP_EOL . '</ul>';
+            }
+        }
+    }
+    static public function Tree($route_show)
+    {
+        static::$treeResult = '';
+        static::treeUsers($route_show,User::ROOT_USER, 1,'*');
+        return static::$treeResult;
+    }
+
 
 
 }

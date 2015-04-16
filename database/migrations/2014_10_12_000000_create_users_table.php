@@ -22,6 +22,8 @@ class CreateUsersTable extends Migration {
 			$table->string('password', 60);
 			$table->rememberToken();
             $table->text('comments')->nullable();
+            $table->integer('user_id')->unsigned()->nullable()->index();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->boolean('is_admin')->default(false)->nullable();
             $table->boolean('is_author')->default(false)->nullable();
             $table->boolean('is_reviewer')->default(false)->nullable();
@@ -30,7 +32,10 @@ class CreateUsersTable extends Migration {
             $table->softDeletes();
             $table->timestamps();
 		});
-	}
+        DB::statement('create view sp_users as select * from users');
+        DB::statement('create view sc_users as select * from users');
+
+    }
 
 	/**
 	 * Reverse the migrations.
@@ -39,7 +44,9 @@ class CreateUsersTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('users');
+        DB::statement('drop view if exists sc_users');
+        DB::statement('drop view if exists sp_users');
+        Schema::drop('users');
 	}
 
 }

@@ -63,6 +63,18 @@ $yes_no = ['0' => trans($VN.'no'), '1' => trans($VN.'yes')];
                 {!! $errors->first('email', '<p class="help-block error-msg">:message</p>') !!}
             </div>
         </div>
+        <!--- user_id Field --->
+        <div class="form-group {{$errors->first('user_id','has-error')}}">
+            {!! Form::label('parent', trans($VN.'parent'),
+                                ['class' =>'col-sm-2 control-label text-right']) !!}
+            <div class="col-sm-10">
+                {!! Form::select('user_id',$users, $model->user_id,
+                                ['class' => 'form-control input-sm']+[(isset($readonly)?($readonly?'readonly':''):''),
+                                'style' => 'width:100%;']) !!}
+                {!! $errors->first('user_id', '<p class="help-block error-msg">:message</p>') !!}
+            </div>
+        </div>
+
         <!--- is_admin , is_owner , is_reviewer Fields --->
         <div class="form-group {{$errors->first('is_admin','has-error')}}">
             {!! Form::label('is_author', trans($VN.'author'),['class' =>'col-sm-2 control-label text-right']) !!}

@@ -43,7 +43,6 @@ class UsersController extends Controller
             'name',
             'acronym',
             'display_name',
-            'email',
             'is_admin',
             'is_author',
             'is_reviewer',
@@ -57,12 +56,12 @@ class UsersController extends Controller
             'name',
             'acronym',
             'display_name',
-            'email',
             'is_admin',
             'is_author',
             'is_reviewer',
             'is_approver',
             'is_publisher',
+            'parent',
             'roles',
             'departments',
         ];
@@ -84,6 +83,31 @@ class UsersController extends Controller
     public function __construct()
     {
         $this->middleware('admin');
+
+        $root = User::withTrashed()->find(User::ROOT_USER);
+        if (!$root) {
+            $root = new User();
+            $root->name = 'Root';
+            $root->acronym = 'root';
+            $root->display_name = 'Root User';
+            $root->user_id = null;
+            $root->save();
+            $root->id = User::ROOT_USER;
+            $root->save();
+        } else {
+            if ($root->trashed()) {
+                $root->restore();
+            };
+            if ($root->user_id != null) {
+                $root->user_id = null;
+                $root->save();
+            }
+        }
+        $more = User::withTrashed()->whereUserId(null)->where('id', '<>', User::ROOT_USER);
+        if ($more->count() > 0) {
+            $more->update(['user_id' => User::ROOT_USER]);
+        }
+
     }
 
 
@@ -104,7 +128,7 @@ class UsersController extends Controller
             $value = false;
         }
         Session([$this->index_view . '.trash' => $value]);
-        return redirect(route($this->index_route));
+        return redirect(route($this->index_route,['tab' => 'data']));
     }
 
     public function filter(SearchRequest $request)
@@ -112,7 +136,7 @@ class UsersController extends Controller
         foreach ($this->filter_fields as $field) {
             Profile::loginProfile()->setFilterValue($this->index_view, $field, $request->input($field, ''));
         }
-        return redirect(route($this->index_route));
+        return redirect(route($this->index_route,['tab' => 'data']));
     }
 
     public function sort($column = null, $order = null)
@@ -133,7 +157,7 @@ class UsersController extends Controller
             Profile::loginProfile()->setOrderBy($this->index_view, []);
         };
 
-        return redirect(route($this->index_route));
+        return redirect(route($this->index_route,['tab' => 'data']));
     }
 
     public function excel($format = 'xlsx')
@@ -183,6 +207,8 @@ class UsersController extends Controller
         $model_roles = [];
         $departments = Department::lists('name', 'id');
         $model_departments = [];
+        $users = User::ListUsers();
+
         return view($this->create_view,
             compact([
                 'model',
@@ -190,6 +216,7 @@ class UsersController extends Controller
                 'model_roles',
                 'departments',
                 'model_departments',
+                'users',
             ]));
     }
 
@@ -207,6 +234,7 @@ class UsersController extends Controller
             $model_roles = $model->roles->lists('id');
             $departments = Department::lists('name', 'id');
             $model_departments = $model->departments->lists('id');
+            $users = User::ListUsers();
             return view($this->show_view,
                 compact([
                     'model',
@@ -214,6 +242,7 @@ class UsersController extends Controller
                     'model_roles',
                     'departments',
                     'model_departments',
+                    'users',
                 ]));
         } catch (Exception $e) {
             Flash::warning(trans($this->resource_name . 'not_found', ['model' => $this->model_name, 'id' => $id]));
@@ -235,6 +264,10 @@ class UsersController extends Controller
             $model_roles = $model->roles->lists('id');
             $departments = Department::lists('name', 'id');
             $model_departments = $model->departments->lists('id');
+            $excluded = $model->children()->lists('id');
+            $excluded[] = $model->id;
+            $users = User::ListUsers($excluded);
+
             return view($this->edit_view,
                 compact([
                     'model',
@@ -242,6 +275,7 @@ class UsersController extends Controller
                     'model_roles',
                     'departments',
                     'model_departments',
+                    'users'
                 ]));
         } catch (Exception $e) {
             Flash::warning(trans($this->resource_name . 'not_found', ['model' => $this->model_name, 'id' => $id]));
@@ -260,9 +294,11 @@ class UsersController extends Controller
         try {
             $roles = $request->input('roles', []);
             $departments = $request->input('departments', []);
+            $user_id = $request->input('user_id', null);
             $model = new User($request->all());
             try {
                 DB::beginTransaction();
+                $model->user_id = $user_id;
                 $model->save();
                 $model->roles()->sync($roles);
                 $model->departments()->sync($departments);
@@ -295,9 +331,11 @@ class UsersController extends Controller
         try {
             $roles = $request->input('roles', []);
             $departments = $request->input('departments', []);
+            $user_id = $request->input('user_id', null);
             $model = $this->getModel($id);
             try {
                 DB::beginTransaction();
+                $model->user_id = $user_id;
                 $model->update($request->all());
                 $model->roles()->sync($roles);
                 $model->departments()->sync($departments);
@@ -334,7 +372,7 @@ class UsersController extends Controller
             if ($this->show_trash()) {
                 return redirect(route($this->show_route, [$id]));
             } else {
-                return redirect(route($this->index_route));
+                return redirect(route($this->index_route,['tab' => 'data']));
             }
         } catch (Exception $e) {
             Flash::error($e->getMessage());
@@ -367,7 +405,7 @@ class UsersController extends Controller
                     $model->forcedelete();
                 });
             Flash::info(trans($this->resource_name . 'deleted', ['model' => $this->model_name]));
-            return redirect(route($this->index_route));
+            return redirect(route($this->index_route,['tab' => 'data']));
         } catch (Exception $e) {
             Flash::error($e->getMessage());
             return $request->response([]);
@@ -442,6 +480,18 @@ class UsersController extends Controller
                                 $first = false;
                             } else {
                                 $models = $models->orWhere($field, $value);
+                            }
+                        } else if ($field == 'parent') {
+                            $value = '%' . $value . '%';
+                            if ($first) {
+                                $models = $models->whereHas('parent', function ($q) use ($value) {
+                                    $q->where('name', 'like', $value);
+                                });
+                                $first = false;
+                            } else {
+                                $models = $models->orWhereHas('parent', function ($q) use ($value) {
+                                    $q->where('name', 'like', $value);
+                                });
                             }
                         } else if ($field == 'roles') {
                             $value = '%' . $value . '%';

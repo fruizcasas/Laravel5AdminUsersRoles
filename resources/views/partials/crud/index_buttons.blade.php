@@ -19,7 +19,7 @@ $VN = 'views/partials/crud/index_buttons.';
                               ['class'=>'btn-sm btn-primary active'])!!}
         @endif
     @endif
-    {!! $models->render()!!}
+    {!! $models->appends(['tab' => 'data'])->render()!!}
     &nbsp;
     {!! link_to_route(EXCEL_ROUTE,trans($VN.'excel'),[],
             ['class' => 'btn-sm btn-success ']) !!}

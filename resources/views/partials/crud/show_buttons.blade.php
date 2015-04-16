@@ -10,7 +10,7 @@ $VN = 'views/partials/crud/show_buttons.';
     <div class="form-horizontal">
         <div class="form-group">
             <div class="col-md-2 col-md-offset-2">
-                {!! link_to_route(INDEX_ROUTE,trans($VN.'cancel'),[],
+                {!! link_to_route(INDEX_ROUTE,trans($VN.'back'),['tab'=>'data'],
                                  ['class' => 'form-control btn btn-primary']) !!}
             </div>
             <div class="col-md-2">

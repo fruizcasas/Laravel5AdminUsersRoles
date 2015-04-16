@@ -14,6 +14,7 @@ return [
     'admin' => 'SysAdmin',
     'approver' => 'Approver',
     'publisher' => 'Publisher',
+    'parent' => 'Report To',
     'roles' => 'Roles',
     'departments' => 'Departments',
     'comments' => 'Comments',

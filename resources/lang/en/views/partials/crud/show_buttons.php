@@ -2,7 +2,7 @@
 
 return [
     // ----------------------------------------------
-        'cancel' => 'Cancel',
+        'back' => 'Back',
         'new' => 'New',
         'edit' => 'Edit',
         'trash' => 'Trash',

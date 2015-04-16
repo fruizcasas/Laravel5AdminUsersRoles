@@ -87,9 +87,9 @@ class Category extends Model
     {
         $result = [];
         if ($indent<15) {
-            $categories = Category::withTrashed()->whereCategoryId($id)->get();
+            $categories = Category::withTrashed()->whereCategoryId($id)->orderBy('name')->get();
             foreach ($categories as $category) {
-                $result[] = ['indent' => $indent, 'name' => $path.'.'.$category->name, 'id' => $category->id, 'parent' => $id];
+                $result[] = ['indent' => $indent, 'path' => $path.'.'.$category->name,'name' => $category->name, 'display_name' => $category->display_name, 'id' => $category->id, 'parent' => $id];
                 $result = array_merge($result, static::GetCategories($category->id, $indent + 1,$path.'.'.$category->name));
             }
         }
@@ -103,11 +103,36 @@ class Category extends Model
         $categories = static::getCategories(Category::ROOT_CATEGORY, 1,'*');
         foreach ($categories as $category) {
             if (!in_array($category['id'], $excluded)) {
-                $result[$category['id']] = $category['name'];
+                $result[$category['id']] = $category['path'];
             }
         }
         return $result;
     }
+
+    static protected $treeResult = '';
+
+    static function treeCategories($route_show,$id, $indent,$name)
+    {
+        if ($indent<15) {
+            $categories = Category::withTrashed()->whereCategoryId($id)->orderBy('name')->get();
+            if ($categories->count() > 0) {
+                static::$treeResult .= PHP_EOL . '<ul>';
+                foreach ($categories as $category) {
+                    static::$treeResult .= PHP_EOL . '<li>' . link_to_route($route_show,$category->name,['id'=> $category->id]) .' - '. e($category->display_name);
+                    static::treeCategories($route_show,$category->id, $indent + 1, $category->name);
+                    static::$treeResult .= PHP_EOL . '</li>';
+                }
+                static::$treeResult .= PHP_EOL . '</ul>';
+            }
+        }
+    }
+    static public function Tree($route_show)
+    {
+        static::$treeResult = '';
+        static::treeCategories($route_show,Category::ROOT_CATEGORY, 1,'*');
+        return static::$treeResult;
+    }
+
 }
 
 
