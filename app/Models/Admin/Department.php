@@ -39,6 +39,10 @@ class Department extends Model {
     use SoftDeletes;
     protected $dates = ['deleted_at'];
 
+
+    const ROOT_DEPARTMENT = 0;
+
+
     /**
      * The database table used by the model.
      *
@@ -54,6 +58,65 @@ class Department extends Model {
     protected $fillable = ['name','acronym', 'display_name','description'];
 
 
+    public function Path($glue = '.')
+    {
+        $result =$this->name;
+        $count = 15;
+        $model = $this;
+        while (($model->parent()->withTrashed()->count() > 0) && $count) {
+            $count--;
+            $model = $model->parent()->withTrashed()->first();
+            $result =  $model->name . $glue . $result;
+        }
+        return $result;
+    }
+
+
+    public function children()
+    {
+        return $this->hasMany('App\Models\Admin\ScDepartment','department_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo('App\Models\Admin\SpDepartment','department_id');
+    }
+
+
+    public function getShortDescriptionAttribute()
+    {
+        return str_limit($this->description,30);
+
+    }
+
+    static public function getDepartments($id, $indent,$path)
+    {
+        $result = [];
+        if ($indent<15) {
+            $models = Department::withTrashed()->whereDepartmentId($id)->get();
+            foreach ($models as $model) {
+                $result[] = ['indent' => $indent, 'name' => $path.'.'.$model->name, 'id' => $model->id, 'parent' => $id];
+                $result = array_merge($result, static::getDepartments($model->id, $indent + 1,$path.'.'.$model->name));
+            }
+        }
+        return $result;
+    }
+
+    static public function ListDepartments($excluded = [])
+    {
+        $result = [];
+        $result[Department::ROOT_DEPARTMENT] = '*';
+        $models = static::getDepartments(Department::ROOT_DEPARTMENT, 1,'*');
+        foreach ($models as $model) {
+            if (!in_array($model['id'], $excluded)) {
+                $result[$model['id']] = $model['name'];
+            }
+        }
+        return $result;
+    }
+
+
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -65,19 +128,14 @@ class Department extends Model {
 
     public function getStrUsersAttribute()
     {
-        $users = $this->roles()->lists('name');
+        $users = $this->users()->lists('acronym');
         $trim_users = [];
         foreach($users as $user)
         {
-            $trim_users[] = str_limit($user,3,'');
+            $trim_users[] = trim($user);
         }
-        return implode(',',$trim_users);
+        return implode(', ',$trim_users);
     }
 
-    public function getShortDescriptionAttribute()
-    {
-        return str_limit($this->description,30);
-
-    }
 
 }

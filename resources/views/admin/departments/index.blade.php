@@ -43,7 +43,9 @@ const VIEW_NAME    = 'admin.departments.index';
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'name',trans($VN.'name'))!!}</th>
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'acronym',trans($VN.'acronym'))!!}</th>
         <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'display_name',trans($VN.'display_name'))!!}</th>
-        <th>Description</th>
+        <th>{{trans($VN.'parent')}}</th>
+        <th>{{trans($VN.'users')}}</th>
+        <th>{{trans($VN.'description')}}</th>
         </thead>
         <tbody>
         <tr>
@@ -75,6 +77,18 @@ const VIEW_NAME    = 'admin.departments.index';
                                                              'placeholder'=>trans($VN.'display_name')]) !!}
             </td>
             <td>
+                <!--- filter parent Field --->
+                {!! Form::text('parent', null, ['class' => 'form-control input-sm',
+                                                         'style' => 'width:100%;',
+                                                             'placeholder'=>trans($VN.'parent')]) !!}
+            </td>
+            <td>
+                <!--- filter users Field --->
+                {!! Form::text('users', null, ['class' => 'form-control input-sm',
+                                                         'style' => 'width:100%;',
+                                                             'placeholder'=>trans($VN.'users')]) !!}
+            </td>
+            <td>
                 <!--- filter description Field --->
                 {!! Form::text('description', null, ['class' => 'form-control input-sm',
                                                          'style' => 'width:100%;',
@@ -101,6 +115,15 @@ const VIEW_NAME    = 'admin.departments.index';
                     {!! link_to_route(SHOW_ROUTE,$model->display_name,['id'=>$model->id]) !!}
                 </td>
                 <td>
+                    @if($model->parent)
+                        {!! link_to_route(SHOW_ROUTE,$model->parent->name,['id'=>$model->parent->id]) !!}
+                    @endif
+                </td>
+
+                <td>
+                    {{ $model->StrUsers}}
+                </td>
+                <td>
                     {{ $model->ShortDescription}}
                 </td>
 
@@ -118,7 +141,7 @@ const VIEW_NAME    = 'admin.departments.index';
                 @endif
                 &nbsp;
                 @if (App\Profile::FilterByLabel(VIEW_NAME) !='')
-                    <small>{{trans($VN.'filer_by')}}: <strong>{{ App\Profile::FilterByLabel(VIEW_NAME) }}</strong></small>
+                    <small>{{trans($VN.'filter_by')}}: <strong>{{ App\Profile::FilterByLabel(VIEW_NAME) }}</strong></small>
                 @endif
 
             </td>

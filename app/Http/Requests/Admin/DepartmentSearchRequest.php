@@ -31,6 +31,8 @@ class DepartmentSearchRequest extends Request {
             'acronym' => '',
             'name' => '',
             'display_name' => '',
+            'parent' => '',
+            'users' => '',
             'description' =>''
 		];
 	}

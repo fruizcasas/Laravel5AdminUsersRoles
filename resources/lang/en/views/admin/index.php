@@ -4,6 +4,7 @@
 return [
     // ----------------------------------------------
     'administration' => 'Administration',
+    'people' => 'People',
     'users' => 'Users',
     'roles' => 'Roles',
     'permissions' => 'Permissions',

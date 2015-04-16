@@ -23,6 +23,8 @@ class CreateCategoriesTable extends Migration {
             $table->softDeletes();
             $table->timestamps();
         });
+        DB::statement('create view sp_categories as select * from categories');
+        DB::statement('create view sc_categories as select * from categories');
 	}
 
 	/**
@@ -32,6 +34,8 @@ class CreateCategoriesTable extends Migration {
 	 */
 	public function down()
 	{
+        DB::statement('drop view if exists sc_categories');
+        DB::statement('drop view if exists sp_categories');
 		Schema::drop('categories');
 	}
 

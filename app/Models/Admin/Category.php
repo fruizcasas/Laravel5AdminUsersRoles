@@ -59,23 +59,23 @@ class Category extends Model
     {
         $result =$this->name;
         $count = 15;
-        $category = $this;
-        while (($category->parent()->withTrashed()->count() > 0) && $count) {
+        $model = $this;
+        while (($model->parent()->withTrashed()->count() > 0) && $count) {
             $count--;
-            $category = $category->parent()->withTrashed()->first();
-            $result =  $category->name . $glue . $result;
+            $model = $model->parent()->withTrashed()->first();
+            $result =  $model->name . $glue . $result;
         }
         return $result;
     }
 
     public function children()
     {
-        return $this->hasMany('App\Models\Admin\Category');
+        return $this->hasMany('App\Models\Admin\ScCategory','category_id');
     }
 
     public function parent()
     {
-        return $this->belongsTo('App\Models\Admin\Category','category_id');
+        return $this->belongsTo('App\Models\Admin\SpCategory','category_id');
     }
 
     public function getShortDescriptionAttribute()

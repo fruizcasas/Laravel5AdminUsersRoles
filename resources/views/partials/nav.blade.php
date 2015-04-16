@@ -94,13 +94,14 @@ if (!in_array($locale, ['en', 'es'])) {
                                role="button" aria-expanded="false">{{trans($VN.'admin')}}<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ route('admin.users.index') }}">{{trans($VN.'users')}}</a></li>
+                                <li><a href="{{ route('admin.departments.index') }}">{{trans($VN.'departments')}}</a></li>
                                 <li><a href="{{ route('admin.roles.index') }}">{{trans($VN.'roles')}}</a></li>
                                 <li><a href="{{ route('admin.permissions.index') }}">{{trans($VN.'permissions')}}</a></li>
-                                <li><a href="{{ route('admin.departments.index') }}">{{trans($VN.'departments')}}</a></li>
-                                <li><a href="{{ route('admin.categories.index') }}">{{trans($VN.'categories')}}</a></li>
+                                <li class="divider"></li>
                                 <li><a href="{{ route('admin.folders.index') }}">{{trans($VN.'folders')}}</a></li>
-                                <li><a href="{{ route('admin.documents.index') }}">{{trans($VN.'documents')}}</a></li>
+                                <li><a href="{{ route('admin.categories.index') }}">{{trans($VN.'categories')}}</a></li>
                                 <li><a href="{{ route('admin.frontpages.index') }}">{{trans($VN.'frontpages')}}</a></li>
+                                <li><a href="{{ route('admin.documents.index') }}">{{trans($VN.'documents')}}</a></li>
                             </ul>
                         </li>
                     @endif

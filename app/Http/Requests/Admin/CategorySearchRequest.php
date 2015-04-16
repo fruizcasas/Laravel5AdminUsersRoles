@@ -29,8 +29,9 @@ class CategorySearchRequest extends Request {
         return [
             'id' => '',
             'name' => '',
-            'display_name' => '',
             'acronym' =>'',
+            'display_name' => '',
+            'parent' =>'',
             'description' =>''
         ];
 	}

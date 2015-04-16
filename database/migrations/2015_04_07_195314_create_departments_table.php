@@ -23,6 +23,8 @@ class CreateDepartmentsTable extends Migration {
             $table->softDeletes();
             $table->timestamps();
         });
+        DB::statement('create view sp_departments as select * from departments');
+        DB::statement('create view sc_departments as select * from departments');
 	}
 
 	/**
@@ -32,6 +34,8 @@ class CreateDepartmentsTable extends Migration {
 	 */
 	public function down()
 	{
+        DB::statement('drop view if exists sc_departments');
+        DB::statement('drop view if exists sp_departments');
 		Schema::drop('departments');
 	}
 

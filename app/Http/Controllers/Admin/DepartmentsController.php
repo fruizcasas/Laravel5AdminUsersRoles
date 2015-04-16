@@ -14,11 +14,11 @@ use App\Http\Requests\Admin\DepartmentNewRequest as ModelNewRequest;
 use App\Http\Requests\Admin\DeleteRequest as DeleteRequest;
 use App\Http\Requests\Admin\DepartmentSearchRequest as SearchRequest;
 use App\Models\Admin\Department;
+use PDOException;
 
 
 class DepartmentsController extends Controller
 {
-
 
     protected $model_name = 'Department';
     protected $index_view = 'admin.departments.index';
@@ -32,6 +32,7 @@ class DepartmentsController extends Controller
     protected $edit_route = 'admin.departments.edit';
     protected $trash_route = 'admin.departments.trash';
 
+    protected $resource_name = 'controllers/admin/departments.';
 
     protected $sort_fields =
         [
@@ -41,23 +42,53 @@ class DepartmentsController extends Controller
             'display_name'
         ];
 
-    protected $filter_boolean_fields =
-        [
-        ];
-
     protected $filter_fields =
         [
             'id',
             'name',
             'acronym',
             'display_name',
+            'parent',
+            'users',
             'description'
+        ];
+
+    protected $filter_numeric_fields =
+        [
+            'id',
+        ];
+
+    protected $filter_boolean_fields =
+        [
         ];
 
 
     public function __construct()
     {
         $this->middleware('admin');
+        $root = Department::withTrashed()->find(Department::ROOT_DEPARTMENT);
+        if (!$root) {
+            $root = new Department();
+            $root->name = '*';
+            $root->acronym = '*';
+            $root->display_name = '*';
+            $root->department_id = null;
+            $root->save();
+            $root->id = Department::ROOT_DEPARTMENT;
+            $root->save();
+        } else {
+            if ($root->trashed()) {
+                $root->restore();
+            };
+            if ($root->department_id != null) {
+                $root->department_id = null;
+                $root->save();
+            }
+        }
+        $more = Department::withTrashed()->whereDepartmentId(null)->where('id', '<>', Department::ROOT_DEPARTMENT);
+        if ($more->count() > 0) {
+            $more->update(['department_id' => Department::ROOT_DEPARTMENT]);
+        }
     }
 
 
@@ -147,8 +178,12 @@ class DepartmentsController extends Controller
      */
     public function create()
     {
+        $departments = Department::ListDepartments();
         $model = new Department();
-        return view($this->create_view, compact(['model']));
+        return view($this->create_view, compact([
+            'model',
+            'departments',
+        ]));
     }
 
     /**
@@ -160,10 +195,14 @@ class DepartmentsController extends Controller
     public function show($id)
     {
         try {
+            $departments = Department::ListDepartments();
             $model = $this->getModel($id);
-            return view($this->show_view, compact('model'));
+            return view($this->show_view, compact([
+                'model',
+                'departments',
+            ]));
         } catch (Exception $e) {
-            flash()->warning("$this->model_name $id not found");
+            Flash::warning(trans($this->resource_name . 'not_found', ['model' => $this->model_name, 'id' => $id]));
             return $this->index();
         }
     }
@@ -176,8 +215,30 @@ class DepartmentsController extends Controller
      */
     public function edit($id)
     {
-        $model = $this->getModel($id);
-        return view($this->edit_view, compact(['model']));
+
+        if ($id == Department::ROOT_DEPARTMENT) {
+            $departments = Department::ListDepartments();
+            $model = $this->getModel($id);
+            Flash::warning(trans($this->resource_name . 'forbidden'));
+            return view($this->show_view, compact([
+                'model',
+                'departments',
+            ]));
+        }
+        try {
+            $model = $this->getModel($id);
+            $excluded = $model->children()->lists('id');
+            $excluded[] = $model->id;
+            $departments = Department::ListDepartments($excluded);
+            return view($this->edit_view, compact([
+                'model',
+                'departments',
+            ]));
+        } catch (Exception $e) {
+            Flash::warning(trans($this->resource_name . 'not_found', ['model' => $this->model_name, 'id' => $id]));
+            return $this->index();
+        }
+
     }
 
 
@@ -186,15 +247,17 @@ class DepartmentsController extends Controller
      *
      * @return Response
      */
-    public function store(ModelRequest $request)
+    public function store(ModelNewRequest $request)
     {
         try {
             $model = new Department($request->all());
             try {
                 DB::beginTransaction();
+                $department_id = $request->input('department_id', null);
+                $model->department_id = $department_id;
                 $model->save();
                 DB::commit();
-                flash()->info("$this->model_name saved");
+                Flash::info(trans($this->resource_name . 'saved', ['model' => $this->model_name]));
                 return redirect(route($this->show_route, [$model->id]));
             } catch (Exception $e) {
                 DB::rollBack();
@@ -202,7 +265,11 @@ class DepartmentsController extends Controller
             }
         } catch (Exception $e) {
             $errors = [];
-            flash()->error($e->getMessage());
+            if ($e instanceof PDOException) {
+                Flash::error($e->errorInfo[2]);
+            } else {
+                Flash::error($e->getMessage());
+            }
             return $request->response($errors);
         }
     }
@@ -219,9 +286,11 @@ class DepartmentsController extends Controller
             $model = $this->getModel($id);
             try {
                 DB::beginTransaction();
+                $department_id = $request->input('department_id', null);
+                $model->department_id = $department_id;
                 $model->update($request->all());
                 DB::commit();
-                flash()->info("$this->model_name saved");
+                Flash::info(trans($this->resource_name . 'saved', ['model' => $this->model_name]));
                 return redirect(route($this->show_route, [$model->id]));
             } catch (Exception $e) {
                 DB::rollBack();
@@ -229,7 +298,11 @@ class DepartmentsController extends Controller
             }
         } catch (Exception $e) {
             $errors = [];
-            flash()->error($e->getMessage());
+            if ($e instanceof PDOException) {
+                Flash::error($e->errorInfo[2]);
+            } else {
+                Flash::error($e->getMessage());
+            }
             return $request->response($errors);
         }
     }
@@ -242,17 +315,31 @@ class DepartmentsController extends Controller
      */
     public function destroy($id, DeleteRequest $request)
     {
+        if ($id == Department::ROOT_DEPARTMENT) {
+            $departments = Department::ListDepartments();
+            $model = $this->getModel($id);
+            Flash::warning(trans($this->resource_name . 'forbidden'));
+            return view($this->show_view, compact([
+                'model',
+                'departments',
+            ]));
+        }
+
         try {
             $model = $this->getModel($id);
             $model->delete();
-            flash()->info("$this->model_name sent to trash");
+            Flash::info(trans($this->resource_name . 'sent_to_trash', ['model' => $this->model_name]));
             if ($this->show_trash()) {
                 return redirect(route($this->show_route, [$id]));
             } else {
                 return redirect(route($this->index_route));
             }
         } catch (Exception $e) {
-            flash()->error($e->getMessage());
+            if ($e instanceof PDOException) {
+                Flash::error($e->errorInfo[2]);
+            } else {
+                Flash::error($e->getMessage());
+            }
             return $request->response([]);
         }
     }
@@ -263,10 +350,14 @@ class DepartmentsController extends Controller
         try {
             $model = $this->getModel($id);
             $model->restore();
-            flash()->info("$this->model_name restored");
+            Flash::info(trans($this->resource_name . 'restored', ['model' => $this->model_name]));
             return redirect(route($this->show_route, [$id]));
         } catch (Exception $e) {
-            flash()->error($e->getMessage());
+            if ($e instanceof PDOException) {
+                Flash::error($e->errorInfo[2]);
+            } else {
+                Flash::error($e->getMessage());
+            }
             return $request->response([]);
         }
     }
@@ -279,10 +370,14 @@ class DepartmentsController extends Controller
                 function () use ($model) {
                     $model->forcedelete();
                 });
-            flash()->info("$this->model_name removed");
+            Flash::info(trans($this->resource_name . 'deleted', ['model' => $this->model_name]));
             return redirect(route($this->index_route));
         } catch (Exception $e) {
-            flash()->error($e->getMessage());
+            if ($e instanceof PDOException) {
+                Flash::error($e->errorInfo[2]);
+            } else {
+                Flash::error($e->getMessage());
+            }
             return $request->response([]);
         }
     }
@@ -300,12 +395,44 @@ class DepartmentsController extends Controller
                     $values = explode(',', $filter[$field]);
                     $first = true;
                     foreach ($values as $value) {
-                        if ($field == 'id') {
+                        if (in_array($field, $this->filter_numeric_fields)) {
                             if ($first) {
                                 $models = $models->Where($field, $value);
                                 $first = false;
                             } else {
                                 $models = $models->orWhere($field, $value);
+                            }
+                        } else if (in_array($field, $this->filter_boolean_fields)) {
+                            $value = (strtolower($value) == 'x');
+                            if ($first) {
+                                $models = $models->Where($field, $value);
+                                $first = false;
+                            } else {
+                                $models = $models->orWhere($field, $value);
+                            }
+                        } else if ($field == 'parent') {
+                            $value = '%' . $value . '%';
+                            if ($first) {
+                                $models = $models->whereHas('parent', function ($q) use ($value) {
+                                    $q->where('name', 'like', $value);
+                                });
+                                $first = false;
+                            } else {
+                                $models = $models->orWhereHas('parent', function ($q) use ($value) {
+                                    $q->where('name', 'like', $value);
+                                });
+                            }
+                        } else if ($field == 'users') {
+                            $value = '%' . $value . '%';
+                            if ($first) {
+                                $models = $models->whereHas('users', function ($q) use ($value) {
+                                    $q->where('acronym', 'like', $value);
+                                });
+                                $first = false;
+                            } else {
+                                $models = $models->orWhereHas('users', function ($q) use ($value) {
+                                    $q->where('acronym', 'like', $value);
+                                });
                             }
                         } else {
                             $value = '%' . $value . '%';

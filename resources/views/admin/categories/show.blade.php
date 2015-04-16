@@ -23,7 +23,7 @@ const VIEW_NAME    = 'admin.categories.show';
 
 @section('content')
     <div class="row">
-        <div class="col-md-10 col-md-offset-1">
+        <div class="col-md-12 col-md-offset-0">
             <div class="panel panel-primary">
              @include('partials.crud.show_buttons')
 
@@ -31,19 +31,24 @@ const VIEW_NAME    = 'admin.categories.show';
 
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#data" aria-controls="data" role="tab"
-                                                                  data-toggle="tab">Data</a></li>
-                        <li role="presentation"><a href="#relations" aria-controls="relations" role="tab"
-                                                   data-toggle="tab">Relations</a></li>
+                        <li role="presentation" {!! Input::get('tab','data')=='data'?'class="active"':''!!}><a href="#data" aria-controls="data" role="tab"
+                                                                  data-toggle="tab">{{trans($VN.'data')}}</a></li>
+                        <li role="presentation" {!! Input::get('tab','data')=='relations'?'class="active"':''!!}><a href="#relations" aria-controls="relations" role="tab"
+                                                   data-toggle="tab">{{trans($VN.'relations')}}</a></li>
+                        <li role="presentation" {!! Input::get('tab','data')=='frontpages'?'class="active"':''!!}><a href="#frontpages" aria-controls="frontpages" role="tab"
+                                                                                                                    data-toggle="tab">{{trans($VN.'frontpages')}}</a></li>
                     </ul>
 
                     <!-- Tab panes -->
                     <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="data">
+                        <div role="tabpanel" class="tab-pane {!! Input::get('tab','data')=='data'?'active':''!!}" id="data">
                             @include('admin.categories._form',['readonly' => true])
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="relations">
+                        <div role="tabpanel" class="tab-pane {!! Input::get('tab','data')=='relations'?'active':''!!}" id="relations">
                             @include('admin.categories._relations',['readonly' => true])
+                        </div>
+                        <div role="tabpanel" class="tab-pane {!! Input::get('tab','data')=='frontpages'?'active':''!!}" id="frontpages">
+                            @include('admin.categories._frontpages',['readonly' => true])
                         </div>
                     </div>
                 </div>

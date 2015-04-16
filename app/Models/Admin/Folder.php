@@ -49,4 +49,16 @@ class Folder extends Model {
     protected $fillable = ['name','description'];
 
 
+
+
+    public function children()
+    {
+        return $this->hasMany('App\Models\Admin\ScFolder','folder_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo('App\Models\Admin\SpFolder','folder_id');
+    }
+
 }

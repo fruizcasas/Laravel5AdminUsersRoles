@@ -77,6 +77,10 @@ const VIEW_NAME = 'admin.categories.index';
                                                              'placeholder'=>trans($VN.'display_name')]) !!}
             </td>
             <td>
+                <!--- filter parent Field --->
+                {!! Form::text('parent', null, ['class' => 'form-control input-sm',
+                                                         'style' => 'width:100%;',
+                                                             'placeholder'=>trans($VN.'parent')]) !!}
 
             </td>
             <td>

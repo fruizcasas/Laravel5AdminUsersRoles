@@ -46,6 +46,19 @@ $VN = 'views/admin/departments/_form.';
             </div>
         </div>
 
+        <!--- department_id Field --->
+        <div class="form-group {{$errors->first('department_id','has-error')}}">
+            {!! Form::label('parent', trans($VN.'parent'),
+                                ['class' =>'col-sm-2 control-label text-right']) !!}
+            <div class="col-sm-10">
+                {!! Form::select('department_id',$departments, $model->department_id,
+                                ['class' => 'form-control input-sm']+[(isset($readonly)?($readonly?'readonly':''):''),
+                                'style' => 'width:100%;']) !!}
+                {!! $errors->first('department_id', '<p class="help-block error-msg">:message</p>') !!}
+            </div>
+        </div>
+
+
         <!--- description Field --->
         <div class="form-group {{$errors->first('description','has-error')}}">
             {!! Form::label('description', trans($VN.'description'),['class' =>'col-sm-2 control-label text-right']) !!}

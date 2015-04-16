@@ -3,26 +3,12 @@
 // -----------------
 // View Name Prefix
 // -----------------
-$VN = 'views/admin/categories/_relations.';
+$VN = 'views/admin/categories/_frontpages.';
 ?>
 
 
 <div class="panel-body">
     <div class="form-horizontal">
-
-        <!--- path Field --->
-        <div class="form-group {{$errors->first('path','has-error')}}">
-            {!! Form::label('path',  trans($VN.'path'),['class' =>'col-sm-2 control-label text-right']) !!}
-            <div class="col-sm-10">
-                {!! Form::text('path', $model->Path(), [
-                    'class' => 'form-control input-sm',
-                    'readonly',
-                    'placeholder' =>  trans($VN.'display_name'),
-                    'style' => 'width:100%;']) !!}
-                {!! $errors->first('path', '<p class="help-block error-msg">:message</p>') !!}
-            </div>
-        </div>
-        <hr/>
         <div class="form-group">
             <div class="col-sm-2 ">
                 {!! Form::label('parent', trans($VN.'parent'),['class' =>'col-sm-2 control-label text-right']) !!}
@@ -50,7 +36,7 @@ $VN = 'views/admin/categories/_relations.';
                 </table>
             </div>
         </div>
-        <hr/>
+
         <!--- Name Field --->
         <div class="form-group {{$errors->first('name','has-error')}}">
             {!! Form::label('name',  trans($VN.'name'),['class' =>'col-sm-2 control-label text-right']) !!}
@@ -63,7 +49,21 @@ $VN = 'views/admin/categories/_relations.';
                 {!! $errors->first('name', '<p class="help-block error-msg">:message</p>') !!}
             </div>
         </div>
-        <hr/>
+
+        <!--- path Field --->
+        <div class="form-group {{$errors->first('path','has-error')}}">
+            {!! Form::label('path',  trans($VN.'path'),['class' =>'col-sm-2 control-label text-right']) !!}
+            <div class="col-sm-10">
+                {!! Form::text('path', $model->Path(), [
+                    'class' => 'form-control input-sm',
+                    'readonly',
+                    'placeholder' =>  trans($VN.'display_name'),
+                    'style' => 'width:100%;']) !!}
+                {!! $errors->first('path', '<p class="help-block error-msg">:message</p>') !!}
+            </div>
+        </div>
+
+
         <div class="form-group">
             <div class="col-sm-2 ">
                 {!! Form::label('children',trans($VN.'children'),['class' =>'col-sm-2 control-label text-right']) !!}

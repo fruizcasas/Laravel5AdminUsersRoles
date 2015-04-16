@@ -23,6 +23,9 @@ class CreateFoldersTable extends Migration {
             $table->softDeletes();
             $table->timestamps();
         });
+        DB::statement('create view sp_folders as select * from folders');
+        DB::statement('create view sc_folders as select * from folders');
+
 	}
 
 	/**
@@ -32,6 +35,8 @@ class CreateFoldersTable extends Migration {
 	 */
 	public function down()
 	{
+        DB::statement('drop view if exists sc_folders');
+        DB::statement('drop view if exists sp_folders');
 		Schema::drop('folders');
 	}
 

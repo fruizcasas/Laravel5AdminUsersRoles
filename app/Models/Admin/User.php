@@ -132,9 +132,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $trim_roles = [];
         foreach($roles as $role)
         {
-            $trim_roles[] = str_limit($role,3,'');
+            $trim_roles[] = trim($role);
         }
-        return implode(',',$trim_roles);
+        return implode(', ',$trim_roles);
     }
 
     /**
@@ -152,9 +152,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $trim_departments = [];
         foreach($departments as $department)
         {
-            $trim_departments[] = str_limit($department,3,'');
+            $trim_departments[] = trim($department);
         }
-        return implode(',',$trim_departments);
+        return implode(', ',$trim_departments);
     }
 
 

@@ -3,7 +3,7 @@
 
 return [
     // ----------------------------------------------
-    'title' => 'Categorias',
+    'title' => 'Categorías',
     'reset' => 'iniciar',
     'id' => 'Id',
     'name' => 'Nombre',

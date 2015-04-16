@@ -14,6 +14,7 @@ use App\Http\Requests\Admin\CategoryNewRequest as ModelNewRequest;
 use App\Http\Requests\Admin\DeleteRequest as DeleteRequest;
 use App\Http\Requests\Admin\CategorySearchRequest as SearchRequest;
 use App\Models\Admin\Category;
+use PDOException;
 
 
 class CategoriesController extends Controller
@@ -47,6 +48,7 @@ class CategoriesController extends Controller
             'name',
             'acronym',
             'display_name',
+            'parent',
             'description',
         ];
 
@@ -65,8 +67,7 @@ class CategoriesController extends Controller
     {
         $this->middleware('admin');
         $root = Category::withTrashed()->find(Category::ROOT_CATEGORY);
-        if (! $root)
-        {
+        if (!$root) {
             $root = new Category();
             $root->name = '*';
             $root->acronym = '*';
@@ -75,21 +76,17 @@ class CategoriesController extends Controller
             $root->save();
             $root->id = Category::ROOT_CATEGORY;
             $root->save();
-        }
-        else
-        {
-            if ($root->trashed())
-            {
+        } else {
+            if ($root->trashed()) {
                 $root->restore();
             };
-            if ($root->category_id != null)
-            {
+            if ($root->category_id != null) {
                 $root->category_id = null;
                 $root->save();
             }
         }
-        $more = Category::withTrashed()->whereCategoryId(null)->where('id','<>',Category::ROOT_CATEGORY);
-        if ($more->count()>0) {
+        $more = Category::withTrashed()->whereCategoryId(null)->where('id', '<>', Category::ROOT_CATEGORY);
+        if ($more->count() > 0) {
             $more->update(['category_id' => Category::ROOT_CATEGORY]);
         }
     }
@@ -204,7 +201,11 @@ class CategoriesController extends Controller
                 'categories',
             ]));
         } catch (Exception $e) {
-            Flash::warning(trans($this->resource_name . 'not_found', ['model' => $this->model_name, 'id' => $id]));
+            if ($e instanceof PDOException) {
+                Flash::error($e->errorInfo[2]);
+            } else {
+                Flash::warning(trans($this->resource_name . 'not_found', ['model' => $this->model_name, 'id' => $id]));
+            }
             return $this->index();
         }
     }
@@ -217,8 +218,7 @@ class CategoriesController extends Controller
      */
     public function edit($id)
     {
-        if ($id == Category::ROOT_CATEGORY)
-        {
+        if ($id == Category::ROOT_CATEGORY) {
             $categories = Category::ListCategories();
             $model = $this->getModel($id);
             Flash::warning(trans($this->resource_name . 'forbidden'));
@@ -229,13 +229,20 @@ class CategoriesController extends Controller
         }
         try {
             $model = $this->getModel($id);
-            $categories = Category::ListCategories([$model->id]);
+            $excluded = $model->children()->lists('id');
+            $excluded[] = $model->id;
+            $categories = Category::ListCategories($excluded);
             return view($this->edit_view, compact([
                 'model',
                 'categories',
             ]));
         } catch (Exception $e) {
-            Flash::warning(trans($this->resource_name . 'not_found', ['model' => $this->model_name, 'id' => $id]));
+            if ($e instanceof PDOException) {
+                Flash::error($e->errorInfo[2]);
+            } else {
+                Flash::warning(trans($this->resource_name . 'not_found', ['model' => $this->model_name, 'id' => $id]));
+            }
+
             return $this->index();
         }
     }
@@ -251,7 +258,6 @@ class CategoriesController extends Controller
         try {
             $model = new Category($request->all());
             try {
-                DB::connection()->enableQueryLog();
                 DB::beginTransaction();
                 $category_id = $request->input('category_id', null);
                 $model->category_id = $category_id;
@@ -264,11 +270,12 @@ class CategoriesController extends Controller
                 throw $e;
             }
         } catch (Exception $e) {
-            $errors = [];
-            $errors [] = DB::getQueryLog();
-            DB::connection()->disableQueryLog();
-            Flash::error($e->getMessage());
-            return $request->response($errors);
+            if ($e instanceof PDOException) {
+                Flash::error($e->errorInfo[2]);
+            } else {
+                Flash::error($e->getMessage());
+            }
+            return $request->response([]);
         }
     }
 
@@ -283,13 +290,11 @@ class CategoriesController extends Controller
         try {
             $model = $this->getModel($id);
             try {
-                DB::connection()->enableQueryLog();
                 DB::beginTransaction();
                 $category_id = $request->input('category_id', null);
                 $model->category_id = $category_id;
                 $model->update($request->all());
                 DB::commit();
-                DB::connection()->disableQueryLog();
                 Flash::info(trans($this->resource_name . 'saved', ['model' => $this->model_name]));
                 return redirect(route($this->show_route, [$model->id]));
             } catch (Exception $e) {
@@ -297,11 +302,12 @@ class CategoriesController extends Controller
                 throw $e;
             }
         } catch (Exception $e) {
-            $errors = [];
-            DB::connection()->disableQueryLog();
-            dd(DB::getQueryLog());
-            Flash::error($e->getMessage());
-            return $request->response($errors);
+            if ($e instanceof PDOException) {
+                Flash::error($e->errorInfo[2]);
+            } else {
+                Flash::error($e->getMessage());
+            }
+            return $request->response([]);
         }
     }
 
@@ -313,8 +319,7 @@ class CategoriesController extends Controller
      */
     public function destroy($id, DeleteRequest $request)
     {
-        if ($id == Category::ROOT_CATEGORY)
-        {
+        if ($id == Category::ROOT_CATEGORY) {
             $categories = Category::ListCategories();
             $model = $this->getModel($id);
             Flash::warning(trans($this->resource_name . 'forbidden'));
@@ -334,7 +339,11 @@ class CategoriesController extends Controller
                 return redirect(route($this->index_route));
             }
         } catch (Exception $e) {
-            Flash::error($e->getMessage());
+            if ($e instanceof PDOException) {
+                Flash::error($e->errorInfo[2]);
+            } else {
+                Flash::error($e->getMessage());
+            }
             return $request->response([]);
         }
     }
@@ -347,8 +356,12 @@ class CategoriesController extends Controller
             $model->restore();
             Flash::info(trans($this->resource_name . 'restored', ['model' => $this->model_name]));
             return redirect(route($this->show_route, [$id]));
-        } catch (Exception $e) {
-            Flash::error($e->getMessage());
+        } catch (PDOException $e) {
+            if ($e instanceof PDOException) {
+                Flash::error($e->errorInfo[2]);
+            } else {
+                Flash::error($e->getMessage());
+            }
             return $request->response([]);
         }
     }
@@ -363,8 +376,8 @@ class CategoriesController extends Controller
                 });
             Flash::info(trans($this->resource_name . 'deleted', ['model' => $this->model_name]));
             return redirect(route($this->index_route));
-        } catch (Exception $e) {
-            Flash::error($e->getMessage());
+        } catch (PDOException $e) {
+            Flash::error($e->errorInfo[2]);
             return $request->response([]);
         }
     }
@@ -397,6 +410,19 @@ class CategoriesController extends Controller
                             } else {
                                 $models = $models->orWhere($field, $value);
                             }
+                        } else if ($field == 'parent') {
+                            $value = '%' . $value . '%';
+                            if ($first) {
+                                $models = $models->whereHas('parent', function ($q) use ($value) {
+                                    $q->where('name', 'like', $value);
+                                });
+                                $first = false;
+                            } else {
+                                $models = $models->orWhereHas('parent', function ($q) use ($value) {
+                                    $q->where('name', 'like', $value);
+                                });
+                            }
+
                         } else {
                             $value = '%' . $value . '%';
                             if ($first) {
