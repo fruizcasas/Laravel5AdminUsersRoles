@@ -19,6 +19,22 @@ class Fileentry extends Model {
      */
     protected $table = 'fileentries';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'original_name',
+        'original_mime_type',
+        'original_extension',
+        'name',
+        'mime_type',
+        'extension',
+        'size',
+    ];
+
+
 
     /* Get the post's author.
      *
