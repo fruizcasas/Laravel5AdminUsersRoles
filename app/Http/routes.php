@@ -269,6 +269,53 @@ Route::group(
         Route::resource('/permissions', 'PermissionsController');
 
         /*
+|--------------------------------------------------------------------------
+| Admin/Fileentries Routes
+|--------------------------------------------------------------------------
+*/
+
+        Route::post('/fileentries/filter',
+            [
+                'as' => 'admin.fileentries.filter',
+                'uses' => 'FileentriesController@filter'
+            ]);
+
+        Route::get('/fileentries/excel',
+            [
+                'as' => 'admin.fileentries.excel',
+                'uses' => 'FileentriesController@excel'
+            ]);
+
+
+        Route::get('/fileentries/trash/{trash?}',
+            [
+                'as' => 'admin.fileentries.trash',
+                'uses' => 'FileentriesController@trash'
+            ]);
+
+        Route::get('/fileentries/sort/{column?}/{order?}',
+            [
+                'as' => 'admin.fileentries.sort',
+                'uses' => 'FileentriesController@sort'
+            ]);
+
+        Route::delete('/fileentries/{fileentries}/forcedelete',
+            [
+                'as' => 'admin.fileentries.forcedelete',
+                'uses' => 'FileentriesController@forcedelete'
+            ]);
+
+        Route::post('/fileentries/{fileentries}/restore',
+            [
+                'as' => 'admin.fileentries.restore',
+                'uses' => 'FileentriesController@restore'
+            ]);
+
+        Route::resource('/fileentries', 'FileentriesController');
+
+
+
+        /*
         |--------------------------------------------------------------------------
         | Admin/Departments Routes
         |--------------------------------------------------------------------------
@@ -515,9 +562,6 @@ Route::group(
                 'uses' => 'FileentriesController@update',
                 'middleware' => 'admin'
             ]);
-
-
-
 
     });
 

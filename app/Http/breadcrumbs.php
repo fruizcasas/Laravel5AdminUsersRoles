@@ -160,6 +160,40 @@ Breadcrumbs::register('admin.permissions.show', function($breadcrumbs) use ($VN)
 
 /*
 |--------------------------------------------------------------------------
+| home / admin / fileentries Breadcrumb
+|--------------------------------------------------------------------------
+*/
+
+// Home > Admin -> Fileentries
+Breadcrumbs::register('admin.fileentries', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin');
+    $breadcrumbs->push(trans($VN.'fileentries'), route('admin.fileentries.index'));
+});
+
+// Home > Admin -> fileentries -> Create
+Breadcrumbs::register('admin.fileentries.create', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin.fileentries');
+    $breadcrumbs->push(trans($VN.'create'), route('admin.fileentries.create'));
+});
+
+// Home > Admin -> fileentries -> Edit
+Breadcrumbs::register('admin.fileentries.edit', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin.fileentries');
+    $breadcrumbs->push(trans($VN.'edit'), route('admin.fileentries.edit'));
+});
+
+// Home > Admin -> permissions -> Show
+Breadcrumbs::register('admin.permissions.show', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('admin.permissions');
+    $breadcrumbs->push(trans($VN.'show'), route('admin.permissions.show'));
+});
+
+/*
+|--------------------------------------------------------------------------
 | home / admin / departments Breadcrumb
 |--------------------------------------------------------------------------
 */
