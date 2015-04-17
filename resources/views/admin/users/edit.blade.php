@@ -22,7 +22,8 @@ const VIEW_NAME = 'admin.users.edit';
             <div class="panel panel-primary">
                 {!! Form::model($model,['method' =>'PUT',
                         'route'  => [UPDATE_ROUTE, $model->id],
-                        'class'=>'form-horizontal']) !!}
+                        'class'=>'form-horizontal',
+                        'enctype'=>'multipart/form-data']) !!}
                 @include('partials.crud.edit_buttons')
                 @if($errors->any())
                     <div class="panel-footer">

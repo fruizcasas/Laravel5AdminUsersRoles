@@ -41,6 +41,17 @@ $yes_no = ['0' => trans($VN.'no'), '1' => trans($VN.'yes')];
                 {!! $errors->first('display_name', '<p class="help-block error-msg">:message</p>') !!}
             </div>
         </div>
+        <!--- photo Field --->
+        <div class="form-group {{$errors->first('photo','has-error')}}">
+            {!! Form::label('photo', trans($VN.'photo'),['class' =>'col-sm-2 control-label text-right']) !!}
+            <div class="col-sm-4">
+                {!! Form::file('photo',[
+                'class' => 'form-control input-sm',
+                'placeholder' => 'enter a display name',
+                'style' => 'width:100%;']) !!}
+                {!! $errors->first('photo', '<p class="help-block error-msg">:message</p>') !!}
+            </div>
+        </div>
         <!--- acronym Field --->
         <div class="form-group {{$errors->first('acronym','has-error')}}">
             {!! Form::label('acronym', trans($VN.'acronym'),['class' =>'col-sm-2 control-label text-right']) !!}

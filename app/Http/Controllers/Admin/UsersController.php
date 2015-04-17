@@ -8,6 +8,7 @@ use DB;
 use Exception;
 use Flash;
 use Excel;
+use File;
 
 use App\Http\Requests\Admin\UserRequest as ModelRequest;
 use App\Http\Requests\Admin\UserNewRequest as ModelNewRequest;
@@ -251,6 +252,32 @@ class UsersController extends Controller
     }
 
     /**
+     * get picture
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function picture($id)
+    {
+        try {
+            $model = $this->getModel($id);
+            $file = new File();
+            return view($this->show_view,
+                compact([
+                    'model',
+                    'roles',
+                    'model_roles',
+                    'departments',
+                    'model_departments',
+                    'users',
+                ]));
+        } catch (Exception $e) {
+            Flash::warning(trans($this->resource_name . 'not_found', ['model' => $this->model_name, 'id' => $id]));
+            return $this->index();
+        }
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int $id
@@ -332,8 +359,19 @@ class UsersController extends Controller
             $roles = $request->input('roles', []);
             $departments = $request->input('departments', []);
             $user_id = $request->input('user_id', null);
+            if ($request->hasFile('photo')){
+                $file = $request->file('photo');
+            }
+           else{
+               $file = null;
+           }
+
             $model = $this->getModel($id);
             try {
+                if ($file)
+                {
+                    $file->move(storage_path().'/uploads/pictures',$model->name .'.'. $file->getClientOriginalExtension());
+                }
                 DB::beginTransaction();
                 $model->user_id = $user_id;
                 $model->update($request->all());

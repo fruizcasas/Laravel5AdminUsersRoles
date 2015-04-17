@@ -24,7 +24,9 @@ class CreateUsersTable extends Migration {
             $table->text('comments')->nullable();
             $table->integer('user_id')->unsigned()->nullable()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->integer('order')->unsigned()->nullable();
             $table->boolean('is_admin')->default(false)->nullable();
+            $table->boolean('is_employee')->default(false)->nullable();
             $table->boolean('is_author')->default(false)->nullable();
             $table->boolean('is_reviewer')->default(false)->nullable();
             $table->boolean('is_approver')->default(false)->nullable();

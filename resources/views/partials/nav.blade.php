@@ -9,8 +9,9 @@ $VN = 'views/partials/nav.';
 // Get Locale
 // -----------------
 
-$locale = Cookie::get('locale', Config::get('locale'));
-if (!in_array($locale, ['en', 'es'])) {
+$locale = Cookie::get('locale', Config::get('app.locale','en'));
+$locales = Config::get('app.locales',['en' => 'English']);
+if (!array_has($locales, $locale)) {
     $locale = 'en';
 }
 ?>
@@ -37,7 +38,8 @@ if (!in_array($locale, ['en', 'es'])) {
                     @if(Auth::user()->is_author)
                         <li class="dropdown">
                             <a href="{{ route('author.index') }}" class="dropdown-toggle" data-toggle="dropdown"
-                               role="button" aria-expanded="false">{{trans($VN.'author')}}<span class="caret"></span></a>
+                               role="button" aria-expanded="false">{{trans($VN.'author')}}<span
+                                        class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ route('author.index') }}">Item1</a></li>
                                 <li><a href="{{ route('author.index') }}">Item2</a></li>
@@ -94,9 +96,11 @@ if (!in_array($locale, ['en', 'es'])) {
                                role="button" aria-expanded="false">{{trans($VN.'admin')}}<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ route('admin.users.index') }}">{{trans($VN.'users')}}</a></li>
-                                <li><a href="{{ route('admin.departments.index') }}">{{trans($VN.'departments')}}</a></li>
+                                <li><a href="{{ route('admin.departments.index') }}">{{trans($VN.'departments')}}</a>
+                                </li>
                                 <li><a href="{{ route('admin.roles.index') }}">{{trans($VN.'roles')}}</a></li>
-                                <li><a href="{{ route('admin.permissions.index') }}">{{trans($VN.'permissions')}}</a></li>
+                                <li><a href="{{ route('admin.permissions.index') }}">{{trans($VN.'permissions')}}</a>
+                                </li>
                                 <li class="divider"></li>
                                 <li><a href="{{ route('admin.folders.index') }}">{{trans($VN.'folders')}}</a></li>
                                 <li><a href="{{ route('admin.categories.index') }}">{{trans($VN.'categories')}}</a></li>
@@ -123,10 +127,10 @@ if (!in_array($locale, ['en', 'es'])) {
                        role="button" aria-expanded="false"><img
                                 src="{{asset('/images/flags/'. $locale .'.png') }}"/></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="{{route('locale.setlocale',['en']) }}"><img
-                                        src="{{asset('/images/flags/en.png') }}"/> English</a></li>
-                        <li><a href="{{route('locale.setlocale',['es']) }}"><img
-                                        src="{{asset('/images/flags/es.png') }}"/> Español</a></li>
+                        @foreach(Config::get('app.locales',['en'=>'English']) as $key => $language)
+                            <li><a href="{{route('locale.setlocale',[$key]) }}"><img
+                                            src="{{asset('/images/flags/'.$key.'.png') }}"/> {{$language}}</a></li>
+                        @endforeach
                     </ul>
                 </li>
             </ul>

@@ -17,6 +17,7 @@ class CreateFoldersTable extends Migration {
             $table->string('name')->unique();
             $table->integer('folder_id')->nullable()->unsigned()->index();
             $table->foreign('folder_id')->references('id')->on('folders')->onDelete('set null');
+            $table->integer('order')->unsigned()->nullable();
             $table->integer('user_id')->nullable()->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->text('description')->nullable();

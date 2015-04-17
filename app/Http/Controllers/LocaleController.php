@@ -4,6 +4,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Config;
 use URL;
 use Cookie;
 
@@ -11,7 +12,8 @@ class LocaleController extends Controller {
 
     public function setLocale($locale = 'en')
     {
-        if (! in_array($locale,['en','es']))
+        $locales = Config::get('app.locales',['en' => 'English']);
+        if (! array_has($locales,$locale))
         {
             $locale = 'en';
         }

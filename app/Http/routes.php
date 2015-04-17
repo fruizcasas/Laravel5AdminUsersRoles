@@ -489,6 +489,36 @@ Route::group(
         Route::resource('/frontpages', 'FrontpagesController');
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | Fileentries Routes
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('files',
+            [
+                'as' => 'fileentries.edit',
+                'uses' => 'FileentriesController@index',
+                'middleware' => 'admin'
+            ]);
+
+        Route::post('files',
+            [
+                'as' => 'fileentries.store',
+                'uses' => 'FileentriesController@store',
+                'middleware' => 'admin'
+            ]);
+
+        Route::put('files/{$files}',
+            [
+                'as' => 'fileentries.update',
+                'uses' => 'FileentriesController@update',
+                'middleware' => 'admin'
+            ]);
+
+
+
+
     });
 
 
