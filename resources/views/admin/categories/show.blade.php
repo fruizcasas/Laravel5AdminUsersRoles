@@ -31,24 +31,33 @@ const VIEW_NAME    = 'admin.categories.show';
 
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" {!! Input::get('tab','data')=='data'?'class="active"':''!!}><a href="#data" aria-controls="data" role="tab"
-                                                                  data-toggle="tab">{{trans($VN.'data')}}</a></li>
-                        <li role="presentation" {!! Input::get('tab','data')=='relations'?'class="active"':''!!}><a href="#relations" aria-controls="relations" role="tab"
-                                                   data-toggle="tab">{{trans($VN.'relations')}}</a></li>
-                        <li role="presentation" {!! Input::get('tab','data')=='frontpages'?'class="active"':''!!}><a href="#frontpages" aria-controls="frontpages" role="tab"
-                                                                                                                    data-toggle="tab">{{trans($VN.'frontpages')}}</a></li>
+                        <li role="presentation" {!! Input::get('tab','tab_data')=='tab_data'?'class="active"':''!!}>
+                                <a href="#tab_data" aria-controls="tab_data" role="tab"
+                                   data-toggle="tab">{{trans($VN.'tab_data')}}</a></li>
+                        <li role="presentation" {!! Input::get('tab','tab_data')=='tab_description'?'class="active"':''!!}>
+                            <a href="#tab_description" aria-controls="tab_description" role="tab"
+                                   data-toggle="tab">{{trans($VN.'tab_description')}}</a></li>
+                        <li role="presentation" {!! Input::get('tab','tab_data')=='tab_relations'?'class="active"':''!!}>
+                            <a href="#tab_relations" aria-controls="tab_relations" role="tab"
+                                   data-toggle="tab">{{trans($VN.'relations')}}</a></li>
+                        <li role="presentation" {!! Input::get('tab','tab_data')=='tab_frontpages'?'class="active"':''!!}>
+                            <a href="#tab_frontpages" aria-controls="tab_frontpages" role="tab"
+                                  data-toggle="tab">{{trans($VN.'tab_frontpages')}}</a></li>
                     </ul>
 
                     <!-- Tab panes -->
                     <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane {!! Input::get('tab','data')=='data'?'active':''!!}" id="data">
-                            @include('admin.categories._form',['readonly' => true])
+                        <div role="tabpanel" class="tab-pane {!! Input::get('tab','tab_data')=='tab_data'?'active':''!!}" id="tab_data">
+                            @include('admin.categories._form_data',['readonly' => true])
                         </div>
-                        <div role="tabpanel" class="tab-pane {!! Input::get('tab','data')=='relations'?'active':''!!}" id="relations">
-                            @include('admin.categories._relations',['readonly' => true])
+                        <div role="tabpanel" class="tab-pane {!! Input::get('tab','tab_data')=='tab_descripton'?'active':''!!}" id="tab_description">
+                            @include('admin.categories._form_description',['readonly' => true])
                         </div>
-                        <div role="tabpanel" class="tab-pane {!! Input::get('tab','data')=='frontpages'?'active':''!!}" id="frontpages">
-                            @include('admin.categories._frontpages',['readonly' => true])
+                        <div role="tabpanel" class="tab-pane {!! Input::get('tab','tab_data')=='tab_relations'?'active':''!!}" id="tab_relations">
+                            @include('admin.categories._form_relations',['readonly' => true])
+                        </div>
+                        <div role="tabpanel" class="tab-pane {!! Input::get('tab','tab_data')=='tab_frontpages'?'active':''!!}" id="tab_frontpages">
+                            @include('admin.categories._form_frontpages',['readonly' => true])
                         </div>
                     </div>
                 </div>

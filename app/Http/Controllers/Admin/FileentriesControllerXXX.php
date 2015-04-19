@@ -10,7 +10,7 @@ use Response;
 use Storage;
 use File;
 
-class FileentriesController extends Controller
+class FileentriesControllerXXX extends Controller
 {
 
     public function __construct()
@@ -70,10 +70,11 @@ class FileentriesController extends Controller
      *
      * @return Response
      */
-
+/*
 https://github.com/mrakodol/Laravel-5-Bootstrap-3-Starter-Site/blob/master/app/Http/Controllers/Admin/PhotoController.php
 
 http://www.codetutorial.io/laravel-5-file-upload-storage-download/
+*/
 
     public function update($id,Request $request)
     {

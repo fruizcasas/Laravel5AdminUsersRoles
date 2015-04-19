@@ -33,6 +33,7 @@ class FileentryRequest extends Request {
             'mime_type' => '',
             'extension' => '',
             'size' => '',
+            'file_upload' =>'',
         ];
     }
 

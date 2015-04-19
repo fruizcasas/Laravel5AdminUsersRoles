@@ -20,6 +20,7 @@ const VIEW_NAME = 'admin.users.edit';
     <div class="row">
         <div class="col-md-12 col-md-offset-0">
             <div class="panel panel-primary">
+
                 {!! Form::model($model,['method' =>'PUT',
                         'route'  => [UPDATE_ROUTE, $model->id],
                         'class'=>'form-horizontal',
@@ -30,7 +31,25 @@ const VIEW_NAME = 'admin.users.edit';
                         @include('partials.errors')
                     </div>
                 @endif
-                @include('admin.users._form',['readonly' => false])
+                <div role="tabpanel">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#data" aria-controls="data" role="tab"
+                                                                  data-toggle="tab">Data</a></li>
+                        <li role="presentation"><a href="#tab_comments" aria-controls="tab_comments" role="tab"
+                                                                  data-toggle="tab">Comments</a></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="data">
+                            @include('admin.users._form',['readonly' => false])
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="tab_comments">
+                            @include('admin.users._comments',['readonly' => false])
+                        </div>
+                    </div>
+                </div>
+
                 @include('partials.crud.bottom_buttons')
                 {!! Form::close() !!}
             </div>
@@ -49,6 +68,10 @@ const VIEW_NAME = 'admin.users.edit';
             placeholder: 'Select a department'
         });
 
+    </script>
+    <script src="//cdn.ckeditor.com/4.4.7/basic/ckeditor.js"></script>
+    <script type="text/javascript">
+        CKEDITOR.replace('comments');
     </script>
 @endsection
 

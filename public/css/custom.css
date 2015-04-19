@@ -6,3 +6,18 @@
 {
     float: none; !important;
 }
+
+.textarea {
+    width: 100%;
+    color: #666;
+    background-color: #EEE;
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+    display: block;
+    border: 1px solid #CCC;
+    margin: 0px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}

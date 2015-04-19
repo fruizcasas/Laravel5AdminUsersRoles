@@ -19,6 +19,7 @@ class CreateProfilesTable extends Migration {
             $table->integer('per_page')->nullable();
             $table->boolean('show_trash')->nullable();;
             $table->string('theme')->nullable();
+            $table->string('ckeditor')->nullable();
             $table->text('filters')->nullable();
             $table->text('order_by')->nullable();;
             $table->softDeletes();

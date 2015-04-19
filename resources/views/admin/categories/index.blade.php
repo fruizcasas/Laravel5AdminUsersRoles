@@ -28,20 +28,22 @@ const VIEW_NAME = 'admin.categories.index';
 
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" {!! Input::get('tab','hierarchy')=='hierarchy'?'class="active"':''!!}><a href="#hierarchy" aria-controls="hierarchy" role="tab"
-                                                                                                        data-toggle="tab">{{trans($VN.'hierarchy')}}</a></li>
-            <li role="presentation" {!! Input::get('tab','hierarchy')=='data'?'class="active"':''!!}><a href="#data" aria-controls="data" role="tab"
-                                                                                                   data-toggle="tab">{{trans($VN.'data')}}</a></li>
+            <li role="presentation" {!! Input::get('tab','tab_tree')=='tab_tree'?'class="active"':''!!}>
+                <a href="#tab_tree" aria-controls="tab_tree" role="tab"
+                    data-toggle="tab">{{trans($VN.'tab_tree')}}</a></li>
+            <li role="presentation" {!! Input::get('tab','tab_tree')=='tab_table'?'class="active"':''!!}>
+                <a href="#tab_table" aria-controls="tab_table" role="tab"
+                    data-toggle="tab">{{trans($VN.'tab_table')}}</a></li>
         </ul>
 
         <!-- Tab panes -->
         <div class="tab-content">
-            <div role="tabpanel" class="tab-pane {!! Input::get('tab','hierarchy')=='hierarchy'?'active':''!!}" id="hierarchy">
-                @include('admin.categories._hierarchy')
+            <div role="tabpanel" class="tab-pane {!! Input::get('tab','tab_tree')=='tab_tree'?'active':''!!}" id="tab_tree">
+                @include('admin.categories._index_tree')
             </div>
-            <div role="tabpanel" class="tab-pane {!! Input::get('tab','hierarchy')=='data'?'active':''!!}" id="data">
+            <div role="tabpanel" class="tab-pane {!! Input::get('tab','tab_tree')=='tab_table'?'active':''!!}" id="tab_table">
                 <br/>
-                @include('admin.categories._index',['readonly' => true,'models'=>$models])
+                @include('admin.categories._index_table',['readonly' => true,'models'=>$models])
             </div>
         </div>
     </div>

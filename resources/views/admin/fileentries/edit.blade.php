@@ -1,5 +1,5 @@
 <?php
-const VIEW_NAME    = 'admin.fileentries.edit';
+const VIEW_NAME = 'admin.fileentries.edit';
 ?>
 
 @include('admin.fileentries._routes')
@@ -23,15 +23,16 @@ const VIEW_NAME    = 'admin.fileentries.edit';
             <div class="panel panel-primary">
                 {!! Form::model($model,['method' =>'PUT',
                         'route'  => [UPDATE_ROUTE, $model->id],
-                        'class'=>'form-horizontal']) !!}
-                    @include('partials.crud.edit_buttons')
+                        'class'=>'form-horizontal',
+                        'files'=>'true']) !!}
+                @include('partials.crud.edit_buttons')
                 @if($errors->any())
                     <div class="panel-footer">
                         @include('partials.errors')
                     </div>
                 @endif
-                    @include('admin.fileentries._form',['readonly' => false])
-                    @include('partials.crud.bottom_buttons')
+                @include('admin.fileentries._form',['readonly' => false])
+                @include('partials.crud.bottom_buttons')
                 {!! Form::close() !!}
             </div>
         </div>

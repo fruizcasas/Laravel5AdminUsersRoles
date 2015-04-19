@@ -149,17 +149,6 @@ $yes_no = ['0' => trans($VN.'no'), '1' => trans($VN.'yes')];
                 {!! $errors->first('departments', '<p class="help-block error-msg">:message</p>') !!}
             </div>
         </div>
-        <!--- comments Field --->
-        <div class="form-group {{$errors->first('comments','has-error')}}">
-            {!! Form::label('comments', trans($VN.'comments'),['class' =>'col-sm-2 control-label text-right']) !!}
-            <div class="col-sm-10">
-                {!! Form::textarea('comments', $model->comments, [
-                'class' => 'form-control input-sm' ]+[(isset($readonly)?($readonly?'readonly':''):''),
-                'placeholder' => 'comments',
-                'style' => 'width:100%;']) !!}
-                {!! $errors->first('comments', '<p class="help-block error-msg">:message</p>') !!}
-            </div>
-        </div>
         @include('partials.crud.timestamps',['model'=>$model])
     </div>
 </div>

@@ -1,20 +1,27 @@
 <?php namespace App\Http\Controllers\Admin;
 
-    use App\Http\Requests;
-    use App\Http\Controllers\Controller;
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 
-    use App\Models\Admin\Fileentry;
-    use App\Profile;
-    use DB;
-    use Exception;
-    use Excel;
+use App\Models\Admin\Fileentry;
+use App\Profile;
+use DB;
+use Exception;
+use Excel;
 
-    use App\Http\Requests\Admin\FileentryRequest as ModelRequest;
-    use App\Http\Requests\Admin\DeleteRequest as DeleteRequest;
-    use App\Http\Requests\Admin\FileentrySearchRequest as SearchRequest;
+use Config;
+use Storage;
+use File;
+
+use App\Http\Requests\Admin\FileentryRequest as ModelRequest;
+use App\Http\Requests\Admin\DeleteRequest as DeleteRequest;
+use App\Http\Requests\Admin\FileentrySearchRequest as SearchRequest;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
-class FileentriesController extends Controller {
+class FileentriesController extends Controller
+{
 
 
     protected $model_name = 'Fileentry';
@@ -64,21 +71,16 @@ class FileentriesController extends Controller {
 
     public function trash($value = false)
     {
-        if (isset($value))
-        {
-            if ($value)
-            {
+        if (isset($value)) {
+            if ($value) {
                 $value = true;
-            }
-            else
-            {
+            } else {
                 $value = false;
             }
-        } else
-        {
+        } else {
             $value = false;
         }
-        Session( [ $this->index_view.'.trash' => $value] );
+        Session([$this->index_view . '.trash' => $value]);
         return redirect(route($this->index_route));
     }
 
@@ -181,6 +183,66 @@ class FileentriesController extends Controller {
 
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function download($id)
+    {
+        try {
+            $model = Fileentry::findOrFail($id);
+            $file = storage_path('app/').$model->name;
+            $name = pathinfo($model->original_name,PATHINFO_FILENAME) .'.' .$model->extension;
+            return response()->download($file, $name,['Content-Type' => $model->mime_type]);
+        } catch (Exception $e)
+        {
+            return (new Response($e->getMessage(), Response::HTTP_NOT_FOUND));
+        }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function get($id)
+    {
+        try {
+            $model = Fileentry::findOrFail($id);
+            $file = Storage::disk('local')->get($model->name);
+            return (new Response($file, Response::HTTP_OK))->header('Content-Type', $model->mime_type);
+        } catch (Exception $e)
+        {
+            return (new Response($e->getMessage(), Response::HTTP_NOT_FOUND));
+        }
+    }
+
+
+
+    public function save_upload(UploadedFile $file)
+    {
+        /*
+         *  pathinfo ( string $path [, int $options =
+         * PATHINFO_DIRNAME | PATHINFO_BASENAME | PATHINFO_EXTENSION | PATHINFO_FILENAME ] )
+         */
+
+        $uploads_dir = Config::get('dirs.uploads');
+        $filename =pathinfo($file->getClientOriginalName(),PATHINFO_FILENAME);
+        $extension = $file->guessExtension();
+        $target_name = $uploads_dir . strftime('%Y/%j/') . $filename . '.' .$extension;
+        $n=1;
+        while (Storage::disk('local')->exists($target_name))
+        {
+            $target_name = $uploads_dir . strftime('%Y/%j/') . $filename.'('.$n.').'.$extension;
+            $n++;
+        }
+        Storage::disk('local')->put($target_name , File::get($file));
+        return $target_name;
+
+    }
+    /**
      * Store a newly created resource in storage.
      *
      * @return Response
@@ -189,6 +251,18 @@ class FileentriesController extends Controller {
     {
         try {
             $model = new Fileentry($request->all());
+            if ($request->hasFile('file_upload')) {
+                $file = $request->file('file_upload');
+                if ($file->isValid()) {
+                    $model->original_name = $file->getClientOriginalName();
+                    $model->original_mime_type = $file->getClientMimeType();
+                    $model->original_extension = $file->getClientOriginalExtension();
+                    $model->name = $this->save_upload($file);;
+                    $model->mime_type = $file->getMimeType();
+                    $model->extension = $file->guessExtension();
+                    $model->size = $file->getSize();
+                }
+            }
             try {
                 DB::beginTransaction();
                 $model->save();

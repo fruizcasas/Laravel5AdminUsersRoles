@@ -27,6 +27,8 @@ const VIEW_NAME = 'admin.users.show';
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#data" aria-controls="data" role="tab"
                                                                   data-toggle="tab">Data</a></li>
+                        <li role="presentation"><a href="#comments" aria-controls="comments" role="tab"
+                                                                  data-toggle="tab">Comments</a></li>
                         <li role="presentation"><a href="#permissions" aria-controls="permissions" role="tab"
                                                    data-toggle="tab">Permissions</a></li>
                     </ul>
@@ -35,6 +37,9 @@ const VIEW_NAME = 'admin.users.show';
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="data">
                             @include('admin.users._form',['readonly' => true])
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="comments">
+                            @include('admin.users._comments',['readonly' => true])
                         </div>
                         <div role="tabpanel" class="tab-pane" id="permissions">
                             @include('admin.users._permissions',['readonly' => true])

@@ -20,7 +20,10 @@ const VIEW_NAME = 'admin.fileentries.create';
 <div class="row">
     <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-primary">
-            {!! Form::model($model,['route' =>STORE_ROUTE,'class'=>'form-horizontal']) !!}
+            {!! Form::model($model,[
+            'route' =>STORE_ROUTE,
+            'class'=>'form-horizontal',
+            'files'=>true]) !!}
             @include('partials.crud.create_buttons')
             @if($errors->any())
                 <div class="panel-footer">

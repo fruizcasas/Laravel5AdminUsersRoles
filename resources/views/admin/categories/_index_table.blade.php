@@ -3,7 +3,7 @@
 // -----------------
 // View Name Prefix
 // -----------------
-$VN = 'views/admin/categories/_index.';
+$VN = 'views/admin/categories/_index_table.';
 ?>
 
 

@@ -3,7 +3,7 @@
 // -----------------
 // View Name Prefix
 // -----------------
-$VN = 'views/admin/categories/_form.';
+$VN = 'views/admin/categories/_form_data.';
 ?>
 
 <div class="panel-body">
@@ -69,19 +69,6 @@ $VN = 'views/admin/categories/_form.';
                                 ['class' => 'form-control input-sm']+[(isset($readonly)?($readonly?'readonly':''):''),
                                 'style' => 'width:100%;']) !!}
                 {!! $errors->first('category_id', '<p class="help-block error-msg">:message</p>') !!}
-            </div>
-        </div>
-
-
-        <!--- description Field --->
-        <div class="form-group {{$errors->first('description','has-error')}}">
-            {!! Form::label('description', trans($VN.'description'),['class' =>'col-sm-2 control-label text-right']) !!}
-            <div class="col-sm-10">
-                {!! Form::textarea('description',$model->description, [
-                    'class' => 'form-control input-sm']+[(isset($readonly)?($readonly?'readonly':''):''),
-                    'placeholder' => trans($VN.'description'),
-                    'style' => 'width:100%;']) !!}
-                {!! $errors->first('description', '<p class="help-block error-msg">:message</p>') !!}
             </div>
         </div>
 

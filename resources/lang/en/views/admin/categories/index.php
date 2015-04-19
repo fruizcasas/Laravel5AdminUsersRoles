@@ -4,8 +4,8 @@
 return [
     // ----------------------------------------------
     'title' => 'Categories',
-    'data' => 'Table',
-    'hierarchy' => 'Tree',
+    'tab_tree' => 'Index',
+    'tab_table' => 'Table',
 
 ];
 

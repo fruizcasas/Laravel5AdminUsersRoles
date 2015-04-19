@@ -3,9 +3,10 @@
 return [
     // ----------------------------------------------
     'title' => 'Category',
-    'data' => 'Data',
-    'relations' => 'Relations',
-    'frontpages' => 'Frontpages',
+    'tab_data' => 'Data',
+    'tab_description' => 'Description',
+    'tab_relations' => 'Relations',
+    'tab_frontpages' => 'Frontpages',
     // ----------------------------------------------
 ];
 

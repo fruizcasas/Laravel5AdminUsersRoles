@@ -3,7 +3,7 @@
 // -----------------
 // View Name Prefix
 // -----------------
-$VN = 'views/admin/categories/_hierarchy.';
+$VN = 'views/admin/categories/_index_tree.';
 ?>
 
 <div class="col-md-12 col-md-offset-0">

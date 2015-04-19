@@ -3,7 +3,7 @@
 // -----------------
 // View Name Prefix
 // -----------------
-$VN = 'views/admin/categories/_frontpages.';
+$VN = 'views/admin/categories/_form_frontpages.';
 ?>
 
 

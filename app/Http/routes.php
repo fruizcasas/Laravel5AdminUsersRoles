@@ -311,6 +311,19 @@ Route::group(
                 'uses' => 'FileentriesController@restore'
             ]);
 
+        Route::get('/fileentries/get/{fileentries}',
+            [
+                'as' => 'admin.fileentries.get',
+                'uses' => 'FileentriesController@get'
+            ]);
+
+        Route::get('/fileentries/download/{fileentries}',
+            [
+                'as' => 'admin.fileentries.download',
+                'uses' => 'FileentriesController@download'
+            ]);
+
+
         Route::resource('/fileentries', 'FileentriesController');
 
 

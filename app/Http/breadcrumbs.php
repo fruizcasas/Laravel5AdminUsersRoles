@@ -185,11 +185,11 @@ Breadcrumbs::register('admin.fileentries.edit', function($breadcrumbs) use ($VN)
     $breadcrumbs->push(trans($VN.'edit'), route('admin.fileentries.edit'));
 });
 
-// Home > Admin -> permissions -> Show
-Breadcrumbs::register('admin.permissions.show', function($breadcrumbs) use ($VN)
+// Home > Admin -> fileentries -> Show
+Breadcrumbs::register('admin.fileentries.show', function($breadcrumbs) use ($VN)
 {
-    $breadcrumbs->parent('admin.permissions');
-    $breadcrumbs->push(trans($VN.'show'), route('admin.permissions.show'));
+    $breadcrumbs->parent('admin.fileentries');
+    $breadcrumbs->push(trans($VN.'show'), route('admin.fileentries.show'));
 });
 
 /*

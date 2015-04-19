@@ -33,7 +33,7 @@ const VIEW_NAME = 'admin.categories.create';
                     @include('partials.errors')
                 </div>
             @endif
-            @include('admin.categories._form',['readonly' => false])
+            @include('admin.categories._form_data',['readonly' => false])
             @include('partials.crud.bottom_buttons')
             {!! Form::close() !!}
         </div>
