@@ -16,7 +16,6 @@ class CategoryRequest extends BaseRequest {
             'acronym' => 'required|min:2|max:10',
             'order' => 'integer',
             'display_name' => 'required',
-            'description' =>'',
         ];
     }
 

@@ -70,13 +70,13 @@ return [
         'en' => 'English',
         //'us' => 'English (USA)',
         'es' => 'Español',
-        //'de' => 'Deutsch',
-        //'fr' => 'Français',
-        //'it' => 'Italiano',
-        //'pt' => 'Português',
-        //'br' => 'Brasileiro',
-        //'cn' => '中国',
-        //'ru' => 'Русский'
+        'de' => 'Deutsch',
+        'fr' => 'Français',
+        'it' => 'Italiano',
+        'pt' => 'Português',
+        'br' => 'Brasileiro',
+        'cn' => '中国',
+        'ru' => 'Русский'
     ],
 
 
@@ -190,6 +190,8 @@ return [
 
         // ...
         'Spatie\Backup\BackupServiceProvider',
+        // ...
+        'Mews\Purifier\PurifierServiceProvider',
 
 
 
@@ -258,6 +260,9 @@ return [
 
         // ...
         'Excel' => 'Maatwebsite\Excel\Facades\Excel',
+
+        // ...
+        'Purifier' => 'Mews\Purifier\Facades\Purifier',
 
         // DEV MODE
 
