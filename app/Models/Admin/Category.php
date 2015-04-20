@@ -4,6 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Traits\SortableTrait;
+use App\Library\Utils;
 
 
 /**
@@ -52,7 +53,7 @@ class Category extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'acronym', 'display_name', 'description'];
+    protected $fillable = ['name', 'acronym', 'order', 'display_name', 'description'];
 
 
     public function Path($glue = '.')
@@ -70,40 +71,40 @@ class Category extends Model
 
     public function children()
     {
-        return $this->hasMany('App\Models\Admin\ScCategory','category_id');
+        return $this->hasMany('App\Models\Admin\ScCategory','category_id')->withTrashed();
     }
 
     public function parent()
     {
-        return $this->belongsTo('App\Models\Admin\SpCategory','category_id');
+        return $this->belongsTo('App\Models\Admin\SpCategory','category_id')->withTrashed();
     }
 
     public function getShortDescriptionAttribute()
     {
-        return str_limit($this->description, 30);
+        return Utils::getplaintextintrofromhtml($this->description);
     }
 
-    static public function getCategories($id, $indent,$path)
+    static public function getItems($id, $indent,$path)
     {
         $result = [];
         if ($indent<15) {
-            $categories = Category::withTrashed()->whereCategoryId($id)->orderBy('name')->get();
-            foreach ($categories as $category) {
-                $result[] = ['indent' => $indent, 'path' => $path.'.'.$category->name,'name' => $category->name, 'display_name' => $category->display_name, 'id' => $category->id, 'parent' => $id];
-                $result = array_merge($result, static::GetCategories($category->id, $indent + 1,$path.'.'.$category->name));
+            $items = Category::withTrashed()->whereCategoryId($id)->orderBy('order')->orderBy('name')->get();
+            foreach ($items as $item) {
+                $result[] = ['indent' => $indent, 'path' => $path.'.'.$item->name,'name' => $item->name, 'display_name' => $item->display_name, 'id' => $item->id, 'parent' => $id];
+                $result = array_merge($result, static::getItems($item->id, $indent + 1,$path.'.'.$item->name));
             }
         }
         return $result;
     }
 
-    static public function ListCategories($excluded = [])
+    static public function ListItems($excluded = [])
     {
         $result = [];
         $result[Category::ROOT_CATEGORY] = '*';
-        $categories = static::getCategories(Category::ROOT_CATEGORY, 1,'*');
-        foreach ($categories as $category) {
-            if (!in_array($category['id'], $excluded)) {
-                $result[$category['id']] = $category['path'];
+        $items = static::getItems(Category::ROOT_CATEGORY, 1,'*');
+        foreach ($items as $item) {
+            if (!in_array($item['id'], $excluded)) {
+                $result[$item['id']] = $item['path'];
             }
         }
         return $result;
@@ -111,15 +112,16 @@ class Category extends Model
 
     static protected $treeResult = '';
 
-    static function treeCategories($route_show,$id, $indent,$name)
+    static function treeItems($route_show,$id, $indent,$name)
     {
         if ($indent<15) {
-            $categories = Category::withTrashed()->whereCategoryId($id)->orderBy('name')->get();
-            if ($categories->count() > 0) {
+            $items = Category::withTrashed()->whereCategoryId($id)->orderBy('order')->orderBy('name')->get();
+            if ($items->count() > 0) {
                 static::$treeResult .= PHP_EOL . '<ul>';
-                foreach ($categories as $category) {
-                    static::$treeResult .= PHP_EOL . '<li>' . link_to_route($route_show,$category->name,['id'=> $category->id]) .' - '. e($category->display_name);
-                    static::treeCategories($route_show,$category->id, $indent + 1, $category->name);
+                foreach ($items as $item) {
+                    static::$treeResult .= PHP_EOL . '<li>' . link_to_route($route_show,$item->name,['id'=> $item->id]) .' - '
+                                            .($item->trashed()?'<del>'.e($item->display_name).'</del>':e($item->display_name));
+                    static::treeItems($route_show,$item->id, $indent + 1, $item->name);
                     static::$treeResult .= PHP_EOL . '</li>';
                 }
                 static::$treeResult .= PHP_EOL . '</ul>';
@@ -129,7 +131,7 @@ class Category extends Model
     static public function Tree($route_show)
     {
         static::$treeResult = '';
-        static::treeCategories($route_show,Category::ROOT_CATEGORY, 1,'*');
+        static::treeItems($route_show,Category::ROOT_CATEGORY, 1,'*');
         return static::$treeResult;
     }
 

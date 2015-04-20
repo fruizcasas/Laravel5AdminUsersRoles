@@ -3,9 +3,11 @@
 return [
     // ----------------------------------------------
     'name' => 'Nombre',
-    'display_name' => 'Nombre Pantalla',
+    'acronym' => 'Siglas',
+    'order' => 'Orden',
+    'display_name' => 'Nombre pantalla',
+    'path' => 'Camino',
     'parent' => 'Categoría padre',
-    'children' => 'Categorías hijas',
     // ----------------------------------------------
 ];
 

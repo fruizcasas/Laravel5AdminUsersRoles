@@ -49,6 +49,9 @@ $VN = 'views/admin/index.';
                     <a href="{{ route('admin.documents.index') }}">{{trans($VN.'documents')}}</a>
                 </li>
                 <li>
+                    <a href="{{ route('admin.fileentries.index') }}">{{trans($VN.'fileentries')}}</a>
+                </li>
+                <li>
                     <a href="{{ route('admin.frontpages.index') }}">{{trans($VN.'frontpages')}}</a>
                 </li>
             </ul>

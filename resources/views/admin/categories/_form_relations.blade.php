@@ -17,7 +17,7 @@ $VN = 'views/admin/categories/_form_relations.';
                 {!! Form::text('path', $model->Path(), [
                     'class' => 'form-control input-sm',
                     'readonly',
-                    'placeholder' =>  trans($VN.'display_name'),
+                    'placeholder' =>  trans($VN.'path'),
                     'style' => 'width:100%;']) !!}
                 {!! $errors->first('path', '<p class="help-block error-msg">:message</p>') !!}
             </div>
@@ -29,8 +29,10 @@ $VN = 'views/admin/categories/_form_relations.';
             </div>
             <div class="col-sm-10">
                 <table class="table table-hover table-bordered table-condensed" name="parent">
+                    <col style="width:4em;">
                     <thead>
                     <tr>
+                        <th>{{trans($VN.'order')}}</th>
                         <th>{{trans($VN.'name')}}</th>
                         <th>{{trans($VN.'display_name')}}</th>
                     </tr>
@@ -38,11 +40,16 @@ $VN = 'views/admin/categories/_form_relations.';
                     <tbody>
                     @foreach($model->parent()->get() as $parent)
                         <tr>
-                            <td>
-                                {!! link_to_route('admin.categories.show',$parent->name,['id'=>$parent->id,'tab' => 'relations']) !!}
+                            <td style="width:4em;text-align: right;">
+                                {!! (($parent->order)?link_to_route('admin.categories.show',$parent->order,['id'=>$parent->id,'tab' => 'tab_relations']):'') !!}
                             </td>
                             <td>
-                                {!! link_to_route('admin.categories.show',$parent->display_name,['id'=>$parent->id,'tab' => 'relations']) !!}
+                                {!! link_to_route('admin.categories.show',$parent->name,['id'=>$parent->id,'tab' => 'tab_relations']) !!}
+                            </td>
+                            <td>
+                                {!! $parent->trashed()?'<del>':'' !!}
+                                {!! link_to_route('admin.categories.show',$parent->display_name,['id'=>$parent->id,'tab' => 'tab_relations']) !!}
+                                {!! $parent->trashed()?'</del>':'' !!}
                             </td>
                         </tr>
                     @endforeach
@@ -70,20 +77,27 @@ $VN = 'views/admin/categories/_form_relations.';
             </div>
             <div class="col-sm-10">
                 <table class="table table-hover table-bordered table-condensed" name="children">
+                    <col style="width:4em;">
                     <thead>
                     <tr>
+                        <th>{{trans($VN.'order')}}</th>
                         <th>{{trans($VN.'name')}}</th>
                         <th>{{trans($VN.'display_name')}}</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($model->children()->get() as $children)
+                    @foreach($model->children()->orderby('order')->orderby('name')->get() as $children)
                         <tr>
-                            <td>
-                                {!! link_to_route('admin.categories.show',$children->name,['id'=>$children->id,'tab' => 'relations']) !!}
+                            <td style="text-align: right;">
+                                {!! (($children->order!=null)?link_to_route('admin.categories.show',$children->order,['id'=>$children->id,'tab' => 'tab_relations']):'') !!}
                             </td>
                             <td>
-                                {!! link_to_route('admin.categories.show',$children->display_name,['id'=>$children->id,'tab' => 'relations']) !!}
+                                {!! link_to_route('admin.categories.show',$children->name,['id'=>$children->id,'tab' => 'tab_relations']) !!}
+                            </td>
+                            <td>
+                                {!! $children->trashed()?'<del>':'' !!}
+                                {!! link_to_route('admin.categories.show',$children->display_name,['id'=>$children->id,'tab' => 'tab_relations']) !!}
+                                {!! $children->trashed()?'</del>':'' !!}
                             </td>
                         </tr>
                     @endforeach

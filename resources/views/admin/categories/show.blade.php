@@ -39,7 +39,7 @@ const VIEW_NAME    = 'admin.categories.show';
                                    data-toggle="tab">{{trans($VN.'tab_description')}}</a></li>
                         <li role="presentation" {!! Input::get('tab','tab_data')=='tab_relations'?'class="active"':''!!}>
                             <a href="#tab_relations" aria-controls="tab_relations" role="tab"
-                                   data-toggle="tab">{{trans($VN.'relations')}}</a></li>
+                                   data-toggle="tab">{{trans($VN.'tab_relations')}}</a></li>
                         <li role="presentation" {!! Input::get('tab','tab_data')=='tab_frontpages'?'class="active"':''!!}>
                             <a href="#tab_frontpages" aria-controls="tab_frontpages" role="tab"
                                   data-toggle="tab">{{trans($VN.'tab_frontpages')}}</a></li>

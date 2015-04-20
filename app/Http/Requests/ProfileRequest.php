@@ -27,6 +27,7 @@ class ProfileRequest extends Request {
 			'per_page' => 'required|integer|min:5|max:100',
             'theme' => 'required',
             'show_trash' => '',
+            'ckeditor' => 'required',
 		];
 	}
 

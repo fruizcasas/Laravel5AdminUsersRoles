@@ -2,7 +2,10 @@
 
 return [
     // ----------------------------------------------
-    'title' => 'Crear Categoría',
+    'title' => 'Crea Categoría',
+    'tab_data' => 'Datos',
+    'tab_description' => 'Descripción',
+
     // ----------------------------------------------
 ];
 

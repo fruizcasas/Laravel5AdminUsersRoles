@@ -28,6 +28,19 @@ $yes_no = ['0' => trans($VN.'no'), '1' => trans($VN.'yes')];
     </div>
 </div>
 
+<!--- ckeditor Field --->
+<div class="form-group {{$errors->first('theme','has-error')}}">
+    {!! Form::label('ckeditor', trans($VN.'ckeditor'),
+                        ['class' =>'col-sm-4 control-label text-right']) !!}
+    <div class="col-sm-3">
+        {!! Form::select('ckeditor',\App\Profile::CKEDITORS(), $model->ckeditor,
+                        ['class' => 'form-control input-sm',
+                        'style' => 'width:100%;']) !!}
+        {!! $errors->first('ckeditor', '<p class="help-block error-msg">:message</p>') !!}
+    </div>
+</div>
+
+
 <!--- theme Field --->
 <div class="form-group {{$errors->first('theme','has-error')}}">
     {!! Form::label('theme', trans($VN.'theme'),

@@ -8,64 +8,124 @@ use DB;
 use Exception;
 use Flash;
 use Excel;
+use PDOException;
 
 use App\Http\Requests\Admin\CategoryRequest as ModelRequest;
 use App\Http\Requests\Admin\CategoryNewRequest as ModelNewRequest;
 use App\Http\Requests\Admin\DeleteRequest as DeleteRequest;
 use App\Http\Requests\Admin\CategorySearchRequest as SearchRequest;
 use App\Models\Admin\Category;
-use PDOException;
 
 
+/**
+ * Class CategoriesController
+ * @package App\Http\Controllers\Admin
+ */
 class CategoriesController extends Controller
 {
 
+    /**
+     * @var string
+     */
     protected $model_name = 'Category';
+    /**
+     * @var string
+     */
     protected $index_view = 'admin.categories.index';
+    /**
+     * @var string
+     */
     protected $create_view = 'admin.categories.create';
+    /**
+     * @var string
+     */
     protected $show_view = 'admin.categories.show';
+    /**
+     * @var string
+     */
     protected $edit_view = 'admin.categories.edit';
 
+    /**
+     * @var string
+     */
     protected $index_route = 'admin.categories.index';
+    /**
+     * @var string
+     */
     protected $create_route = 'admin.categories.create';
+    /**
+     * @var string
+     */
     protected $show_route = 'admin.categories.show';
+    /**
+     * @var string
+     */
     protected $edit_route = 'admin.categories.edit';
+    /**
+     * @var string
+     */
     protected $trash_route = 'admin.categories.trash';
 
+    /**
+     * @var string
+     */
     protected $resource_name = 'controllers/admin/categories.';
 
+    /**
+     * @var array
+     */
     protected $sort_fields =
         [
             'id',
             'name',
             'acronym',
+            'order',
             'display_name',
         ];
 
+    /**
+     * @var array
+     */
     protected $filter_fields =
         [
             'id',
             'name',
             'acronym',
+            'order',
             'display_name',
             'parent',
             'description',
         ];
 
+    /**
+     * @var array
+     */
     protected $filter_numeric_fields =
         [
             'id',
+            'order',
         ];
 
 
+    /**
+     * @var array
+     */
     protected $filter_boolean_fields =
         [
         ];
 
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->middleware('admin');
+
+        /*
+         * check the ROOT_ITEM with a null parent
+         * check all items with null parent to be ROOT_ITEM owned
+         */
         $root = Category::withTrashed()->find(Category::ROOT_CATEGORY);
         if (!$root) {
             $root = new Category();
@@ -85,33 +145,115 @@ class CategoriesController extends Controller
                 $root->save();
             }
         }
-        $more = Category::withTrashed()->whereCategoryId(null)->where('id', '<>', Category::ROOT_CATEGORY);
-        if ($more->count() > 0) {
-            $more->update(['category_id' => Category::ROOT_CATEGORY]);
-        }
+        Category::withTrashed()->whereCategoryId(null)
+                               ->where('id', '<>', Category::ROOT_CATEGORY)
+                               ->update(['category_id' => Category::ROOT_CATEGORY]);
     }
 
 
+    /**
+     * @return bool session_value
+     */
     public function show_trash()
     {
         return Session($this->index_view . '.trash', false);
     }
 
+    /**
+     * @param bool $value
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function trash($value = false)
     {
-        if (isset($value)) {
-            if ($value) {
-                $value = true;
-            } else {
-                $value = false;
-            }
-        } else {
-            $value = false;
-        }
-        Session([$this->index_view . '.trash' => $value]);
+        Session([$this->index_view . '.trash' => $value ? true : false]);
         return redirect(route($this->index_route));
     }
 
+    /**
+     * @param null $filter
+     * @return Category|\Illuminate\Database\Eloquent\Builder|static
+     */
+    public function getModels($filter = null)
+    {
+        $models = Category::sortable($this->index_view);
+        if ($this->show_trash()) {
+            $models = $models->withTrashed();
+        }
+        if (isset($filter)) {
+            foreach ($this->filter_fields as $field) {
+                if (trim($filter[$field]) != '') {
+                    $values = explode(',', $filter[$field]);
+                    $first = true;
+                    foreach ($values as $value) {
+                        if (in_array($field, $this->filter_numeric_fields)) {
+                            if ($first) {
+                                $models = $models->Where($field, $value);
+                                $first = false;
+                            } else {
+                                $models = $models->orWhere($field, $value);
+                            }
+                        } else if (in_array($field, $this->filter_boolean_fields)) {
+                            $value = (strtolower($value) == 'x');
+                            if ($first) {
+                                $models = $models->Where($field, $value);
+                                $first = false;
+                            } else {
+                                $models = $models->orWhere($field, $value);
+                            }
+                        } else if ($field == 'parent') {
+                            $value = '%' . $value . '%';
+                            if ($first) {
+                                $models = $models->whereHas('parent', function ($q) use ($value) {
+                                    $q->where('name', 'like', $value);
+                                });
+                                $first = false;
+                            } else {
+                                $models = $models->orWhereHas('parent', function ($q) use ($value) {
+                                    $q->where('name', 'like', $value);
+                                });
+                            }
+
+                        } else {
+                            $value = '%' . $value . '%';
+                            if ($first) {
+                                $models = $models->Where($field, 'LIKE', $value);
+                                $first = false;
+                            } else {
+                                $models = $models->orWhere($field, 'LIKE', $value);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $models;
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     */
+    public function getModel($id)
+    {
+        return $this->getModels()->findOrFail($id);
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilter()
+    {
+        $values = [];
+        foreach ($this->filter_fields as $field) {
+            $values[$field] = Profile::loginProfile()->getFilterValue($this->index_view, $field);
+        }
+        return $values;
+    }
+
+    /**
+     * @param SearchRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function filter(SearchRequest $request)
     {
         foreach ($this->filter_fields as $field) {
@@ -120,6 +262,11 @@ class CategoriesController extends Controller
         return redirect(route($this->index_route));
     }
 
+    /**
+     * @param null $column
+     * @param null $order
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function sort($column = null, $order = null)
     {
         if (isset($order)) {
@@ -141,6 +288,9 @@ class CategoriesController extends Controller
         return redirect(route($this->index_route));
     }
 
+    /**
+     * @param string $format
+     */
     public function excel($format = 'xlsx')
     {
         $filter = $this->getFilter();
@@ -176,7 +326,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        $categories = Category::ListCategories();
+        $categories = Category::ListItems();
         $model = new Category();
         return view($this->create_view,
             compact([
@@ -194,7 +344,7 @@ class CategoriesController extends Controller
     public function show($id)
     {
         try {
-            $categories = Category::ListCategories();
+            $categories = Category::ListItems();
             $model = $this->getModel($id);
             return view($this->show_view, compact([
                 'model',
@@ -219,7 +369,7 @@ class CategoriesController extends Controller
     public function edit($id)
     {
         if ($id == Category::ROOT_CATEGORY) {
-            $categories = Category::ListCategories();
+            $categories = Category::ListItems();
             $model = $this->getModel($id);
             Flash::warning(trans($this->resource_name . 'forbidden'));
             return view($this->show_view, compact([
@@ -231,7 +381,7 @@ class CategoriesController extends Controller
             $model = $this->getModel($id);
             $excluded = $model->children()->lists('id');
             $excluded[] = $model->id;
-            $categories = Category::ListCategories($excluded);
+            $categories = Category::ListItems($excluded);
             return view($this->edit_view, compact([
                 'model',
                 'categories',
@@ -320,7 +470,7 @@ class CategoriesController extends Controller
     public function destroy($id, DeleteRequest $request)
     {
         if ($id == Category::ROOT_CATEGORY) {
-            $categories = Category::ListCategories();
+            $categories = Category::ListItems();
             $model = $this->getModel($id);
             Flash::warning(trans($this->resource_name . 'forbidden'));
             return view($this->show_view, compact([
@@ -349,6 +499,11 @@ class CategoriesController extends Controller
     }
 
 
+    /**
+     * @param $id
+     * @param DeleteRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Symfony\Component\HttpFoundation\Response
+     */
     public function restore($id, DeleteRequest $request)
     {
         try {
@@ -366,6 +521,11 @@ class CategoriesController extends Controller
         }
     }
 
+    /**
+     * @param $id
+     * @param DeleteRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Symfony\Component\HttpFoundation\Response
+     */
     public function forcedelete($id, DeleteRequest $request)
     {
         try {
@@ -382,75 +542,5 @@ class CategoriesController extends Controller
         }
     }
 
-
-    public function getModels($filter = null)
-    {
-        $models = Category::sortable($this->index_view);
-        if ($this->show_trash()) {
-            $models = $models->withTrashed();
-        }
-        if (isset($filter)) {
-            foreach ($this->filter_fields as $field) {
-                if (trim($filter[$field]) != '') {
-                    $values = explode(',', $filter[$field]);
-                    $first = true;
-                    foreach ($values as $value) {
-                        if (in_array($field, $this->filter_numeric_fields)) {
-                            if ($first) {
-                                $models = $models->Where($field, $value);
-                                $first = false;
-                            } else {
-                                $models = $models->orWhere($field, $value);
-                            }
-                        } else if (in_array($field, $this->filter_boolean_fields)) {
-                            $value = (strtolower($value) == 'x');
-                            if ($first) {
-                                $models = $models->Where($field, $value);
-                                $first = false;
-                            } else {
-                                $models = $models->orWhere($field, $value);
-                            }
-                        } else if ($field == 'parent') {
-                            $value = '%' . $value . '%';
-                            if ($first) {
-                                $models = $models->whereHas('parent', function ($q) use ($value) {
-                                    $q->where('name', 'like', $value);
-                                });
-                                $first = false;
-                            } else {
-                                $models = $models->orWhereHas('parent', function ($q) use ($value) {
-                                    $q->where('name', 'like', $value);
-                                });
-                            }
-
-                        } else {
-                            $value = '%' . $value . '%';
-                            if ($first) {
-                                $models = $models->Where($field, 'LIKE', $value);
-                                $first = false;
-                            } else {
-                                $models = $models->orWhere($field, 'LIKE', $value);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return $models;
-    }
-
-    public function getModel($id)
-    {
-        return $this->getModels()->findOrFail($id);
-    }
-
-    public function getFilter()
-    {
-        $values = [];
-        foreach ($this->filter_fields as $field) {
-            $values[$field] = Profile::loginProfile()->getFilterValue($this->index_view, $field);
-        }
-        return $values;
-    }
 
 }

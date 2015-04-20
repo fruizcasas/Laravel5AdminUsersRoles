@@ -192,9 +192,9 @@ class FileentriesController extends Controller
     {
         try {
             $model = Fileentry::findOrFail($id);
-            $file = storage_path('app/').$model->name;
+            $filename = base_path().$model->name;
             $name = pathinfo($model->original_name,PATHINFO_FILENAME) .'.' .$model->extension;
-            return response()->download($file, $name,['Content-Type' => $model->mime_type]);
+            return response()->download($filename, $name,['Content-Type' => $model->mime_type]);
         } catch (Exception $e)
         {
             return (new Response($e->getMessage(), Response::HTTP_NOT_FOUND));
@@ -211,8 +211,9 @@ class FileentriesController extends Controller
     {
         try {
             $model = Fileentry::findOrFail($id);
-            $file = Storage::disk('local')->get($model->name);
-            return (new Response($file, Response::HTTP_OK))->header('Content-Type', $model->mime_type);
+            $filename = base_path().$model->name;
+            $file_content = File::get($filename);
+            return (new Response($file_content, Response::HTTP_OK))->header('Content-Type', $model->mime_type);
         } catch (Exception $e)
         {
             return (new Response($e->getMessage(), Response::HTTP_NOT_FOUND));
@@ -220,8 +221,17 @@ class FileentriesController extends Controller
     }
 
 
+    private function file_force_contents($dir, $contents){
+        $parts = explode('/', $dir);
+        $file = array_pop($parts);
+        $dir = '';
+        foreach($parts as $part)
+            if(!is_dir($dir .= "/$part")) mkdir($dir);
+        file_put_contents("$dir/$file", $contents);
+    }
 
-    public function save_upload(UploadedFile $file)
+
+    public function save_upload(UploadedFile $fileupload)
     {
         /*
          *  pathinfo ( string $path [, int $options =
@@ -229,16 +239,16 @@ class FileentriesController extends Controller
          */
 
         $uploads_dir = Config::get('dirs.uploads');
-        $filename =pathinfo($file->getClientOriginalName(),PATHINFO_FILENAME);
-        $extension = $file->guessExtension();
-        $target_name = $uploads_dir . strftime('%Y/%j/') . $filename . '.' .$extension;
+        $filename =pathinfo($fileupload->getClientOriginalName(),PATHINFO_FILENAME);
+        $extension = $fileupload->guessExtension();
+        $target_name = $uploads_dir . strftime('/%Y/%m%d/') . $filename . '.' .$extension;
         $n=1;
-        while (Storage::disk('local')->exists($target_name))
+        while (File::exists(base_path($target_name)))
         {
-            $target_name = $uploads_dir . strftime('%Y/%j/') . $filename.'('.$n.').'.$extension;
+            $target_name = $uploads_dir . strftime('/%Y/%m%d/') . $filename.'('.$n.').'.$extension;
             $n++;
         }
-        Storage::disk('local')->put($target_name , File::get($file));
+        $this->file_force_contents(base_path($target_name) , File::get($fileupload));
         return $target_name;
 
     }

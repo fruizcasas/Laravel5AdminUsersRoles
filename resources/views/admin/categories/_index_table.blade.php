@@ -8,7 +8,9 @@ $VN = 'views/admin/categories/_index_table.';
 
 
 {!! Form::model($filter,['route' => FILTER_ROUTE,
-                         'class'=>'form-inline','role'=>'form']) !!}
+                         'class'=>'form-inline',
+                         'role'=>'form']) !!}
+
 @include ('partials.crud.index_buttons')
 
 <table class="table table-striped table-bordered table-compact table-hover">
@@ -24,6 +26,7 @@ $VN = 'views/admin/categories/_index_table.';
         {!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'id',trans($VN.'id'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'name',trans($VN.'name'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'acronym',trans($VN.'acronym'))!!}</th>
+    <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'order',trans($VN.'order'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'display_name',trans($VN.'display_name'))!!}</th>
     <th>{{trans($VN.'parent')}}</th>
     <th>{{trans($VN.'path')}}</th>
@@ -51,6 +54,12 @@ $VN = 'views/admin/categories/_index_table.';
             {!! Form::text('acronym', null, ['class' => 'form-control input-sm',
                                                      'style' => 'width:100%;',
                                                          'placeholder'=>trans($VN.'acronym')]) !!}
+        </td>
+        <td>
+            <!--- filter order Field --->
+            {!! Form::text('order', null, ['class' => 'form-control input-sm',
+                                                     'style' => 'width:100%;',
+                                                         'placeholder'=>trans($VN.'order')]) !!}
         </td>
         <td>
             <!--- filter display_name Field --->
@@ -92,6 +101,9 @@ $VN = 'views/admin/categories/_index_table.';
                 {!! link_to_route(SHOW_ROUTE,$model->acronym,['id'=>$model->id]) !!}
             </td>
             <td>
+                {!! $model->order !!}
+            </td>
+            <td>
                 {!! link_to_route(SHOW_ROUTE,$model->display_name,['id'=>$model->id]) !!}
             </td>
             <td>
@@ -112,7 +124,7 @@ $VN = 'views/admin/categories/_index_table.';
     <tfoot>
     <tr>
         <td class="text-right">
-            <small>{{  $models->total() .' recs' }}</small>
+            <small>{{ trans($VN.'records',['total'=>$models->total()]) }}</small>
         </td>
         <td colspan="10">
             @if (App\Profile::OrderByLabel(VIEW_NAME) !='')

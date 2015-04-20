@@ -14,9 +14,10 @@ $VN = 'views/admin/categories/_form_data.';
             {!! Form::label('name',  trans($VN.'name'),['class' =>'col-sm-2 control-label text-right']) !!}
             <div class="col-sm-10">
                 {!! Form::text('name', $model->name, [
-                    'class' => 'form-control input-sm' ]+[(isset($readonly)?($readonly?'readonly':''):''),
+                    'class' => 'form-control input-sm',
                     'placeholder' => trans($VN.'name'),
-                    'style' => 'width:100%;']) !!}
+                    'style' => 'width:100%;']+
+                    ($readonly?['readonly']:[])) !!}
                 {!! $errors->first('name', '<p class="help-block error-msg">:message</p>') !!}
             </div>
         </div>
@@ -26,11 +27,25 @@ $VN = 'views/admin/categories/_form_data.';
             {!! Form::label('acronym',  trans($VN.'acronym'),['class' =>'col-sm-2 control-label text-right']) !!}
             <div class="col-sm-2">
                 {!! Form::text('acronym',$model->acronym, [
-                    'class' => 'form-control input-sm']+[(isset($readonly)?($readonly?'readonly':''):''),
+                    'class' => 'form-control input-sm ',
                     'placeholder' => trans($VN.'acronym'),
                     'maxlength' => '6',
-                    'style' => 'width:100%;']) !!}
+                    'style' => 'width:100%;']+
+                    ($readonly?['readonly']:[])) !!}
                 {!! $errors->first('acronym', '<p class="help-block error-msg">:message</p>') !!}
+            </div>
+        </div>
+
+        <!--- order Field --->
+        <div class="form-group {{$errors->first('order','has-error')}}">
+            {!! Form::label('order',  trans($VN.'order'),['class' =>'col-sm-2 control-label text-right']) !!}
+            <div class="col-sm-2">
+                {!! Form::text('order',$model->order, [
+                    'class' => 'form-control input-sm ' .($readonly?'readonly':''),
+                    'placeholder' => trans($VN.'order'),
+                    'style' => 'width:100%;']+
+                    ($readonly?['readonly']:[])) !!}
+                {!! $errors->first('order', '<p class="help-block error-msg">:message</p>') !!}
             </div>
         </div>
 
@@ -39,9 +54,10 @@ $VN = 'views/admin/categories/_form_data.';
             {!! Form::label('display_name',  trans($VN.'display_name'),['class' =>'col-sm-2 control-label text-right']) !!}
             <div class="col-sm-10">
                 {!! Form::text('display_name', $model->display_name, [
-                    'class' => 'form-control input-sm']+[(isset($readonly)?($readonly?'readonly':''):''),
+                    'class' => 'form-control input-sm ' .($readonly?'readonly':''),
                     'placeholder' =>  trans($VN.'display_name'),
-                    'style' => 'width:100%;']) !!}
+                    'style' => 'width:100%;']+
+                    ($readonly?['readonly']:[])) !!}
                 {!! $errors->first('display_name', '<p class="help-block error-msg">:message</p>') !!}
             </div>
         </div>
@@ -53,7 +69,7 @@ $VN = 'views/admin/categories/_form_data.';
                 {!! Form::text('path', $model->Path(), [
                     'class' => 'form-control input-sm',
                     'readonly',
-                    'placeholder' =>  trans($VN.'display_name'),
+                    'placeholder' =>  trans($VN.'path'),
                     'style' => 'width:100%;']) !!}
                 {!! $errors->first('path', '<p class="help-block error-msg">:message</p>') !!}
             </div>
@@ -66,8 +82,9 @@ $VN = 'views/admin/categories/_form_data.';
                                 ['class' =>'col-sm-2 control-label text-right']) !!}
             <div class="col-sm-10">
                 {!! Form::select('category_id',$categories, $model->category_id,
-                                ['class' => 'form-control input-sm']+[(isset($readonly)?($readonly?'readonly':''):''),
-                                'style' => 'width:100%;']) !!}
+                                ['class' => 'form-control input-sm',
+                                'style' => 'width:100%;']+
+                                ($readonly?['readonly']:[])) !!}
                 {!! $errors->first('category_id', '<p class="help-block error-msg">:message</p>') !!}
             </div>
         </div>

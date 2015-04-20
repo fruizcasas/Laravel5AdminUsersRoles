@@ -12,6 +12,7 @@ return [
     'folders' => 'Folders',
     'categories' => 'Categories',
     'documents' => 'Documents',
+    'fileentries' => 'File Entries',
     'frontpages' => 'Frontpages',
     // ----------------------------------------------
 ];

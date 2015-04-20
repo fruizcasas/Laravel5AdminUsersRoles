@@ -3,10 +3,7 @@
 
 return [
     // ----------------------------------------------
-    'title' => 'Categories',
-    'tab_table' => 'Table',
-    'tab_tree' => 'Index',
-
+    'title' => 'Categorias',
 ];
 
 

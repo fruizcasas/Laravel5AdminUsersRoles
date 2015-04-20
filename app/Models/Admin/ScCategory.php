@@ -18,13 +18,13 @@ class ScCategory extends Model {
 
     public function children()
     {
-        return $this->hasMany('App\Models\Admin\Category','category_id');
+        return $this->hasMany('App\Models\Admin\Category','category_id')->withTrashed();
     }
 
 
     public function parent()
     {
-        return $this->belongsTo('App\Models\Admin\Category','category_id');
+        return $this->belongsTo('App\Models\Admin\Category','category_id')->withTrashed();
     }
 
 

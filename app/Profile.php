@@ -43,6 +43,10 @@ class Profile extends Model
      *
      */
     const DEFAULT_SHOW_TRASH = false;
+    /*
+     *
+     */
+    const DEFAULT_CKEDITOR = 'basic';
 
 
     /**
@@ -74,6 +78,22 @@ class Profile extends Model
         return $result;
     }
 
+    /**
+     * @return array
+     */
+    static public function CKEDITORS()
+    {
+        $result = [];
+        foreach ([
+                     'basic',
+                     'standard',
+                     'full',
+                     'TinyMCE',
+                 ] as $editor) {
+            $result[$editor] = Str::title($editor);
+        }
+        return $result;
+    }
 
     /**
      * The database table used by the model.
@@ -87,7 +107,7 @@ class Profile extends Model
      *
      * @var array
      */
-    protected $fillable = ['per_page', 'theme', 'show_trash', 'filters'];
+    protected $fillable = ['per_page', 'theme', 'ckeditor', 'show_trash', 'filters'];
 
 
     /**
@@ -99,6 +119,7 @@ class Profile extends Model
         $profile['per_page'] = Profile::DEFAULT_PER_PAGE;
         $profile['theme'] = Profile::DEFAULT_THEME;
         $profile['show_trash'] = Profile::DEFAULT_SHOW_TRASH;
+        $profile['ckeditor'] = Profile::DEFAULT_CKEDITOR;
         $profile['filters'] = '';
         $profile['order_by'] = '';
         return $profile;

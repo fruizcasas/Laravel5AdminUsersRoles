@@ -11,6 +11,7 @@ return [
     'users' => 'Users',
     'roles' => 'Roles',
     'permissions' => 'Permissions',
+    'fileentries' => 'Fileentries',
     'departments' => 'Departments',
     'categories' => 'Categories',
     'folders' => 'Folders',

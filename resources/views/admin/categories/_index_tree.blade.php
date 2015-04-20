@@ -10,6 +10,7 @@ $VN = 'views/admin/categories/_index_tree.';
     <br/>
     <div class="panel panel-primary">
         <div class="panel-footer">
+            <h3> {{trans($VN.'title')}}</h3>
         </div>
         <div class="panel-body">
             {!! \App\Models\Admin\Category::Tree(SHOW_ROUTE) !!}

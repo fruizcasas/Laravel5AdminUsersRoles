@@ -11,6 +11,7 @@ return [
     'users' => 'Usuarios',
     'roles' => 'Roles',
     'permissions' => 'Permisos',
+    'fileentries' => 'Registro de Ficheros',
     'departments' => 'Departamentos',
     'categories' => 'Categorias',
     'folders' => 'Carpetas',
