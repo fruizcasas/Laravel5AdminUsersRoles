@@ -5,13 +5,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 
 use App\Models\Admin\Fileentry;
+use App\Library\Utils as Utils;
 use App\Profile;
 use DB;
 use Exception;
 use Excel;
 
 use Config;
-use Storage;
 use File;
 
 use App\Http\Requests\Admin\FileentryRequest as ModelRequest;
@@ -221,26 +221,10 @@ class FileentriesController extends Controller
     }
 
 
-    private function file_force_contents($dir, $contents){
-        $parts = explode('/', $dir);
-        $file = array_pop($parts);
-        $dir = '';
-        foreach($parts as $part)
-            if(!is_dir($dir .= "/$part")) mkdir($dir);
-        file_put_contents("$dir/$file", $contents);
-    }
-
-
-    public function save_upload(UploadedFile $fileupload)
+    public function save_upload(UploadedFile $file_upload,$extension)
     {
-        /*
-         *  pathinfo ( string $path [, int $options =
-         * PATHINFO_DIRNAME | PATHINFO_BASENAME | PATHINFO_EXTENSION | PATHINFO_FILENAME ] )
-         */
-
         $uploads_dir = Config::get('dirs.uploads');
-        $filename =pathinfo($fileupload->getClientOriginalName(),PATHINFO_FILENAME);
-        $extension = $fileupload->guessExtension();
+        $filename =pathinfo($file_upload->getClientOriginalName(),PATHINFO_FILENAME);
         $target_name = $uploads_dir . strftime('/%Y/%m%d/') . $filename . '.' .$extension;
         $n=1;
         while (File::exists(base_path($target_name)))
@@ -248,7 +232,8 @@ class FileentriesController extends Controller
             $target_name = $uploads_dir . strftime('/%Y/%m%d/') . $filename.'('.$n.').'.$extension;
             $n++;
         }
-        $this->file_force_contents(base_path($target_name) , File::get($fileupload));
+        Utils::file_force_contents(base_path($target_name) , File::get($file_upload));
+        Utils::gzCompressFile(base_path($target_name));
         return $target_name;
 
     }
@@ -264,13 +249,21 @@ class FileentriesController extends Controller
             if ($request->hasFile('file_upload')) {
                 $file = $request->file('file_upload');
                 if ($file->isValid()) {
+                    $new_ext = $file->guessExtension();
+                    $new_mime_tipe = $file->getMimeType();
+                    if ($new_ext =='bin')
+                    {
+                        $new_ext = $file->getClientOriginalExtension();
+                        $new_mime_tipe = $file->getClientMimeType();
+                    }
                     $model->original_name = $file->getClientOriginalName();
                     $model->original_mime_type = $file->getClientMimeType();
                     $model->original_extension = $file->getClientOriginalExtension();
-                    $model->name = $this->save_upload($file);;
-                    $model->mime_type = $file->getMimeType();
-                    $model->extension = $file->guessExtension();
+                    $model->name = $this->save_upload($file,$new_ext);
+                    $model->mime_type = $new_mime_tipe;
+                    $model->extension = $new_ext;
                     $model->size = $file->getSize();
+                    $model->sha1 = sha1_file(base_path($model->name));
                 }
             }
             try {

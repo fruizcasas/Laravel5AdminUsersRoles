@@ -85,6 +85,7 @@ class Profile extends Model
     {
         $result = [];
         foreach ([
+                     'none',
                      'basic',
                      'standard',
                      'full',

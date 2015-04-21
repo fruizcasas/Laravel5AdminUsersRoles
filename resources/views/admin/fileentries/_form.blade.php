@@ -82,7 +82,7 @@
                 </div>
             </div>
         @endif
-                <!--- size Field --->
+        <!--- size Field --->
         <div class="form-group {{$errors->first('size','has-error')}}">
             {!! Form::label('size', 'size:',['class' =>'col-sm-2 control-label text-right']) !!}
             <div class="col-sm-10">
@@ -93,6 +93,15 @@
                 {!! $errors->first('size', '<p class="help-block error-msg">:message</p>') !!}
             </div>
         </div>
+            <!--- size Field --->
+            <div class="form-group {{$errors->first('size','has-error')}}">
+                {!! Form::label('view', 'View:',['class' =>'col-sm-2 control-label text-right']) !!}
+                <div class="col-sm-10">
+                    {!! link_to_route('admin.fileentries.get','View Content',[$model->id],['target'=>'_blank'])!!}
+                </div>
+            </div>
+
+
 
 
         @include('partials.crud.timestamps',['model'=>$model])

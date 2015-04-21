@@ -9,6 +9,8 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+
+
 use App\Models\Admin\Role;
 use App\Traits\SortableTrait;
 
@@ -108,6 +110,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->belongsTo('App\Models\Admin\SpUser','user_id');
     }
 
+
+    /**
+     * @return mixed
+     */
+    public function picture()
+    {
+        return $this->hasOne('App\Models\Admin\Picture');
+    }
 
     public function roles()
     {

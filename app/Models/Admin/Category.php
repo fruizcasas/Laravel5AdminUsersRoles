@@ -53,7 +53,7 @@ class Category extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'acronym', 'order', 'display_name', 'description'];
+    protected $fillable = ['name', 'acronym', 'order', 'display_name'];
 
 
     public function Path($glue = '.')

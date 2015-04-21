@@ -70,13 +70,13 @@ return [
         'en' => 'English',
         //'us' => 'English (USA)',
         'es' => 'Español',
-        'de' => 'Deutsch',
-        'fr' => 'Français',
-        'it' => 'Italiano',
-        'pt' => 'Português',
-        'br' => 'Brasileiro',
-        'cn' => '中国',
-        'ru' => 'Русский'
+        //'de' => 'Deutsch',
+        //'fr' => 'Français',
+        //'it' => 'Italiano',
+        //'pt' => 'Português',
+        //'br' => 'Brasileiro',
+        //'cn' => '中国',
+        //'ru' => 'Русский'
     ],
 
 

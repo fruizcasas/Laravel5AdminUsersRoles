@@ -36,13 +36,13 @@ const VIEW_NAME = 'admin.users.show';
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="data">
-                            @include('admin.users._form',['readonly' => true])
+                            @include('admin.users._form_data',['readonly' => true])
                         </div>
                         <div role="tabpanel" class="tab-pane" id="comments">
-                            @include('admin.users._comments',['readonly' => true])
+                            @include('admin.users._form_picture',['readonly' => true])
                         </div>
                         <div role="tabpanel" class="tab-pane" id="permissions">
-                            @include('admin.users._permissions',['readonly' => true])
+                            @include('admin.users._form_permissions',['readonly' => true])
                         </div>
                     </div>
                 </div>

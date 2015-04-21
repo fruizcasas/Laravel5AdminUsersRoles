@@ -27,7 +27,7 @@ const VIEW_NAME = 'admin.users.create';
                         @include('partials.errors')
                     </div>
                 @endif
-                @include('admin.users._form',['readonly' => false])
+                @include('admin.users._form_data',['readonly' => false])
                 @include('partials.crud.bottom_buttons')
                 {!! Form::close() !!}
             </div>

@@ -2,12 +2,20 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+use App\Models\Admin\Picture;
+use App\Library\Utils;
+use App\Library\Imaging;
 use App\Profile;
 use DB;
 use Exception;
 use Flash;
 use Excel;
+
+use Config;
 use File;
 
 use App\Http\Requests\Admin\UserRequest as ModelRequest;
@@ -129,7 +137,7 @@ class UsersController extends Controller
             $value = false;
         }
         Session([$this->index_view . '.trash' => $value]);
-        return redirect(route($this->index_route,['tab' => 'data']));
+        return redirect(route($this->index_route, ['tab' => 'data']));
     }
 
     public function filter(SearchRequest $request)
@@ -137,7 +145,7 @@ class UsersController extends Controller
         foreach ($this->filter_fields as $field) {
             Profile::loginProfile()->setFilterValue($this->index_view, $field, $request->input($field, ''));
         }
-        return redirect(route($this->index_route,['tab' => 'data']));
+        return redirect(route($this->index_route, ['tab' => 'data']));
     }
 
     public function sort($column = null, $order = null)
@@ -158,7 +166,7 @@ class UsersController extends Controller
             Profile::loginProfile()->setOrderBy($this->index_view, []);
         };
 
-        return redirect(route($this->index_route,['tab' => 'data']));
+        return redirect(route($this->index_route, ['tab' => 'data']));
     }
 
     public function excel($format = 'xlsx')
@@ -252,32 +260,6 @@ class UsersController extends Controller
     }
 
     /**
-     * get picture
-     *
-     * @param  int $id
-     * @return Response
-     */
-    public function picture($id)
-    {
-        try {
-            $model = $this->getModel($id);
-            $file = new File();
-            return view($this->show_view,
-                compact([
-                    'model',
-                    'roles',
-                    'model_roles',
-                    'departments',
-                    'model_departments',
-                    'users',
-                ]));
-        } catch (Exception $e) {
-            Flash::warning(trans($this->resource_name . 'not_found', ['model' => $this->model_name, 'id' => $id]));
-            return $this->index();
-        }
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int $id
@@ -312,6 +294,49 @@ class UsersController extends Controller
 
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function picture($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            if ($user) {
+                $picture = $user->picture;
+                if ($picture) {
+                    $filename = base_path() . $picture->filename;
+                    $file_content = File::get($filename);
+                    return (new Response($file_content, Response::HTTP_OK))->header('Content-Type', $picture->mime_type);
+                }
+            }
+            return (new Response('', Response::HTTP_NOT_FOUND));
+        } catch (Exception $e) {
+            return (new Response($e->getMessage(), Response::HTTP_NOT_FOUND));
+        }
+    }
+
+
+    public function save_picture($user_name, UploadedFile $file_upload)
+    {
+        $pictures_dir = Config::get('dirs.pìctures','/uploads/pictures');
+        $extension = $file_upload->guessExtension();
+        $target_name = $pictures_dir .'/'. $user_name . '.' . $extension;
+        $n = 1;
+        while (File::exists(base_path().$target_name)) {
+            $target_name = $pictures_dir .'/'.  $user_name . '(' . $n . ').' . $extension;
+            $n++;
+        }
+        $n--;
+        Utils::file_force_contents(base_path().$target_name, File::get($file_upload));
+        Imaging::img_resize(base_path().$target_name,base_path().$pictures_dir .'/'. $user_name . '-200x300.png',200,300);
+        Imaging::img_thumb(base_path().$target_name,base_path().$pictures_dir .'/'. $user_name . '-thumb.png',200,300);
+        return $target_name;
+
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @return Response
@@ -329,6 +354,17 @@ class UsersController extends Controller
                 $model->save();
                 $model->roles()->sync($roles);
                 $model->departments()->sync($departments);
+                if ($request->hasFile('photo')) {
+                    $uploaded_file= $request->file('photo');
+                    if ($uploaded_file->isValid()) {
+                        $picture = new Picture();
+                        $picture->filename = $this->save_picture($model->name,$uploaded_file);
+                        $picture->mime_type = $uploaded_file->getMimeType();
+                        $picture->extension = $uploaded_file->guessExtension();
+                        $picture->user_id = $model->id;
+                        $picture->save();
+                    }
+                }
                 DB::commit();
                 Flash::info(trans($this->resource_name . 'saved', ['model' => $this->model_name]));
                 return redirect(route($this->show_route, [$model->id]));
@@ -359,24 +395,37 @@ class UsersController extends Controller
             $roles = $request->input('roles', []);
             $departments = $request->input('departments', []);
             $user_id = $request->input('user_id', null);
-            if ($request->hasFile('photo')){
-                $file = $request->file('photo');
-            }
-           else{
-               $file = null;
-           }
-
             $model = $this->getModel($id);
             try {
-                if ($file)
-                {
-                    $file->move(storage_path().'/uploads/pictures',$model->name .'.'. $file->getClientOriginalExtension());
-                }
                 DB::beginTransaction();
                 $model->user_id = $user_id;
                 $model->update($request->all());
                 $model->roles()->sync($roles);
                 $model->departments()->sync($departments);
+                if ($request->hasFile('photo')) {
+                    $uploaded_file= $request->file('photo');
+                    if ($uploaded_file->isValid()) {
+                        $picture = $model->picture;
+                        if (!$picture) {
+                            $picture = new Picture();
+                        }
+                        else
+                        {
+                            try {
+                                File::delete(base_path() . $picture->filename);
+                            }
+                            catch(Exception $e)
+                            {
+
+                            }
+                        }
+                        $picture->filename = $this->save_picture($model->name,$uploaded_file);
+                        $picture->mime_type = $uploaded_file->getMimeType();
+                        $picture->extension = $uploaded_file->guessExtension();
+                        $picture->user_id = $model->id;
+                        $picture->save();
+                    }
+                }
                 DB::commit();
                 Flash::info(trans($this->resource_name . 'saved', ['model' => $this->model_name]));
                 return redirect(route($this->show_route, [$model->id]));
@@ -410,7 +459,7 @@ class UsersController extends Controller
             if ($this->show_trash()) {
                 return redirect(route($this->show_route, [$id]));
             } else {
-                return redirect(route($this->index_route,['tab' => 'data']));
+                return redirect(route($this->index_route, ['tab' => 'data']));
             }
         } catch (Exception $e) {
             Flash::error($e->getMessage());
@@ -443,7 +492,7 @@ class UsersController extends Controller
                     $model->forcedelete();
                 });
             Flash::info(trans($this->resource_name . 'deleted', ['model' => $this->model_name]));
-            return redirect(route($this->index_route,['tab' => 'data']));
+            return redirect(route($this->index_route, ['tab' => 'data']));
         } catch (Exception $e) {
             Flash::error($e->getMessage());
             return $request->response([]);

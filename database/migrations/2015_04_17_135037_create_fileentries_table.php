@@ -23,6 +23,7 @@ class CreateFileentriesTable extends Migration {
             $table->string('mime_type');
             $table->string('extension');
             $table->integer('size');
+            $table->string('sha1')->nullable();
             $table->string('error');
             $table->softDeletes();
             $table->timestamps();

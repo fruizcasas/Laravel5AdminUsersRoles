@@ -10,7 +10,7 @@ use Exception;
 use Flash;
 use Excel;
 use PDOException;
-use HTMLPurifier;
+use Purifier;
 
 use App\Http\Requests\Admin\CategoryRequest as ModelRequest;
 use App\Http\Requests\Admin\CategoryNewRequest as ModelNewRequest;
@@ -82,7 +82,7 @@ class CategoriesController extends Controller
             'name',
             'acronym',
             'order',
-            'display_name',
+            'display_name'
         ];
 
     /**
@@ -410,11 +410,10 @@ class CategoriesController extends Controller
         try {
             $model = new Category($request->all());
             try {
-                $purifier = new HTMLPurifier();
                 DB::beginTransaction();
                 $category_id = $request->input('category_id', null);
                 $model->category_id = $category_id;
-                $model->description =  $purifier->purify($request->input('description'));
+                $model->description =  Purifier::clean($request->input('description'));
                 $model->save();
                 DB::commit();
                 Flash::info(trans($this->resource_name . 'saved', ['model' => $this->model_name]));
@@ -444,12 +443,11 @@ class CategoriesController extends Controller
         try {
             $model = $this->getModel($id);
             try {
-                $purifier = new HTMLPurifier();
                 DB::beginTransaction();
                 $category_id = $request->input('category_id', null);
                 $model->category_id = $category_id;
-                $model->description =  $purifier->purify($request->input('description'));
-                $model->update($request->all());
+                $model->description =  Purifier::clean($request->input('description'));
+                $model->update($request->input());
                 DB::commit();
                 Flash::info(trans($this->resource_name . 'saved', ['model' => $this->model_name]));
                 return redirect(route($this->show_route, [$model->id]));

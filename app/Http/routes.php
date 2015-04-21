@@ -169,6 +169,13 @@ Route::group(
                 'uses' => 'UsersController@edit_password'
             ]);
 
+        Route::get('/users/{users}/picture',
+            [
+                'as' => 'admin.users.picture',
+                'uses' => 'UsersController@picture'
+            ]);
+
+
         Route::put('/users/{users}/password',
             [
                 'as' => 'admin.users.update_password',

@@ -42,10 +42,10 @@ const VIEW_NAME = 'admin.users.edit';
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="data">
-                            @include('admin.users._form',['readonly' => false])
+                            @include('admin.users._form_data',['readonly' => false])
                         </div>
                         <div role="tabpanel" class="tab-pane" id="tab_comments">
-                            @include('admin.users._comments',['readonly' => false])
+                            @include('admin.users._form_picture',['readonly' => false])
                         </div>
                     </div>
                 </div>
@@ -69,9 +69,6 @@ const VIEW_NAME = 'admin.users.edit';
         });
 
     </script>
-    <script src="//cdn.ckeditor.com/4.4.7/basic/ckeditor.js"></script>
-    <script type="text/javascript">
-        CKEDITOR.replace('comments');
-    </script>
+    @include('partials.crud.script_textarea',['fields' => ['comments']]);
 @endsection
 

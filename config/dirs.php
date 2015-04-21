@@ -15,6 +15,9 @@ return [
 
     'uploads' => env('DIR_UPLOADS', '/uploads'),
 
+
+    'pictures' => env('DIR_PICTURES', '/uploads/pictures'),
+
     /*
     |--------------------------------------------------------------------------
     */
