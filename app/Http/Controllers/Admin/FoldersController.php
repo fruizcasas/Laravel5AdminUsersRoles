@@ -508,6 +508,45 @@ class FoldersController extends Controller
             return $request->response([]);
         }
     }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return Response
+     */
+    public function delsubfolders($root_id,DeleteRequest $request)
+    {
+        try {
+            $ids= $request->input('remove_children');
+            try {
+                DB::beginTransaction();
+                foreach ($ids as $id)
+                {
+                    $model = Folder::withTrashed()->find($id);
+                    if ($model)
+                    {
+                        if ($model->trashed()) {
+                            $model->restore();
+                        }else {
+                            $model->delete();
+                        }
+                    }
+                }
+                DB::commit();
+                Flash::info(trans($this->resource_name . 'trashed/untrashed', ['model' => $this->model_name]));
+                return redirect(route($this->show_route, [$root_id,'tab'=>'tab_data']));
+            } catch (Exception $e) {
+                DB::rollBack();
+                throw $e;
+            }
+        } catch (Exception $e) {
+            if ($e instanceof PDOException) {
+                Flash::error($e->errorInfo[2]);
+            } else {
+                Flash::error($e->getMessage());
+            }
+            return $request->response([]);
+        }
+    }
 
 
     /**

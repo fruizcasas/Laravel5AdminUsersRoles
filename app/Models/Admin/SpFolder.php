@@ -27,5 +27,19 @@ class SpFolder extends Model {
         return $this->belongsTo('App\Models\Admin\Folder','folder_id');
     }
 
+    public function Path($glue = '/')
+    {
+        $result = $this->name;
+        $count = 15;
+        $model = $this;
+        while (($model->parent()->withTrashed()->count() > 0) && $count) {
+            $count--;
+            $model = $model->parent()->withTrashed()->first();
+            $result = $model->name . $glue . $result;
+        }
+        return $result;
+    }
+
+
 
 }

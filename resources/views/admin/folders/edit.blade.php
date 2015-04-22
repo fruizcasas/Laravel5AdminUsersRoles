@@ -13,7 +13,7 @@ const VIEW_NAME = 'admin.folders.edit';
 @extends ('app')
 
 @section('headings')
-    <h1>{{trans($VN.'title')}}: {{ $model->name }}</h1>
+    <h3>{{trans($VN.'title')}}: {{ $model->Path() }}</h3>
 @endsection
 
 @section('breadcrumbs')

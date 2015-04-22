@@ -41,18 +41,12 @@ const VIEW_NAME = 'admin.folders.create';
                     <li role="presentation" {!! Input::get('tab','tab_data')=='tab_data'?'class="active"':''!!}>
                         <a href="#tab_data" aria-controls="tab_data" role="tab"
                            data-toggle="tab">{{trans($VN.'tab_data')}}</a></li>
-                    <li role="presentation" {!! Input::get('tab','tab_data')=='tab_description'?'class="active"':''!!}>
-                        <a href="#tab_description" aria-controls="tab_description" role="tab"
-                           data-toggle="tab">{{trans($VN.'tab_description')}}</a></li>
                 </ul>
 
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane {!! Input::get('tab','tab_data')=='tab_data'?'active':''!!}" id="tab_data">
                         @include('admin.folders._form_data',['readonly' => false])
-                    </div>
-                    <div role="tabpanel" class="tab-pane {!! Input::get('tab','tab_data')=='tab_descripton'?'active':''!!}" id="tab_description">
-                        @include('admin.folders._form_description',['readonly' => false])
                     </div>
                 </div>
             </div>

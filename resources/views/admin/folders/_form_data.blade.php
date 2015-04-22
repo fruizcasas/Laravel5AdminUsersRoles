@@ -67,31 +67,29 @@ $VN = 'views/admin/folders/_form_data.';
             </div>
         </div>
 
-
-        <!--- path Field --->
-        <div class="form-group {{$errors->first('path','has-error')}}">
-            {!! Form::label('path',  trans($VN.'path'),['class' =>'col-sm-2 control-label text-right']) !!}
-            <div class="col-sm-10">
-                {!! Form::text('path', $model->Path(), [
-                    'class' => 'form-control input-sm',
-                    'readonly',
-                    'placeholder' =>  trans($VN.'path'),
-                    'style' => 'width:100%;']) !!}
-                {!! $errors->first('path', '<p class="help-block error-msg">:message</p>') !!}
-            </div>
-        </div>
-
-
         <!--- folder_id Field --->
         <div class="form-group {{$errors->first('folder_id','has-error')}}">
-            {!! Form::label('parent', trans($VN.'parent'),
-                                ['class' =>'col-sm-2 control-label text-right']) !!}
+            @if ($model->parent)
+                <p class="col-sm-2 control-label text-right">
+                    <span class="glyphicon glyphicon-backward">&nbsp;</span>{!!link_to_route(SHOW_ROUTE,trans($VN.'parent'),['id'=>$model->parent->id,'tab' => 'tab_data'])!!}
+                </p>
+            @else
+                {!! Form::label('parent',trans($VN.'parent'),['class' =>'col-sm-2 control-label text-right']) !!}
+            @endif
             <div class="col-sm-10">
-                {!! Form::select('folder_id',$folders, $model->folder_id,
-                                ['class' => 'form-control input-sm',
-                                'style' => 'width:100%;']+
-                                ($readonly?['readonly']:[])) !!}
-                {!! $errors->first('folder_id', '<p class="help-block error-msg">:message</p>') !!}
+                @if ($readonly)
+                    @if ($model->parent)
+                        <p class="textarea">
+                            {!!link_to_route(SHOW_ROUTE,$model->parent->Path(),['id'=>$model->parent->id,'tab' => 'tab_data'])!!}
+                        </p>
+                    @endif
+                @else
+                    {!! Form::select('folder_id',$folders, $model->folder_id,
+                                    ['class' => 'form-control input-sm',
+                                    'style' => 'width:100%;']+
+                                    ($readonly?['readonly']:[])) !!}
+                    {!! $errors->first('folder_id', '<p class="help-block error-msg">:message</p>') !!}
+                @endif
             </div>
         </div>
 
@@ -100,15 +98,20 @@ $VN = 'views/admin/folders/_form_data.';
                 {!! Form::label('children',trans($VN.'children'),['class' =>'col-sm-2 control-label text-right']) !!}
                 <div class="col-sm-10">
                     {!! Form::open(['route'=> ['admin.folders.delsubfolders',$model->id],
-                                    'method' => 'delete',
-                                    'name'=>'del_form']) !!}
+                                    'method' => 'delete']) !!}
 
                     <table class="table table-hover table-bordered table-condensed" name="children">
                         <col style="width:2em;">
                         <col style="width:4em;">
                         <thead>
                         <tr>
-                            <th>{!! Form::submit(trans($VN.'trash'),['class'=>'btn-sm btn-danger'])!!}</th>
+                            <th>
+                                @if ($model->children()->withTrashed()->count()>0)
+                                    {!! Form::submit(trans($VN.'trash'),['class'=>'btn-sm btn-danger'])!!}
+                                @else
+                                    {{trans($VN.'trash')}}
+                                @endif
+                            </th>
                             <th>{{trans($VN.'order')}}</th>
                             <th>{{trans($VN.'name')}}</th>
                         </tr>
@@ -118,7 +121,7 @@ $VN = 'views/admin/folders/_form_data.';
                             <tr>
                                 <td class="text-center">
                                     @if (! $children->children->count())
-                                        {!! Form::checkbox('remove_children',$children->id,false,['form'=>'del_form']) !!}
+                                        {!! Form::checkbox('remove_children[]',$children->id,false) !!}
                                     @endif
                                 </td>
                                 <td style="text-align: right;">
