@@ -21,6 +21,8 @@ $VN = 'views/admin/users/_index_table.';
     <col style="width:3.5em;">
     <col style="width:3.5em;">
     <col style="width:3.5em;">
+    <col style="width:3.5em;">
+    <col style="width:8em;">
     <thead>
     <th>
         {!! link_to_route(SORT_ROUTE,trans($VN.'reset'),[],
@@ -33,6 +35,7 @@ $VN = 'views/admin/users/_index_table.';
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'acronym',trans($VN.'acronym'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'display_name',trans($VN.'display_name'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_admin',trans($VN.'adm'))!!}</th>
+    <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_employee',trans($VN.'emp'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_author',trans($VN.'aut'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_reviewer',trans($VN.'rev'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_approver',trans($VN.'app'))!!}</th>
@@ -75,6 +78,12 @@ $VN = 'views/admin/users/_index_table.';
             {!! Form::text('is_admin', null, ['class' => 'form-control input-sm',
                                                      'style' => 'width:100%;',
                                                          'placeholder'=>'adm filter...']) !!}
+        </td>
+        <td>
+            <!--- filter is_employee Field --->
+            {!! Form::text('is_employee', null, ['class' => 'form-control input-sm',
+                                                     'style' => 'width:100%;',
+                                                         'placeholder'=>'emp filter...']) !!}
         </td>
         <td>
             <!--- filter is_author Field --->
@@ -141,6 +150,9 @@ $VN = 'views/admin/users/_index_table.';
             </td>
             <td class="text-center">
                 {{ $model->is_admin?'X':'-'}}
+            </td>
+            <td class="text-center">
+                {{ $model->is_employee?'X':'-'}}
             </td>
             <td class="text-center">
                 {{ $model->is_author?'X':'-'}}

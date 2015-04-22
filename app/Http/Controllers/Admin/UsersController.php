@@ -137,7 +137,7 @@ class UsersController extends Controller
             $value = false;
         }
         Session([$this->index_view . '.trash' => $value]);
-        return redirect(route($this->index_route, ['tab' => 'data']));
+        return redirect(route($this->index_route, []));
     }
 
     public function filter(SearchRequest $request)
@@ -145,7 +145,7 @@ class UsersController extends Controller
         foreach ($this->filter_fields as $field) {
             Profile::loginProfile()->setFilterValue($this->index_view, $field, $request->input($field, ''));
         }
-        return redirect(route($this->index_route, ['tab' => 'data']));
+        return redirect(route($this->index_route, []));
     }
 
     public function sort($column = null, $order = null)
@@ -166,7 +166,7 @@ class UsersController extends Controller
             Profile::loginProfile()->setOrderBy($this->index_view, []);
         };
 
-        return redirect(route($this->index_route, ['tab' => 'data']));
+        return redirect(route($this->index_route, []));
     }
 
     public function excel($format = 'xlsx')
@@ -207,6 +207,7 @@ class UsersController extends Controller
         $model = new User(
             [
                 'is_admin' => false,
+                'is_employee' => false,
                 'is_author' => false,
                 'is_reviewer' => false,
                 'is_approver' => false,
@@ -459,7 +460,7 @@ class UsersController extends Controller
             if ($this->show_trash()) {
                 return redirect(route($this->show_route, [$id]));
             } else {
-                return redirect(route($this->index_route, ['tab' => 'data']));
+                return redirect(route($this->index_route, []));
             }
         } catch (Exception $e) {
             Flash::error($e->getMessage());
@@ -492,7 +493,7 @@ class UsersController extends Controller
                     $model->forcedelete();
                 });
             Flash::info(trans($this->resource_name . 'deleted', ['model' => $this->model_name]));
-            return redirect(route($this->index_route, ['tab' => 'data']));
+            return redirect(route($this->index_route, []));
         } catch (Exception $e) {
             Flash::error($e->getMessage());
             return $request->response([]);

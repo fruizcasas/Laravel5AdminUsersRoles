@@ -87,6 +87,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'password',
         'comments',
         'is_admin',
+        'is_employee',
         'is_author',
         'is_reviewer',
         'is_approver',
@@ -123,6 +124,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->belongsToMany('App\Models\Admin\Role')->withTimestamps();
     }
+
+    public function folders()
+    {
+        return $this->hasMany('App\Models\Admin\Folder')->withTimestamps();
+    }
+
 
     public function permissions()
     {

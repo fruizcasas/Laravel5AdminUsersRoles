@@ -10,11 +10,7 @@
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="panel panel-info">
-        <div class="panel-body">
-            You are logged in!
-        </div>
-    </div>
-</div>
+         <div class="headings">
+             <h1>You are logged in!</h1>
+         </div>
 @endsection

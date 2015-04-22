@@ -28,7 +28,7 @@
     <![endif]-->
 </head>
 <body>
-<div class="container">
+<div class="__container" style="margin-left: 1%;margin-right: 1%;margin-top: 0.5%;">
     @include('partials.nav')
     <div id="top"></div>
     @yield('headings')

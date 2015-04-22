@@ -31,6 +31,7 @@ class UserSearchRequest extends Request {
             'acronym' => '',
             'email' => '',
             'is_admin' =>'',
+            'is_employee' =>'',
             'is_author' =>'',
             'is_reviewer' =>'',
             'is_approver' =>'',

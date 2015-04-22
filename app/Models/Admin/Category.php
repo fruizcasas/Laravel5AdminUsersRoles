@@ -56,6 +56,17 @@ class Category extends Model
     protected $fillable = ['name', 'acronym', 'order', 'display_name'];
 
 
+
+    public function children()
+    {
+        return $this->hasMany('App\Models\Admin\ScCategory','category_id')->withTrashed();
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo('App\Models\Admin\SpCategory','category_id')->withTrashed();
+    }
+
     public function Path($glue = '.')
     {
         $result =$this->name;
@@ -67,16 +78,6 @@ class Category extends Model
             $result =  $model->name . $glue . $result;
         }
         return $result;
-    }
-
-    public function children()
-    {
-        return $this->hasMany('App\Models\Admin\ScCategory','category_id')->withTrashed();
-    }
-
-    public function parent()
-    {
-        return $this->belongsTo('App\Models\Admin\SpCategory','category_id')->withTrashed();
     }
 
     public function getShortDescriptionAttribute()

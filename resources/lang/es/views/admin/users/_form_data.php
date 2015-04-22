@@ -12,6 +12,7 @@ return [
     'author' => 'Autor',
     'reviewer' => 'Revisor',
     'admin' => 'Administrador',
+    'employee' => 'Empleado',
     'approver' => 'Aprobador',
     'publisher' => 'Publicador',
     'roles' => 'Roles',

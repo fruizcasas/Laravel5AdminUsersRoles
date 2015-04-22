@@ -125,6 +125,14 @@ $yes_no = ['0' => trans($VN.'no'), '1' => trans($VN.'yes')];
                     ($readonly?['disabled']:[])) !!}
                 {!! $errors->first('is_publisher', '<p class="help-block error-msg">:message</p>') !!}
             </div>
+            {!! Form::label('is_employee',  trans($VN.'employee'),['class' =>'col-sm-2 control-label text-right']) !!}
+            <div class="col-sm-2">
+                {!! Form::select('is_employee',$yes_no, $model->is_employee, [
+                    'class' => 'form-control input-sm',
+                    'style' => 'width:100%;']+
+                    ($readonly?['disabled']:[])) !!}
+                {!! $errors->first('is_employee', '<p class="help-block error-msg">:message</p>') !!}
+            </div>
         </div>
         <!--- roles Field --->
         <div class="form-group {{$errors->first('roles','has-error')}}">

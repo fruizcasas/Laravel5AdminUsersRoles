@@ -41,14 +41,14 @@ $VN = 'views/admin/categories/_form_relations.';
                     @foreach($model->parent()->get() as $parent)
                         <tr>
                             <td style="width:4em;text-align: right;">
-                                {!! (($parent->order)?link_to_route('admin.categories.show',$parent->order,['id'=>$parent->id,'tab' => 'tab_relations']):'') !!}
+                                {!! (($parent->order)?link_to_route(SHOW_ROUTE,$parent->order,['id'=>$parent->id,'tab' => 'tab_relations']):'') !!}
                             </td>
                             <td>
-                                {!! link_to_route('admin.categories.show',$parent->name,['id'=>$parent->id,'tab' => 'tab_relations']) !!}
+                                {!! link_to_route(SHOW_ROUTE,$parent->name,['id'=>$parent->id,'tab' => 'tab_relations']) !!}
                             </td>
                             <td>
                                 {!! $parent->trashed()?'<del>':'' !!}
-                                {!! link_to_route('admin.categories.show',$parent->display_name,['id'=>$parent->id,'tab' => 'tab_relations']) !!}
+                                {!! link_to_route(SHOW_ROUTE,$parent->display_name,['id'=>$parent->id,'tab' => 'tab_relations']) !!}
                                 {!! $parent->trashed()?'</del>':'' !!}
                             </td>
                         </tr>
@@ -89,14 +89,14 @@ $VN = 'views/admin/categories/_form_relations.';
                     @foreach($model->children()->orderby('order')->orderby('name')->get() as $children)
                         <tr>
                             <td style="text-align: right;">
-                                {!! (($children->order!=null)?link_to_route('admin.categories.show',$children->order,['id'=>$children->id,'tab' => 'tab_relations']):'') !!}
+                                {!! (($children->order!=null)?link_to_route(SHOW_ROUTE,$children->order,['id'=>$children->id,'tab' => 'tab_relations']):'') !!}
                             </td>
                             <td>
-                                {!! link_to_route('admin.categories.show',$children->name,['id'=>$children->id,'tab' => 'tab_relations']) !!}
+                                {!! link_to_route(SHOW_ROUTE,$children->name,['id'=>$children->id,'tab' => 'tab_relations']) !!}
                             </td>
                             <td>
                                 {!! $children->trashed()?'<del>':'' !!}
-                                {!! link_to_route('admin.categories.show',$children->display_name,['id'=>$children->id,'tab' => 'tab_relations']) !!}
+                                {!! link_to_route(SHOW_ROUTE,$children->display_name,['id'=>$children->id,'tab' => 'tab_relations']) !!}
                                 {!! $children->trashed()?'</del>':'' !!}
                             </td>
                         </tr>

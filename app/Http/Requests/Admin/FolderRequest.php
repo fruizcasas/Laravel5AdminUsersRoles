@@ -1,18 +1,7 @@
 <?php namespace App\Http\Requests\Admin;
 
-use App\Http\Requests\Request;
 
-class FolderRequest extends Request {
-
-	/**
-	 * Determine if the user is authorized to make this request.
-	 *
-	 * @return bool
-	 */
-	public function authorize()
-	{
-		return false;
-	}
+class FolderRequest extends BaseRequest {
 
 	/**
 	 * Get the validation rules that apply to the request.
@@ -22,7 +11,8 @@ class FolderRequest extends Request {
 	public function rules()
 	{
 		return [
-			//
+            'name' => 'required|min:2',
+            'order' => 'integer',
 		];
 	}
 

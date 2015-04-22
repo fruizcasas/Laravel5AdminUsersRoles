@@ -13,6 +13,7 @@ return [
     'author' => 'Author',
     'reviewer' => 'Reviewer',
     'admin' => 'SysAdmin',
+    'employee' => 'Employee',
     'approver' => 'Approver',
     'publisher' => 'Publisher',
     'parent' => 'Report To',

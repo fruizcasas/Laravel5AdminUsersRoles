@@ -27,7 +27,7 @@ if (!array_has($locales, $locale)) {
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="/home">
-                {{trans($VN.'app_name')}}
+                <img src="{{asset('/images/laravel-logo.png')}}" height="26" alt="logo"/>
             </a>
         </div>
 

@@ -421,6 +421,20 @@ Route::group(
                 'uses' => 'FoldersController@restore'
             ]);
 
+        Route::post('/folders/{folders}/subfolders',
+            [
+                'as' => 'admin.folders.addsubfolders',
+                'uses' => 'FoldersController@addsubfolders'
+            ]);
+
+        Route::delete('/folders/{folders}/subfolders',
+            [
+                'as' => 'admin.folders.delsubfolders',
+                'uses' => 'FoldersController@delsubfolders'
+            ]);
+
+
+
         Route::resource('/folders', 'FoldersController');
 
         /*

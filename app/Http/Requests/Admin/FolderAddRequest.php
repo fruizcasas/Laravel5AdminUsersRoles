@@ -1,7 +1,6 @@
 <?php namespace App\Http\Requests\Admin;
 
-
-class FolderNewRequest extends BaseRequest {
+class FolderAddRequest extends BaseRequest {
 
 
 	/**
@@ -12,8 +11,8 @@ class FolderNewRequest extends BaseRequest {
 	public function rules()
 	{
 		return [
-            'name' => 'required|min:2',
-            'order' => 'integer',
+            'addorder' => 'integer',
+            'addname' => 'required|min:2',
 		];
 	}
 
