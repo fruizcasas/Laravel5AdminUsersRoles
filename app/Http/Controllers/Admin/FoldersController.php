@@ -86,6 +86,7 @@ class FoldersController extends Controller
             'order',
             'user_id',
             'folder_id',
+            'root_id',
         ];
 
     /**
@@ -97,6 +98,8 @@ class FoldersController extends Controller
             'name',
             'order',
             'owner',
+            'root',
+            'private',
             'description',
         ];
 
@@ -115,6 +118,7 @@ class FoldersController extends Controller
      */
     protected $filter_boolean_fields =
         [
+            'private',
         ];
 
 
@@ -134,7 +138,9 @@ class FoldersController extends Controller
             $root = new Folder();
             $root->name = '/';
             $root->folder_id = null;
+            $root->root_id = null;
             $root->user_id = User::ROOT_USER;
+            $root->private = false;
             $root->save();
             $root->id = Folder::ROOT_FOLDER;
             $root->save();
@@ -151,6 +157,19 @@ class FoldersController extends Controller
         Folder::withTrashed()->whereFolderId(null)
             ->where('id', '<>', Folder::ROOT_FOLDER)
             ->update(['folder_id' => Folder::ROOT_FOLDER]);
+
+        $root = Folder::withTrashed()->whereFolderId(Folder::ROOT_FOLDER)->whereUserId(Auth::user()->id)->first();
+        if (! $root)
+        {
+            $root = new Folder();
+            $root->name = Auth::user()->display_name;
+            $root->folder_id = Folder::ROOT_FOLDER;
+            $root->root_id = Folder::ROOT_FOLDER;
+            $root->user_id = Auth::user()->id;
+            $root->private= true;
+            $root->description = Auth::user()->display_name . '\'s Private folder';
+            $root->save();
+        }
     }
 
 
@@ -330,13 +349,15 @@ class FoldersController extends Controller
     public function create()
     {
         $folders = Folder::ListItems();
-        $model = new Folder();
+        $model = new Folder(['root_id' => Folder::ROOT_FOLDER]);
         $users = User::withTrashed()->lists('display_name','id');
+        $roots = Folder::whereFolderId(Folder::ROOT_FOLDER)->orWhere('id',Folder::ROOT_FOLDER)->withTrashed()->lists('name','id');
         return view($this->create_view,
             compact([
                 'model',
                 'folders',
                 'users',
+                'roots',
             ]));
     }
 
@@ -352,10 +373,12 @@ class FoldersController extends Controller
             $folders = Folder::ListItems();
             $model = $this->getModel($id);
             $users = User::withTrashed()->lists('display_name','id');
+            $roots = Folder::whereFolderId(Folder::ROOT_FOLDER)->orWhere('id',Folder::ROOT_FOLDER)->withTrashed()->lists('name','id');
             return view($this->show_view, compact([
                 'model',
                 'folders',
                 'users',
+                'roots',
             ]));
         } catch (Exception $e) {
             if ($e instanceof PDOException) {
@@ -379,11 +402,13 @@ class FoldersController extends Controller
             $folders = Folder::ListItems();
             $model = $this->getModel($id);
             $users = User::withTrashed()->lists('display_name','id');
+            $roots = Folder::whereFolderId(Folder::ROOT_FOLDER)->orWhere('id',Folder::ROOT_FOLDER)->withTrashed()->lists('name','id');
             Flash::warning(trans($this->resource_name . 'forbidden'));
             return view($this->show_view, compact([
                 'model',
                 'folders',
-                'users'
+                'users',
+                'roots',
             ]));
         }
         try {
@@ -392,10 +417,12 @@ class FoldersController extends Controller
             $excluded[] = $model->id;
             $folders = Folder::ListItems($excluded);
             $users = User::withTrashed()->lists('display_name','id');
+            $roots = Folder::whereFolderId(Folder::ROOT_FOLDER)->orWhere('id',Folder::ROOT_FOLDER)->withTrashed()->lists('name','id');
             return view($this->edit_view, compact([
                 'model',
                 'folders',
-                'users'
+                'users',
+                'roots',
             ]));
         } catch (Exception $e) {
             if ($e instanceof PDOException) {

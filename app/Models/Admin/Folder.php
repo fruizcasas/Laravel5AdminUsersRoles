@@ -51,7 +51,7 @@ class Folder extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'order'];
+    protected $fillable = ['name', 'order','folder_id','root_id','user_id'];
 
 
     public function children()
@@ -63,6 +63,13 @@ class Folder extends Model
     {
         return $this->belongsTo('App\Models\Admin\SpFolder', 'folder_id');
     }
+
+
+    public function root()
+    {
+        return $this->belongsTo('App\Models\Admin\SpFolder', 'root_id');
+    }
+
 
     /**
      * @return mixed
@@ -119,21 +126,32 @@ class Folder extends Model
 
     static protected $treeResult = '';
 
-    static function treeItems($route_show, $id, $indent, array $params = [])
+    static function treeItems($route_show, $id, $indent, array $params = [],$selected=null)
     {
         if ($indent < 15) {
             $items = Folder::withTrashed()->whereFolderId($id)->orderBy('order')->orderBy('name')->get();
             if ($items->count() > 0) {
-                static::$treeResult .= PHP_EOL . '<ul>';
+                static::$treeResult .= PHP_EOL . '<ul style="padding-left: 15px;">';
                 foreach ($items as $item) {
-                    if ($item->trashed()) {
-                        static::$treeResult .= PHP_EOL . '<li><del>' . link_to_route($route_show, $item->name,
-                                                array_merge(['id' => $item->id], $params)) . '</del>';
-                    } else {
-                        static::$treeResult .= PHP_EOL . '<li>' . link_to_route($route_show, $item->name,
-                                                array_merge(['id' => $item->id], $params));
+                    if ($item->id == $selected)
+                    {
+                        if ($item->trashed()) {
+                            static::$treeResult .= PHP_EOL . '<li><strong><del>' . $item->name . '</strong></del>';
+                        } else {
+                            static::$treeResult .= PHP_EOL . '<li><strong>' . $item->name . '</strong>';
+                        }
+
                     }
-                    static::treeItems($route_show, $item->id, $indent + 1, $params);
+                    else {
+                        if ($item->trashed()) {
+                            static::$treeResult .= PHP_EOL . '<li><del>' . link_to_route($route_show, $item->name,
+                                    array_merge(['id' => $item->id], $params)) . '</del>';
+                        } else {
+                            static::$treeResult .= PHP_EOL . '<li>' . link_to_route($route_show, $item->name,
+                                    array_merge(['id' => $item->id], $params));
+                        }
+                    }
+                    static::treeItems($route_show, $item->id, $indent + 1, $params,$selected);
                     static::$treeResult .= PHP_EOL . '</li>';
                 }
                 static::$treeResult .= PHP_EOL . '</ul>';
@@ -141,10 +159,10 @@ class Folder extends Model
         }
     }
 
-    static public function Tree($route_show, $id = Folder::ROOT_FOLDER, array $params = [])
+    static public function Tree($route_show, $id = Folder::ROOT_FOLDER, array $params = [],$selected=null)
     {
         static::$treeResult = '';
-        static::treeItems($route_show, $id, 1, $params);
+        static::treeItems($route_show, $id, 1, $params,$selected);
         return static::$treeResult;
     }
 

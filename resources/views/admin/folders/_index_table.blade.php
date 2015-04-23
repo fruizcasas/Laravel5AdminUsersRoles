@@ -16,6 +16,7 @@ $VN = 'views/admin/folders/_index_table.';
 <table class="table table-striped table-bordered table-compact table-hover">
     <col style="width:6em;">
     <col style="width:5em;">
+    <col style="width:4.5em;">
     <col>
     <col style="width:5em;">
     <thead>
@@ -26,9 +27,11 @@ $VN = 'views/admin/folders/_index_table.';
     </th>
     <th class="text-right">
         {!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'id',trans($VN.'id'))!!}</th>
+    <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'private',trans($VN.'private'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'name',trans($VN.'name'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'order',trans($VN.'order'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'user_id',trans($VN.'owner'))!!}</th>
+    <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'root_id',trans($VN.'root'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'folder_id',trans($VN.'path'))!!}</th>
     <th>{{trans($VN.'description')}}</th>
     </thead>
@@ -42,6 +45,12 @@ $VN = 'views/admin/folders/_index_table.';
             {!! Form::text('id', null, ['class' => 'form-control input-sm',
                                                    'style' => 'width:100%;',
                                                    'placeholder'=>trans($VN.'id')]) !!}
+        </td>
+        <td>
+            <!--- filter private Field --->
+            {!! Form::text('private', null, ['class' => 'form-control input-sm',
+                                                     'style' => 'width:100%;',
+                                                         'placeholder'=>trans($VN.'private')]) !!}
         </td>
         <td>
             <!--- filter name Field --->
@@ -60,6 +69,12 @@ $VN = 'views/admin/folders/_index_table.';
             {!! Form::text('owner', null, ['class' => 'form-control input-sm',
                                                      'style' => 'width:100%;',
                                                          'placeholder'=>trans($VN.'owner')]) !!}
+        </td>
+        <td>
+            <!--- filter root Field --->
+            {!! Form::text('root', null, ['class' => 'form-control input-sm',
+                                                     'style' => 'width:100%;',
+                                                         'placeholder'=>trans($VN.'root')]) !!}
         </td>
         <td>
 
@@ -81,6 +96,9 @@ $VN = 'views/admin/folders/_index_table.';
             <td class="text-right">
                 {!! link_to_route(SHOW_ROUTE,$model->id,['id'=>$model->id]) !!}
             </td>
+            <td class="text-center">
+                {!! $model->private?'X':'-' !!}
+            </td>
             <td>
                 {!! link_to_route(SHOW_ROUTE,$model->name,['id'=>$model->id]) !!}
             </td>
@@ -90,6 +108,11 @@ $VN = 'views/admin/folders/_index_table.';
             <td>
                 @if($model->owner)
                     {!! link_to_route('admin.users.show',$model->owner->name,['id'=>$model->owner->id]) !!}
+                @endif
+            </td>
+            <td>
+                @if($model->root)
+                    {!! link_to_route(SHOW_ROUTE,$model->root->name,['id'=>$model->root->id]) !!}
                 @endif
             </td>
             <td>
