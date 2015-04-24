@@ -92,9 +92,11 @@ if (!array_has($locales, $locale)) {
                 @else
                     @if(Auth::user()->is_admin)
                         <li class="dropdown">
-                            <a href="{{ route('admin.index') }}" class="dropdown-toggle" data-toggle="dropdown"
+                            <a href="{{ route('admin.main.index') }}" class="dropdown-toggle" data-toggle="dropdown"
                                role="button" aria-expanded="false">{{trans($VN.'admin')}}<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
+                                <li><a href="{{ route('admin.main.index') }}">{{trans($VN.'admin_dashboard')}}</a></li>
+                                <li class="divider"></li>
                                 <li><a href="{{ route('admin.users.index') }}">{{trans($VN.'users')}}</a></li>
                                 <li><a href="{{ route('admin.departments.index') }}">{{trans($VN.'departments')}}</a>
                                 </li>

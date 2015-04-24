@@ -8,6 +8,7 @@ return [
     'approver' => 'Approver',
     'publisher' => 'Publisher',
     'admin' => 'Admin',
+    'admin_dashboard' => 'Admin Dashboard',
     'users' => 'Users',
     'roles' => 'Roles',
     'permissions' => 'Permissions',

@@ -148,9 +148,9 @@ class FoldersController extends Controller
             if ($root->trashed()) {
                 $root->restore();
             };
-            if (($root->folder_id != null) || ($root->user_id!= User::ROOT_USER)) {
+            if (($root->folder_id != null) || ($root->user_id != User::ROOT_USER)) {
                 $root->folder_id = null;
-                $root->user_id= User::ROOT_USER;
+                $root->user_id = User::ROOT_USER;
                 $root->save();
             }
         }
@@ -158,17 +158,18 @@ class FoldersController extends Controller
             ->where('id', '<>', Folder::ROOT_FOLDER)
             ->update(['folder_id' => Folder::ROOT_FOLDER]);
 
-        $root = Folder::withTrashed()->whereFolderId(Folder::ROOT_FOLDER)->whereUserId(Auth::user()->id)->first();
-        if (! $root)
-        {
-            $root = new Folder();
-            $root->name = Auth::user()->display_name;
-            $root->folder_id = Folder::ROOT_FOLDER;
-            $root->root_id = Folder::ROOT_FOLDER;
-            $root->user_id = Auth::user()->id;
-            $root->private= true;
-            $root->description = Auth::user()->display_name . '\'s Private folder';
-            $root->save();
+        if (Auth::check()) {
+            $root = Folder::withTrashed()->whereFolderId(Folder::ROOT_FOLDER)->whereUserId(Auth::user()->id)->first();
+            if (!$root) {
+                $root = new Folder();
+                $root->name = Auth::user()->display_name;
+                $root->folder_id = Folder::ROOT_FOLDER;
+                $root->root_id = Folder::ROOT_FOLDER;
+                $root->user_id = Auth::user()->id;
+                $root->private = true;
+                $root->description = Auth::user()->display_name . '\'s Private folder';
+                $root->save();
+            }
         }
     }
 
@@ -350,8 +351,8 @@ class FoldersController extends Controller
     {
         $folders = Folder::ListItems();
         $model = new Folder(['root_id' => Folder::ROOT_FOLDER]);
-        $users = User::withTrashed()->lists('display_name','id');
-        $roots = Folder::whereFolderId(Folder::ROOT_FOLDER)->orWhere('id',Folder::ROOT_FOLDER)->withTrashed()->lists('name','id');
+        $users = User::withTrashed()->lists('display_name', 'id');
+        $roots = Folder::whereFolderId(Folder::ROOT_FOLDER)->orWhere('id', Folder::ROOT_FOLDER)->withTrashed()->lists('name', 'id');
         return view($this->create_view,
             compact([
                 'model',
@@ -372,8 +373,8 @@ class FoldersController extends Controller
         try {
             $folders = Folder::ListItems();
             $model = $this->getModel($id);
-            $users = User::withTrashed()->lists('display_name','id');
-            $roots = Folder::whereFolderId(Folder::ROOT_FOLDER)->orWhere('id',Folder::ROOT_FOLDER)->withTrashed()->lists('name','id');
+            $users = User::withTrashed()->lists('display_name', 'id');
+            $roots = Folder::whereFolderId(Folder::ROOT_FOLDER)->orWhere('id', Folder::ROOT_FOLDER)->withTrashed()->lists('name', 'id');
             return view($this->show_view, compact([
                 'model',
                 'folders',
@@ -401,8 +402,8 @@ class FoldersController extends Controller
         if ($id == Folder::ROOT_FOLDER) {
             $folders = Folder::ListItems();
             $model = $this->getModel($id);
-            $users = User::withTrashed()->lists('display_name','id');
-            $roots = Folder::whereFolderId(Folder::ROOT_FOLDER)->orWhere('id',Folder::ROOT_FOLDER)->withTrashed()->lists('name','id');
+            $users = User::withTrashed()->lists('display_name', 'id');
+            $roots = Folder::whereFolderId(Folder::ROOT_FOLDER)->orWhere('id', Folder::ROOT_FOLDER)->withTrashed()->lists('name', 'id');
             Flash::warning(trans($this->resource_name . 'forbidden'));
             return view($this->show_view, compact([
                 'model',
@@ -416,8 +417,8 @@ class FoldersController extends Controller
             $excluded = $model->children()->lists('id');
             $excluded[] = $model->id;
             $folders = Folder::ListItems($excluded);
-            $users = User::withTrashed()->lists('display_name','id');
-            $roots = Folder::whereFolderId(Folder::ROOT_FOLDER)->orWhere('id',Folder::ROOT_FOLDER)->withTrashed()->lists('name','id');
+            $users = User::withTrashed()->lists('display_name', 'id');
+            $roots = Folder::whereFolderId(Folder::ROOT_FOLDER)->orWhere('id', Folder::ROOT_FOLDER)->withTrashed()->lists('name', 'id');
             return view($this->edit_view, compact([
                 'model',
                 'folders',
@@ -450,7 +451,7 @@ class FoldersController extends Controller
                 $folder_id = $request->input('folder_id', null);
                 $model->folder_id = $folder_id;
                 $model->user_id = $request->input('user_id', Auth::user()->id);
-                $model->description =  Purifier::clean($request->input('description'));
+                $model->description = Purifier::clean($request->input('description'));
                 $model->save();
                 DB::commit();
                 Flash::info(trans($this->resource_name . 'saved', ['model' => $this->model_name]));
@@ -484,7 +485,7 @@ class FoldersController extends Controller
                 $folder_id = $request->input('folder_id', null);
                 $model->folder_id = $folder_id;
                 $model->user_id = $request->input('user_id', Auth::user()->id);
-                $model->description =  Purifier::clean($request->input('description'));
+                $model->description = Purifier::clean($request->input('description'));
                 $model->update($request->input());
                 DB::commit();
                 Flash::info(trans($this->resource_name . 'saved', ['model' => $this->model_name]));
@@ -508,7 +509,7 @@ class FoldersController extends Controller
      *
      * @return Response
      */
-    public function addsubfolders($id,ModelAddRequest $request)
+    public function addsubfolders($id, ModelAddRequest $request)
     {
         try {
             $model = new Folder();
@@ -521,7 +522,7 @@ class FoldersController extends Controller
                 $model->save();
                 DB::commit();
                 Flash::info(trans($this->resource_name . 'saved', ['model' => $this->model_name]));
-                return redirect(route($this->show_route, [$id,'tab'=>'tab_data']));
+                return redirect(route($this->show_route, [$id, 'tab' => 'tab_data']));
             } catch (Exception $e) {
                 DB::rollBack();
                 throw $e;
@@ -535,32 +536,31 @@ class FoldersController extends Controller
             return $request->response([]);
         }
     }
+
     /**
      * Store a newly created resource in storage.
      *
      * @return Response
      */
-    public function delsubfolders($root_id,DeleteRequest $request)
+    public function delsubfolders($root_id, DeleteRequest $request)
     {
         try {
-            $ids= $request->input('remove_children');
+            $ids = $request->input('remove_children');
             try {
                 DB::beginTransaction();
-                foreach ($ids as $id)
-                {
+                foreach ($ids as $id) {
                     $model = Folder::withTrashed()->find($id);
-                    if ($model)
-                    {
+                    if ($model) {
                         if ($model->trashed()) {
                             $model->restore();
-                        }else {
+                        } else {
                             $model->delete();
                         }
                     }
                 }
                 DB::commit();
                 Flash::info(trans($this->resource_name . 'trashed/untrashed', ['model' => $this->model_name]));
-                return redirect(route($this->show_route, [$root_id,'tab'=>'tab_data']));
+                return redirect(route($this->show_route, [$root_id, 'tab' => 'tab_data']));
             } catch (Exception $e) {
                 DB::rollBack();
                 throw $e;

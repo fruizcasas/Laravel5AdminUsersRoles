@@ -47,7 +47,7 @@ Breadcrumbs::register('password', function($breadcrumbs) use ($VN)
 Breadcrumbs::register('admin', function($breadcrumbs) use ($VN)
 {
     $breadcrumbs->parent('home');
-    $breadcrumbs->push(trans($VN.'admin'), route('admin.index'));
+    $breadcrumbs->push(trans($VN.'admin'), route('admin.main.index'));
 });
 
 /*

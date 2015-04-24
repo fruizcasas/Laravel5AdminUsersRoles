@@ -123,7 +123,7 @@ Route::group(
 
         Route::get('/',
             [
-                'as' => 'admin.index', 'uses' => 'MainController@index'
+                'as' => 'admin.main.index', 'uses' => 'MainController@index'
             ]);
 
 
@@ -276,10 +276,10 @@ Route::group(
         Route::resource('/permissions', 'PermissionsController');
 
         /*
-|--------------------------------------------------------------------------
-| Admin/Fileentries Routes
-|--------------------------------------------------------------------------
-*/
+        |--------------------------------------------------------------------------
+        | Admin/Fileentries Routes
+        |--------------------------------------------------------------------------
+        */
 
         Route::post('/fileentries/filter',
             [
