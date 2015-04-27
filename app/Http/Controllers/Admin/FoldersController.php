@@ -96,6 +96,7 @@ class FoldersController extends Controller
         [
             'id',
             'name',
+            'parent',
             'order',
             'owner',
             'root',
@@ -112,6 +113,16 @@ class FoldersController extends Controller
             'order',
         ];
 
+
+    /**
+     * @var array
+     */
+    protected $filter_has_fields =
+        [
+            'root',
+            'parent',
+            'owner',
+        ];
 
     /**
      * @var array
@@ -148,7 +159,8 @@ class FoldersController extends Controller
             if ($root->trashed()) {
                 $root->restore();
             };
-            if (($root->folder_id != null) || ($root->user_id != User::ROOT_USER)) {
+            if (($root->folder_id != null) ||($root->root_id != null) ||  ($root->user_id != User::ROOT_USER)) {
+                $root->root_id = null;
                 $root->folder_id = null;
                 $root->user_id = User::ROOT_USER;
                 $root->save();
@@ -205,49 +217,52 @@ class FoldersController extends Controller
         if (isset($filter)) {
             foreach ($this->filter_fields as $field) {
                 if (trim($filter[$field]) != '') {
-                    $values = explode(',', $filter[$field]);
-                    $first = true;
-                    foreach ($values as $value) {
-                        if (in_array($field, $this->filter_numeric_fields)) {
-                            if ($first) {
-                                $models = $models->Where($field, $value);
-                                $first = false;
+                    $models = $models->Where(function ($query) use ($field, $filter) {
+                        $values = explode(',', $filter[$field]);
+                        $first = true;
+                        foreach ($values as $value) {
+                            if (in_array($field, $this->filter_numeric_fields)) {
+                                if ($first) {
+                                    $query = $query->Where($field, $value);
+                                    $first = false;
+                                } else {
+                                    $query = $query->orWhere($field, $value);
+                                }
+                            } else if (in_array($field, $this->filter_boolean_fields)) {
+                                $value = (strtolower($value) == 'x');
+                                if ($first) {
+                                    $query = $query->Where($field, $value);
+                                    $first = false;
+                                } else {
+                                    $query = $query->orWhere($field, $value);
+                                }
+                            } else if (in_array($field, $this->filter_has_fields)) {
+                                $value = '%' . $value . '%';
+                                if ($first) {
+                                    $query = $query->whereHas($field, function ($q) use ($value) {
+                                        $q->where('name', 'LIKE', $value);
+                                    });
+                                    $first = false;
+                                } else {
+                                    $query = $query->orWhereHas($field, function ($q) use ($value) {
+                                        $q->where('name', 'LIKE', $value);
+                                    });
+                                }
                             } else {
-                                $models = $models->orWhere($field, $value);
-                            }
-                        } else if (in_array($field, $this->filter_boolean_fields)) {
-                            $value = (strtolower($value) == 'x');
-                            if ($first) {
-                                $models = $models->Where($field, $value);
-                                $first = false;
-                            } else {
-                                $models = $models->orWhere($field, $value);
-                            }
-                        } else if ($field == 'owner') {
-                            $value = '%' . $value . '%';
-                            if ($first) {
-                                $models = $models->whereHas('owner', function ($q) use ($value) {
-                                    $q->where('name', 'like', $value);
-                                });
-                                $first = false;
-                            } else {
-                                $models = $models->orWhereHas('owner', function ($q) use ($value) {
-                                    $q->where('name', 'like', $value);
-                                });
-                            }
-
-                        } else {
-                            $value = '%' . $value . '%';
-                            if ($first) {
-                                $models = $models->Where($field, 'LIKE', $value);
-                                $first = false;
-                            } else {
-                                $models = $models->orWhere($field, 'LIKE', $value);
+                                $value = '%' . $value . '%';
+                                if ($first) {
+                                    $query = $query->Where($field, 'LIKE', $value);
+                                    $first = false;
+                                } else {
+                                    $query = $query->orWhere($field, 'LIKE', $value);
+                                }
                             }
                         }
-                    }
+                    });
+
                 }
             }
+
         }
         return $models;
     }
@@ -337,7 +352,7 @@ class FoldersController extends Controller
     public function index()
     {
         $filter = $this->getFilter();
-        $models = $this->getModels($filter);
+        $models = $this->getModels($filter)->with('root')->with('owner')->with('parent');
         $models = $models->paginate(Profile::loginProfile()->per_page);
         return view($this->index_view, compact('models', 'filter'));
     }
@@ -350,7 +365,11 @@ class FoldersController extends Controller
     public function create()
     {
         $folders = Folder::ListItems();
-        $model = new Folder(['root_id' => Folder::ROOT_FOLDER]);
+        $model = new Folder(
+            [
+                'root_id' => Folder::ROOT_FOLDER,
+                'user_id' => Auth::user()->id,
+            ]);
         $users = User::withTrashed()->lists('display_name', 'id');
         $roots = Folder::whereFolderId(Folder::ROOT_FOLDER)->orWhere('id', Folder::ROOT_FOLDER)->withTrashed()->lists('name', 'id');
         return view($this->create_view,
@@ -400,17 +419,8 @@ class FoldersController extends Controller
     public function edit($id)
     {
         if ($id == Folder::ROOT_FOLDER) {
-            $folders = Folder::ListItems();
-            $model = $this->getModel($id);
-            $users = User::withTrashed()->lists('display_name', 'id');
-            $roots = Folder::whereFolderId(Folder::ROOT_FOLDER)->orWhere('id', Folder::ROOT_FOLDER)->withTrashed()->lists('name', 'id');
-            Flash::warning(trans($this->resource_name . 'forbidden'));
-            return view($this->show_view, compact([
-                'model',
-                'folders',
-                'users',
-                'roots',
-            ]));
+            Flash::error(trans($this->resource_name . 'forbidden'));
+            return redirect(route($this->show_route, [$id]));
         }
         try {
             $model = $this->getModel($id);
@@ -585,13 +595,8 @@ class FoldersController extends Controller
     public function destroy($id, DeleteRequest $request)
     {
         if ($id == Folder::ROOT_FOLDER) {
-            $folders = Folder::ListItems();
-            $model = $this->getModel($id);
-            Flash::warning(trans($this->resource_name . 'forbidden'));
-            return view($this->show_view, compact([
-                'model',
-                'folders',
-            ]));
+            Flash::error(trans($this->resource_name . 'forbidden'));
+            return redirect(route($this->show_route, [$id]));
         }
 
         try {
@@ -657,5 +662,28 @@ class FoldersController extends Controller
         }
     }
 
+    protected function setRoot($model, $root, $level)
+    {
+        if ($level < 15) {
+            $model->root_id = $root;
+            $model->save();
+            foreach ($model->children()->get() as $child) {
+                $this->setRoot($child, $root, $level + 1);
+            }
+        }
+    }
+
+    protected function cleanRoot(DeleteRequest $request)
+    {
+        $root = Folder::withTrashed()->find(Folder::ROOT_FOLDER);
+        if ($root) {
+            foreach ($root->children()->get() as $rooted) {
+                foreach ($rooted->children()->get() as $child) {
+                    $this->setRoot($child, $rooted->id, 1);
+                }
+            }
+        }
+        return redirect(route($this->index_route));
+    }
 
 }

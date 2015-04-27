@@ -5,7 +5,7 @@
 // -----------------
 $VN = 'views/admin/users/_form_data.';
 
-$yes_no = ['0' => trans($VN.'no'), '1' => trans($VN.'yes')];
+$yes_no = ['0' => trans($VN . 'no'), '1' => trans($VN . 'yes')];
 
 ?>
 
@@ -26,13 +26,13 @@ $yes_no = ['0' => trans($VN.'no'), '1' => trans($VN.'yes')];
             </div>
             @if (isset($readonly) && ($readonly))
                 <div class="col-sm-2">
-                        {!! link_to_route(EDIT_PASSWORD_ROUTE,trans($VN.'change_password'),[$model->id],
-                                         ['class' => 'btn-sm btn-warning']) !!}
+                    {!! link_to_route(EDIT_PASSWORD_ROUTE,trans($VN.'change_password'),[$model->id],
+                                     ['class' => 'btn form-control btn-warning']) !!}
                 </div>
             @endif
         </div>
         <!--- display_name Field --->
-        <div class="form-group {{$errors->first('display_name','has-error')}}">
+        <div class="form-group {{$errors->first('display_name','has-error') || $errors->first('acronym','has-error') }}">
             {!! Form::label('display_name', trans($VN.'display_name'),['class' =>'col-sm-2 control-label text-right']) !!}
             <div class="col-sm-4">
                 {!! Form::text('display_name', $model->display_name,
@@ -42,9 +42,7 @@ $yes_no = ['0' => trans($VN.'no'), '1' => trans($VN.'yes')];
                     ($readonly?['readonly']:[])) !!}
                 {!! $errors->first('display_name', '<p class="help-block error-msg">:message</p>') !!}
             </div>
-        </div>
-        <!--- acronym Field --->
-        <div class="form-group {{$errors->first('acronym','has-error')}}">
+            <!--- acronym Field --->
             {!! Form::label('acronym', trans($VN.'acronym'),['class' =>'col-sm-2 control-label text-right']) !!}
             <div class="col-sm-4">
                 {!! Form::text('acronym', $model->acronym, [
@@ -161,6 +159,28 @@ $yes_no = ['0' => trans($VN.'no'), '1' => trans($VN.'yes')];
                 {!! $errors->first('departments', '<p class="help-block error-msg">:message</p>') !!}
             </div>
         </div>
+        <div class="form-group {{$errors->first('departments','has-error')}}">
+            {!! Form::label('comments', trans($VN.'comments'),['class' =>'col-sm-2 control-label text-right']) !!}
+            <div class="col-sm-10">
+                {!! Form::label('comments', trans($VN.'comments'),[]) !!}
+                @if ($readonly)
+                    <div class="textarea">
+                        @if ($model->comments!='')
+                            {!! $model->comments !!}
+                        @else
+                            <br/><br/>
+                        @endif
+                    </div>
+                @else
+                    {!! Form::textarea('comments', $model->comments, [
+                    'class' => 'form-control input-sm',
+                    'placeholder' => 'comments',
+                    'style' => 'width:100%;height:100%;']) !!}
+                    {!! $errors->first('comments', '<p class="help-block error-msg">:message</p>') !!}
+                @endif
+            </div>
+        </div>
+
         @include('partials.crud.timestamps',['model'=>$model])
     </div>
 </div>

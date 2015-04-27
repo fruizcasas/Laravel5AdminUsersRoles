@@ -38,6 +38,7 @@ class Registrar implements RegistrarContract {
 			'email' => $data['email'],
 			'password' => bcrypt($data['password']),
             'is_admin' => 'false',
+            'is_employee' => 'false',
             'is_owner' => 'false',
             'is_reviewer' => 'false',
             'is_approver' => 'false',

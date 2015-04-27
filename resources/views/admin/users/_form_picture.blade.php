@@ -33,20 +33,6 @@ $VN = 'views/admin/users/_form_picture.';
                 @endif
 
             </div>
-            <div class="col-sm-8">
-                {!! Form::label('comments', trans($VN.'comments'),[]) !!}
-                @if ($readonly)
-                    <div class="textarea">
-                        {!! $model->comments !!}
-                    </div>
-                @else
-                    {!! Form::textarea('comments', $model->comments, [
-                    'class' => 'form-control input-sm',
-                    'placeholder' => 'comments',
-                    'style' => 'width:100%;height:100%;']) !!}
-                    {!! $errors->first('comments', '<p class="help-block error-msg">:message</p>') !!}
-                @endif
-            </div>
         </div>
     </div>
 </div>

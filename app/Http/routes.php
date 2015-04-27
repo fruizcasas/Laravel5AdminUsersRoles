@@ -397,6 +397,13 @@ Route::group(
                 'uses' => 'FoldersController@excel'
             ]);
 
+        Route::get('/folders/cleanroot',
+            [
+                'as' => 'admin.folders.cleanroot',
+                'uses' => 'FoldersController@cleanRoot'
+            ]);
+
+
         Route::get('/folders/trash/{trash?}',
             [
                 'as' => 'admin.folders.trash',
@@ -432,7 +439,6 @@ Route::group(
                 'as' => 'admin.folders.delsubfolders',
                 'uses' => 'FoldersController@delsubfolders'
             ]);
-
 
 
         Route::resource('/folders', 'FoldersController');

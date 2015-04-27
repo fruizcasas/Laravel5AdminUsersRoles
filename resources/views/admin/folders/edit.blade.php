@@ -24,20 +24,7 @@ const VIEW_NAME = 'admin.folders.edit';
 @section('content')
 
 <div class="row">
-    <div class="col-sm-5">
-        <div class="panel panel-primary">
-            <div class="panel-footer">
-                <h3> {{trans($VN.'title')}}</h3>
-            </div>
-            <div class="panel-body">
-                {!! \App\Models\Admin\Folder::Tree(SHOW_ROUTE,\App\Models\Admin\Folder::ROOT_FOLDER,['tab' => 'tab_data'],$model->id) !!}
-            </div>
-            <div class="panel-footer">
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-7">
+    <div class="col-md-12 col-md-offset-0">
         <div class="panel panel-primary">
             {!! Form::model($model,['method' =>'PUT',
                     'route'  => [UPDATE_ROUTE, $model->id],
@@ -71,7 +58,6 @@ const VIEW_NAME = 'admin.folders.edit';
         </div>
     </div>
 </div>
-
 @endsection
 
 @section('scripts')

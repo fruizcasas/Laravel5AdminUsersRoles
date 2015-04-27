@@ -89,6 +89,16 @@ class UsersController extends Controller
             'is_publisher',
         ];
 
+    /**
+     * @var array
+     */
+    protected $filter_has_fields =
+        [
+            'roles',
+            'departments',
+        ];
+
+
     public function __construct()
     {
         $this->middleware('admin');
@@ -551,6 +561,61 @@ class UsersController extends Controller
         if (isset($filter)) {
             foreach ($this->filter_fields as $field) {
                 if (trim($filter[$field]) != '') {
+                    $models = $models->Where(function ($query) use ($field, $filter) {
+                        $values = explode(',', $filter[$field]);
+                        $first = true;
+                        foreach ($values as $value) {
+                            if (in_array($field, $this->filter_numeric_fields)) {
+                                if ($first) {
+                                    $query = $query->Where($field, $value);
+                                    $first = false;
+                                } else {
+                                    $query = $query->orWhere($field, $value);
+                                }
+                            } else if (in_array($field, $this->filter_boolean_fields)) {
+                                $value = (strtolower($value) == 'x');
+                                if ($first) {
+                                    $query = $query->Where($field, $value);
+                                    $first = false;
+                                } else {
+                                    $query = $query->orWhere($field, $value);
+                                }
+                            } else if ($field == 'parent') {
+                                $value = '%' . $value . '%';
+                                if ($first) {
+                                    $query = $query->whereHas($field, function ($q) use ($value) {
+                                        $q->where('name', 'LIKE', $value);
+                                    });
+                                    $first = false;
+                                } else {
+                                    $query = $query->orWhereHas($field, function ($q) use ($value) {
+                                        $q->where('name', 'LIKE', $value);
+                                    });
+                                }
+                            } else if (in_array($field, $this->filter_has_fields)) {
+                                $value = '%' . $value . '%';
+                                if ($first) {
+                                    $query = $query->whereHas($field, function ($q) use ($value) {
+                                        $q->where('acronym', 'LIKE', $value);
+                                    });
+                                    $first = false;
+                                } else {
+                                    $query = $query->orWhereHas($field, function ($q) use ($value) {
+                                        $q->where('acronym', 'LIKE', $value);
+                                    });
+                                }
+                            } else {
+                                $value = '%' . $value . '%';
+                                if ($first) {
+                                    $query = $query->Where($field, 'LIKE', $value);
+                                    $first = false;
+                                } else {
+                                    $query = $query->orWhere($field, 'LIKE', $value);
+                                }
+                            }
+                        }
+                    });
+                    /*
                     $values = explode(',', $filter[$field]);
                     $first = true;
                     foreach ($values as $value) {
@@ -615,6 +680,7 @@ class UsersController extends Controller
                             }
                         }
                     }
+                    */
                 }
             }
         }
