@@ -233,7 +233,7 @@ class FileentriesController extends Controller
             $n++;
         }
         Utils::file_force_contents(base_path($target_name) , File::get($file_upload));
-        Utils::gzCompressFile(base_path($target_name));
+        //Utils::gzCompressFile(base_path($target_name));
         return $target_name;
 
     }

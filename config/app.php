@@ -28,6 +28,17 @@ return [
 
     'url' => 'http://iso',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Domain
+    |--------------------------------------------------------------------------
+    |
+    | This Domain name is used by register rules request
+    | in order to filter the new login emails for only the domain emails.
+    |
+    */
+
+    'domain' => env('DOMAIN_NAME','admin.com'),
 
 
 
@@ -75,8 +86,8 @@ return [
         //'it' => 'Italiano',
         //'pt' => 'Português',
         //'br' => 'Brasileiro',
-        //'cn' => '中国',
-        //'ru' => 'Русский'
+        'cn' => '中国',
+        'ru' => 'Русский'
     ],
 
 

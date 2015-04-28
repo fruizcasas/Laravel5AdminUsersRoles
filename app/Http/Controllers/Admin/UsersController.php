@@ -53,10 +53,12 @@ class UsersController extends Controller
             'acronym',
             'display_name',
             'is_admin',
+            'is_employee',
             'is_author',
             'is_reviewer',
             'is_approver',
             'is_publisher',
+            'user_id',
         ];
 
     protected $filter_fields =
@@ -65,14 +67,15 @@ class UsersController extends Controller
             'name',
             'acronym',
             'display_name',
+            'parent',
+            'roles',
+            'departments',
             'is_admin',
+            'is_employee',
             'is_author',
             'is_reviewer',
             'is_approver',
             'is_publisher',
-            'parent',
-            'roles',
-            'departments',
         ];
 
     protected $filter_numeric_fields =
@@ -83,6 +86,7 @@ class UsersController extends Controller
     protected $filter_boolean_fields =
         [
             'is_admin',
+            'is_employee',
             'is_author',
             'is_reviewer',
             'is_approver',
@@ -178,6 +182,90 @@ class UsersController extends Controller
 
         return redirect(route($this->index_route, []));
     }
+
+    public function getModels($filter = null)
+    {
+        $models = User::sortable($this->index_view);
+        if ($this->show_trash()) {
+            $models = $models->withTrashed();
+        }
+        if (isset($filter)) {
+            foreach ($this->filter_fields as $field) {
+                if (trim($filter[$field]) != '') {
+                    $models = $models->Where(function ($query) use ($field, $filter) {
+                        $values = explode(',', $filter[$field]);
+                        $first = true;
+                        foreach ($values as $value) {
+                            if (in_array($field, $this->filter_numeric_fields)) {
+                                if ($first) {
+                                    $query = $query->Where($field, $value);
+                                    $first = false;
+                                } else {
+                                    $query = $query->orWhere($field, $value);
+                                }
+                            } else if (in_array($field, $this->filter_boolean_fields)) {
+                                $value = (strtolower($value) == 'x');
+                                if ($first) {
+                                    $query = $query->Where($field, $value);
+                                    $first = false;
+                                } else {
+                                    $query = $query->orWhere($field, $value);
+                                }
+                            } else if ($field == 'parent') {
+                                $value = '%' . $value . '%';
+                                if ($first) {
+                                    $query = $query->whereHas($field, function ($q) use ($value) {
+                                        $q->where('name', 'LIKE', $value);
+                                    });
+                                    $first = false;
+                                } else {
+                                    $query = $query->orWhereHas($field, function ($q) use ($value) {
+                                        $q->where('name', 'LIKE', $value);
+                                    });
+                                }
+                            } else if (in_array($field, $this->filter_has_fields)) {
+                                $value = '%' . $value . '%';
+                                if ($first) {
+                                    $query = $query->whereHas($field, function ($q) use ($value) {
+                                        $q->where('acronym', 'LIKE', $value);
+                                    });
+                                    $first = false;
+                                } else {
+                                    $query = $query->orWhereHas($field, function ($q) use ($value) {
+                                        $q->where('acronym', 'LIKE', $value);
+                                    });
+                                }
+                            } else {
+                                $value = '%' . $value . '%';
+                                if ($first) {
+                                    $query = $query->Where($field, 'LIKE', $value);
+                                    $first = false;
+                                } else {
+                                    $query = $query->orWhere($field, 'LIKE', $value);
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }
+        return $models;
+    }
+
+    public function getModel($id)
+    {
+        return $this->getModels()->findOrFail($id);
+    }
+
+    public function getFilter()
+    {
+        $values = [];
+        foreach ($this->filter_fields as $field) {
+            $values[$field] = Profile::loginProfile()->getFilterValue($this->index_view, $field);
+        }
+        return $values;
+    }
+
 
     public function excel($format = 'xlsx')
     {
@@ -339,10 +427,7 @@ class UsersController extends Controller
             $target_name = $pictures_dir .'/'.  $user_name . '(' . $n . ').' . $extension;
             $n++;
         }
-        $n--;
         Utils::file_force_contents(base_path().$target_name, File::get($file_upload));
-        Imaging::img_resize(base_path().$target_name,base_path().$pictures_dir .'/'. $user_name . '-200x300.png',200,300);
-        Imaging::img_thumb(base_path().$target_name,base_path().$pictures_dir .'/'. $user_name . '-thumb.png',200,300);
         return $target_name;
 
     }
@@ -551,155 +636,5 @@ class UsersController extends Controller
             return $request->response($errors);
         }
     }
-
-    public function getModels($filter = null)
-    {
-        $models = User::sortable($this->index_view);
-        if ($this->show_trash()) {
-            $models = $models->withTrashed();
-        }
-        if (isset($filter)) {
-            foreach ($this->filter_fields as $field) {
-                if (trim($filter[$field]) != '') {
-                    $models = $models->Where(function ($query) use ($field, $filter) {
-                        $values = explode(',', $filter[$field]);
-                        $first = true;
-                        foreach ($values as $value) {
-                            if (in_array($field, $this->filter_numeric_fields)) {
-                                if ($first) {
-                                    $query = $query->Where($field, $value);
-                                    $first = false;
-                                } else {
-                                    $query = $query->orWhere($field, $value);
-                                }
-                            } else if (in_array($field, $this->filter_boolean_fields)) {
-                                $value = (strtolower($value) == 'x');
-                                if ($first) {
-                                    $query = $query->Where($field, $value);
-                                    $first = false;
-                                } else {
-                                    $query = $query->orWhere($field, $value);
-                                }
-                            } else if ($field == 'parent') {
-                                $value = '%' . $value . '%';
-                                if ($first) {
-                                    $query = $query->whereHas($field, function ($q) use ($value) {
-                                        $q->where('name', 'LIKE', $value);
-                                    });
-                                    $first = false;
-                                } else {
-                                    $query = $query->orWhereHas($field, function ($q) use ($value) {
-                                        $q->where('name', 'LIKE', $value);
-                                    });
-                                }
-                            } else if (in_array($field, $this->filter_has_fields)) {
-                                $value = '%' . $value . '%';
-                                if ($first) {
-                                    $query = $query->whereHas($field, function ($q) use ($value) {
-                                        $q->where('acronym', 'LIKE', $value);
-                                    });
-                                    $first = false;
-                                } else {
-                                    $query = $query->orWhereHas($field, function ($q) use ($value) {
-                                        $q->where('acronym', 'LIKE', $value);
-                                    });
-                                }
-                            } else {
-                                $value = '%' . $value . '%';
-                                if ($first) {
-                                    $query = $query->Where($field, 'LIKE', $value);
-                                    $first = false;
-                                } else {
-                                    $query = $query->orWhere($field, 'LIKE', $value);
-                                }
-                            }
-                        }
-                    });
-                    /*
-                    $values = explode(',', $filter[$field]);
-                    $first = true;
-                    foreach ($values as $value) {
-                        if (in_array($field, $this->filter_numeric_fields)) {
-                            if ($first) {
-                                $models = $models->Where($field, $value);
-                                $first = false;
-                            } else {
-                                $models = $models->orWhere($field, $value);
-                            }
-                        } else if (in_array($field, $this->filter_boolean_fields)) {
-                            $value = (strtolower($value) == 'x');
-                            if ($first) {
-                                $models = $models->Where($field, $value);
-                                $first = false;
-                            } else {
-                                $models = $models->orWhere($field, $value);
-                            }
-                        } else if ($field == 'parent') {
-                            $value = '%' . $value . '%';
-                            if ($first) {
-                                $models = $models->whereHas('parent', function ($q) use ($value) {
-                                    $q->where('name', 'like', $value);
-                                });
-                                $first = false;
-                            } else {
-                                $models = $models->orWhereHas('parent', function ($q) use ($value) {
-                                    $q->where('name', 'like', $value);
-                                });
-                            }
-                        } else if ($field == 'roles') {
-                            $value = '%' . $value . '%';
-                            if ($first) {
-                                $models = $models->whereHas('roles', function ($q) use ($value) {
-                                    $q->where('acronym', 'like', $value);
-                                });
-                                $first = false;
-                            } else {
-                                $models = $models->orWhereHas('roles', function ($q) use ($value) {
-                                    $q->where('acronym', 'like', $value);
-                                });
-                            }
-                        } else if ($field == 'departments') {
-                            $value = '%' . $value . '%';
-                            if ($first) {
-                                $models = $models->whereHas('departments', function ($q) use ($value) {
-                                    $q->where('acronym', 'like', $value);
-                                });
-                                $first = false;
-                            } else {
-                                $models = $models->orWhereHas('departments', function ($q) use ($value) {
-                                    $q->where('acronym', 'like', $value);
-                                });
-                            }
-                        } else {
-                            $value = '%' . $value . '%';
-                            if ($first) {
-                                $models = $models->Where($field, 'LIKE', $value);
-                                $first = false;
-                            } else {
-                                $models = $models->orWhere($field, 'LIKE', $value);
-                            }
-                        }
-                    }
-                    */
-                }
-            }
-        }
-        return $models;
-    }
-
-    public function getModel($id)
-    {
-        return $this->getModels()->findOrFail($id);
-    }
-
-    public function getFilter()
-    {
-        $values = [];
-        foreach ($this->filter_fields as $field) {
-            $values[$field] = Profile::loginProfile()->getFilterValue($this->index_view, $field);
-        }
-        return $values;
-    }
-
 
 }

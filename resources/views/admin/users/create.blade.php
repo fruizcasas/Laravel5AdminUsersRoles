@@ -1,4 +1,7 @@
 <?php
+
+$VN = 'views/admin/users/create.';
+
 const VIEW_NAME = 'admin.users.create';
 ?>
 
@@ -18,7 +21,7 @@ const VIEW_NAME = 'admin.users.create';
 @section('content')
 
     <div class="row">
-        <div class="col-md-12 col-md-offset-0">
+        <div class="col-sm-8 col-sm-offset-2">
             <div class="panel panel-primary">
                 {!! Form::model($model,['route' =>STORE_ROUTE,'class'=>'form-horizontal']) !!}
                 @include('partials.crud.create_buttons')
@@ -27,7 +30,19 @@ const VIEW_NAME = 'admin.users.create';
                         @include('partials.errors')
                     </div>
                 @endif
-                @include('admin.users._form_data',['readonly' => false])
+                <div role="tabpanel">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#data" aria-controls="tab_data" role="tab"
+                                                                  data-toggle="tab">{{trans($VN.'tab_data')}}</a></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="tab_data">
+                            @include('admin.users._form_data',['readonly' => false])
+                        </div>
+                    </div>
+                </div>
                 @include('partials.crud.bottom_buttons')
                 {!! Form::close() !!}
             </div>
@@ -37,14 +52,12 @@ const VIEW_NAME = 'admin.users.create';
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('/js/select2.min.js') }}"></script>
-    <script type="text/javascript">
-        $('#roles').select2({
-            placeholder: 'Select a role'
-        });
-        $('#departments').select2({
-            placeholder: 'Select a department'
-        });
-    </script>
+
+    {!!App\Library\Scripts::Select2(
+    [
+        'roles' => trans($VN.'select_role'),
+        'departments' => trans($VN.'select_department'),
+    ])!!}
+
 @endsection
 

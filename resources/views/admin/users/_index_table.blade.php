@@ -40,7 +40,7 @@ $VN = 'views/admin/users/_index_table.';
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_reviewer',trans($VN.'rev'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_approver',trans($VN.'app'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'is_publisher',trans($VN.'pub'))!!}</th>
-    <th>{{trans($VN.'parent')}}</th>
+    <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'user_id',trans($VN.'parent'))!!}</th>
     <th>{{trans($VN.'roles')}}</th>
     <th>{{trans($VN.'departments')}}</th>
     </thead>
@@ -186,7 +186,7 @@ $VN = 'views/admin/users/_index_table.';
         <td class="text-right">
             <small>{{  $models->total() .' rec' }}</small>
         </td>
-        <td colspan="10">
+        <td colspan="100">
             @if (App\Profile::OrderByLabel(VIEW_NAME) !='')
                 <small>{{trans($VN.'order_by')}}<strong>{{ App\Profile::OrderByLabel(VIEW_NAME) }}</strong>
                 </small>                @endif

@@ -14,7 +14,7 @@
 
     <link href="{{ asset('/css/themes/' .(App\Profile::loginProfile()->theme).'/bootstrap.css') }}"
           rel="stylesheet" >
-    <link href="{{ asset('/css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/select2/css/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/custom.css') }}" rel="stylesheet">
 
     <!-- Fonts -->

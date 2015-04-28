@@ -111,7 +111,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->belongsTo('App\Models\Admin\SpUser','user_id');
     }
 
-
     /**
      * @return mixed
      */

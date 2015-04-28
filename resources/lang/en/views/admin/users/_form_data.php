@@ -8,7 +8,8 @@ return [
     'change_password' => 'Change Password',
     'display_name' => 'Display Name',
     'acronym' => 'Acronym',
-    'photo' => 'Change Photo',
+    'picture' => 'Photo',
+    'edit_picture' => 'Change Photo',
     'email' => 'E-mail',
     'author' => 'Author',
     'reviewer' => 'Reviewer',
@@ -20,6 +21,7 @@ return [
     'roles' => 'Roles',
     'departments' => 'Departments',
     'comments' => 'Comments',
+    'max_filesize' => 'Maximum filesize of :value MBytes',
     // ----------------------------------------------
 ];
 

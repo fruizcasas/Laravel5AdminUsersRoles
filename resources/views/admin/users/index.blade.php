@@ -26,3 +26,4 @@ const VIEW_NAME    = 'admin.users.index';
     @include('admin.users._index_table',['readonly' => true,'models'=>$models])
 
 @endsection
+
