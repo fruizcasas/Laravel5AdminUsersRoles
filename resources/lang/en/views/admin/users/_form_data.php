@@ -22,6 +22,13 @@ return [
     'departments' => 'Departments',
     'comments' => 'Comments',
     'max_filesize' => 'Maximum filesize of :value MBytes',
+    'clear_picture' => 'Clear picture',
+
+    'placeholder_name' => 'Enter a name',
+    'placeholder_display_name' => 'Enter a display name',
+    'placeholder_acronym' => 'Enter an acronym',
+    'placeholder_email' => 'Enter an E-mail',
+    'placeholder_comments' => 'Enter Comments',
     // ----------------------------------------------
 ];
 

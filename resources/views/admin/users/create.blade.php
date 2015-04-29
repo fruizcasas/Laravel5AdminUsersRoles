@@ -10,7 +10,7 @@ const VIEW_NAME = 'admin.users.create';
 @extends ('app')
 
 @section('headings')
-    <h1>Create User</h1>
+    <h3>Create User</h3>
 @endsection
 
 @section('breadcrumbs')
@@ -33,7 +33,7 @@ const VIEW_NAME = 'admin.users.create';
                 <div role="tabpanel">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#data" aria-controls="tab_data" role="tab"
+                        <li role="presentation" class="active"><a href="#tab_data" aria-controls="tab_data" role="tab"
                                                                   data-toggle="tab">{{trans($VN.'tab_data')}}</a></li>
                     </ul>
                     <!-- Tab panes -->

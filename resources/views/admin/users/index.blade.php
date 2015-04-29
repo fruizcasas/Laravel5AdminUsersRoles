@@ -12,7 +12,7 @@ const VIEW_NAME    = 'admin.users.index';
 @extends ('app')
 
 @section('headings')
-    <h1>{{trans($VN.'title')}}</h1>
+    <h3>{{trans($VN.'title')}}</h3>
 @endsection
 
 

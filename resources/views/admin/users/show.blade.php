@@ -9,7 +9,7 @@ $VN = 'views/admin/users/show.';
 @extends ('app')
 
 @section('headings')
-    <h1>{{trans($VN.'title')}}: {{ $model->display_name }} ({{ $model->name }})</h1>
+    <h3>{{trans($VN.'title')}} {{$model->display_name .'('.$model->name .')'}}</h3>
 @endsection
 
 @section('breadcrumbs')
@@ -27,13 +27,13 @@ $VN = 'views/admin/users/show.';
 
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#data" aria-controls="data" role="tab"
+                        <li role="presentation" class="active"><a href="#tab_data" aria-controls="tab_data" role="tab"
                                                                   data-toggle="tab">{{trans($VN.'tab_data')}}</a></li>
                     </ul>
 
                     <!-- Tab panes -->
                     <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="data">
+                        <div role="tabpanel" class="tab-pane active" id="tab_data">
                             @include('admin.users._form_data',['readonly' => true])
                         </div>
                     </div>

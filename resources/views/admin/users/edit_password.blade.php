@@ -14,7 +14,7 @@ $VN = 'views/admin/users/edit_password.';
 @extends('app')
 
 @section('headings')
-    <h1>{{trans($VN.'password')}} {{ $model->name .'-'. $model->display_name}}</h1>
+    <h3>{{trans($VN.'password')}} {{$model->display_name .'('.$model->name .')'}}</h3>
 @endsection
 
 
@@ -32,10 +32,10 @@ $VN = 'views/admin/users/edit_password.';
                 <div class="panel-footer">
                     <div class="form-group">
                         <div class="col-sm-2 col-sm-offset-4">
-                            {!! link_to_route(SHOW_ROUTE,trans($VN.'cancel'),[$model->id],['class'=>"btn btn-primary"])!!}
+                            {!! link_to_route(SHOW_ROUTE,trans($VN.'cancel'),[$model->id],['class'=>"btn btn-primary form-control"])!!}
                         </div>
                         <div class="col-sm-2">
-                            <button type="submit" class="btn btn-warning">{{trans($VN.'update')}}</button>
+                            <button type="submit" class="btn btn-warning form-control">{{trans($VN.'update')}}</button>
                         </div>
                     </div>
                     @include('partials.errors')

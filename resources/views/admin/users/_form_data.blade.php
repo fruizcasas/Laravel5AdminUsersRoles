@@ -19,13 +19,13 @@ $yes_no = ['0' => trans($VN . 'no'), '1' => trans($VN . 'yes')];
             <div class="col-sm-4  {{$errors->first('name','has-error')}}">
                 {!! Form::text('name', $model->name, [
                     'class' => 'form-control input-sm',
-                    'placeholder' => 'enter a name',
+                    'placeholder' => trans($VN.'placeholder_name'),
                     'style' => 'width:100%;']+
                     ($readonly?['readonly']:[])) !!}
                 {!! $errors->first('name', '<p class="help-block error-msg">:message</p>') !!}
             </div>
             @if ($readonly)
-                <div class="col-sm-2">
+                <div class="col-sm-3 col-sm-offset-2">
                     {!! link_to_route(EDIT_PASSWORD_ROUTE,trans($VN.'change_password'),[$model->id],
                                      ['class' => 'btn form-control btn-warning']) !!}
                 </div>
@@ -37,7 +37,7 @@ $yes_no = ['0' => trans($VN . 'no'), '1' => trans($VN . 'yes')];
             <div class="col-sm-4  {{$errors->first('display_name','has-error')}}">
                 {!! Form::text('display_name', $model->display_name,
                     ['class' => 'form-control input-sm',
-                    'placeholder' => 'enter a display name',
+                    'placeholder' =>  trans($VN.'placeholder_display_name'),
                     'style' => 'width:100%;']+
                     ($readonly?['readonly']:[])) !!}
                 {!! $errors->first('display_name', '<p class="help-block error-msg">:message</p>') !!}
@@ -47,7 +47,7 @@ $yes_no = ['0' => trans($VN . 'no'), '1' => trans($VN . 'yes')];
             <div class="col-sm-4 {{$errors->first('acronym','has-error') }}">
                 {!! Form::text('acronym', $model->acronym, [
                     'class' => 'form-control input-sm' ,
-                    'placeholder' => 'enter acronym',
+                    'placeholder' => trans($VN.'placeholder_acronym'),
                     'style' => 'width:100%;']+
                     ($readonly?['readonly']:[])) !!}
                 {!! $errors->first('acronym', '<p class="help-block error-msg">:message</p>') !!}
@@ -59,7 +59,7 @@ $yes_no = ['0' => trans($VN . 'no'), '1' => trans($VN . 'yes')];
             <div class="col-sm-10 {{$errors->first('email','has-error')}}">
                 {!! Form::email('email', $model->email, [
                     'class' => 'form-control input-sm',
-                    'placeholder' => 'email',
+                    'placeholder' => trans($VN.'placeholder_email'),
                     'style' => 'width:100%;']+
                     ($readonly?['readonly']:[])) !!}
                 {!! $errors->first('email', '<p class="help-block error-msg">:message</p>') !!}
@@ -70,21 +70,26 @@ $yes_no = ['0' => trans($VN . 'no'), '1' => trans($VN . 'yes')];
         <div class="form-group">
             {!! Form::label('picture', trans($VN.'picture'),['class' =>'col-sm-2 control-label text-right']) !!}
             <div class="col-sm-3">
-                    <img style="border: solid; border-width: 1px;" src="{{route('admin.users.picture',[$model->id])}}" alt="{{$model->name}}" width="200"
-                         height="auto"/>
+                <img style="border: solid; border-width: 1px;" src="{{route('admin.users.picture',[$model->id])}}"
+                     alt="{{$model->name}}" width="auto"
+                     height="auto"/>
                 <!--- photo Field --->
                 @if (! $readonly)
-                    </div>
-                    <div class="col-sm-4">
-                        <h3>{{trans($VN.'edit_picture')}}</h3>
-                        {!! Form::file('photo',[
-                            'accept'=>'image/*',
-                            'style' => 'text-align: center;']+
-                            ($readonly?['disabled']:[])) !!}
-                        <br/>
-                        <br/>
-                        {!! trans($VN.'max_filesize',['value' => \Symfony\Component\HttpFoundation\File\UploadedFile::getMaxFilesize()/(1024*1024)]) !!}
-
+            </div>
+            <div class="col-sm-4">
+                <label for="clear_picture" class="control-label">
+                    {{trans($VN.'clear_picture')}}
+                </label>
+                {!! Form::checkbox('clear_picture',1,false)!!}
+                <br/>
+                <h3>{{trans($VN.'edit_picture')}}</h3>
+                {!! Form::file('photo',[
+                    'accept'=>'image/*',
+                    'style' => 'text-align: center;']+
+                    ($readonly?['disabled']:[])) !!}
+                <br/>
+                <br/>
+                {!! trans($VN.'max_filesize',['value' => \Symfony\Component\HttpFoundation\File\UploadedFile::getMaxFilesize()/(1024*1024)]) !!}
                 @endif
             </div>
         </div>
@@ -109,7 +114,7 @@ $yes_no = ['0' => trans($VN . 'no'), '1' => trans($VN . 'yes')];
                 {!! Form::select('is_author',$yes_no, $model->is_author, [
                     'class' => 'form-control input-sm',
                     'style' => 'width:100%;']+
-                    ($readonly?['readonly']:[])) !!}
+                    ($readonly?['disabled']:[])) !!}
                 {!! $errors->first('is_author', '<p class="help-block error-msg">:message</p>') !!}
             </div>
             {!! Form::label('is_reviewer', trans($VN.'reviewer'),['class' =>'col-sm-2 control-label text-right']) !!}
@@ -197,7 +202,7 @@ $yes_no = ['0' => trans($VN . 'no'), '1' => trans($VN . 'yes')];
                 @else
                     {!! Form::textarea('comments', $model->comments, [
                     'class' => 'form-control input-sm',
-                    'placeholder' => 'comments',
+                    'placeholder' => trans($VN.'placeholder_comments'),
                     'style' => 'width:100%;height:100%;']) !!}
                     {!! $errors->first('comments', '<p class="help-block error-msg">:message</p>') !!}
                 @endif

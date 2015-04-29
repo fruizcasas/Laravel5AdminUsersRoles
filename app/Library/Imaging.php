@@ -24,102 +24,93 @@
  */
 class Imaging {
 
-
-
     /**
      * ----------------------- RESIZE FUNCTION -----------------------
      *  Function for resizing any jpg, gif, or png image files
      * ----------------------- RESIZE FUNCTION -----------------------
      *
+     * @param $source
      * @param $target
-     * @param $newcopy
      * @param $w
      * @param $h
-     * @param $ext
      */
-    static public function img_resize($target, $newcopy, $w, $h) {
-        $ext = strtolower(pathinfo($target,PATHINFO_EXTENSION));
-        list($w_orig, $h_orig) = getimagesize($target);
+    static public function img_resize($source, $target, $w, $h) {
+        list($w_orig, $h_orig) = getimagesize($source);
         $scale_ratio = $w_orig / $h_orig;
         if (($w / $h) > $scale_ratio) {
             $w = $h * $scale_ratio;
         } else {
             $h = $w / $scale_ratio;
         }
-        $img = "";
-        $ext = strtolower($ext);
+        $ext = strtolower(pathinfo($source,PATHINFO_EXTENSION));
         if ($ext == "gif"){
-            $img = imagecreatefromgif($target);
+            $img = imagecreatefromgif($source);
         } else if($ext =="png"){
-            $img = imagecreatefrompng($target);
+            $img = imagecreatefrompng($source);
         } else {
-            $img = imagecreatefromjpeg($target);
+            $img = imagecreatefromjpeg($source);
         }
         $tci = imagecreatetruecolor($w, $h);
-        // imagecopyresampled(dst_img, src_img, dst_x, dst_y, src_x, src_y, dst_w, dst_h, src_w, src_h)
         imagecopyresampled($tci, $img, 0, 0, 0, 0, $w, $h, $w_orig, $h_orig);
+        $ext = strtolower(pathinfo($target,PATHINFO_EXTENSION));
         if ($ext == "gif"){
-            imagegif($tci, $newcopy);
+            imagegif($tci, $target);
         } else if($ext =="png"){
-            imagepng($tci, $newcopy);
+            imagepng($tci, $target);
         } else {
-            imagejpeg($tci, $newcopy, 84);
+            imagejpeg($tci, $target, 84);
         }
     }
     /**
      * ---------------- THUMBNAIL (CROP) FUNCTION ------------------
      * Function for creating a true thumbnail cropping from any jpg, gif, or png image files
      * ---------------- THUMBNAIL (CROP) FUNCTION ------------------
+     * @param $source
      * @param $target
-     * @param $new_copy
      * @param $w
      * @param $h
-     * @param $ext
      */
-    static public function img_thumb($target, $new_copy, $w, $h) {
-        $ext = strtolower(pathinfo($target,PATHINFO_EXTENSION));
-        list($w_orig, $h_orig) = getimagesize($target);
+    static public function img_thumb($source, $target, $w, $h) {
+        $ext = strtolower(pathinfo($source,PATHINFO_EXTENSION));
+        list($w_orig, $h_orig) = getimagesize($source);
         $src_x = ($w_orig / 2) - ($w / 2);
         $src_y = ($h_orig / 2) - ($h / 2);
-        $ext = strtolower($ext);
         if ($ext == "gif"){
-            $img = imagecreatefromgif($target);
+            $img = imagecreatefromgif($source);
         } else if($ext =="png"){
-            $img = imagecreatefrompng($target);
+            $img = imagecreatefrompng($source);
         } else {
-            $img = imagecreatefromjpeg($target);
+            $img = imagecreatefromjpeg($source);
         }
         $tci = imagecreatetruecolor($w, $h);
         imagecopyresampled($tci, $img, 0, 0, $src_x, $src_y, $w, $h, $w, $h);
         if ($ext == "gif"){
-            imagegif($tci, $new_copy);
+            imagegif($tci, $target);
         } else if($ext =="png"){
-            imagepng($tci, $new_copy);
+            imagepng($tci, $target);
         } else {
-            imagejpeg($tci, $new_copy, 84);
+            imagejpeg($tci, $target, 84);
         }
     }
     /**
      * ------------------ IMAGE CONVERT FUNCTION -------------------
      * Function for converting GIFs and PNGs to JPG upon upload
      * ------------------ IMAGE CONVERT FUNCTION -------------------
+     * @param $source
      * @param $target
-     * @param $new_copy
-     * @param $ext
      */
-    static public function img_convert_to_jpg($target, $new_copy) {
-        $ext = strtolower(pathinfo($target,PATHINFO_EXTENSION));
-        list($w_orig, $h_orig) = getimagesize($target);
-        $ext = strtolower($ext);
+    static public function img_convert_to_jpg($source, $target) {
+        $ext = strtolower(pathinfo($source,PATHINFO_EXTENSION));
+        list($w_orig, $h_orig) = getimagesize($source);
         $img = "";
         if ($ext == "gif"){
-            $img = imagecreatefromgif($target);
+            $img = imagecreatefromgif($source);
         } else if($ext =="png"){
-            $img = imagecreatefrompng($target);
+            $img = imagecreatefrompng($source);
         }
         $tci = imagecreatetruecolor($w_orig, $h_orig);
         imagecopyresampled($tci, $img, 0, 0, 0, 0, $w_orig, $h_orig, $w_orig, $h_orig);
-        imagejpeg($tci, $new_copy, 84);
+        imagejpeg($tci, $target, 84);
     }
 
 }

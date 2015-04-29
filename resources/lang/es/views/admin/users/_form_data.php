@@ -7,7 +7,7 @@ return [
     'name' => 'Nombre',
     'change_password' => 'Cambiar Contraseña',
     'display_name' => 'Nombre Pantalla',
-    'acronym' => 'Siglas',
+    'acronym' => 'Iniciales',
     'email' => 'E-mail',
     'picture' => 'Foto',
     'edit_picture' => 'Cambiar foto',
@@ -22,6 +22,14 @@ return [
     'departments' => 'Departamentos',
     'comments' => 'Commentarios',
     'max_filesize' => ':value MBytes de tamaño máximo',
+    'clear_picture' => 'Borrar foto',
+
+    'placeholder_name' => 'Entre un nombre',
+    'placeholder_display_name' => 'Entre un nombre de pantalla',
+    'placeholder_acronym' => 'Entre las Iniciales',
+    'placeholder_email' => 'Entre un E-mail',
+    'placeholder_comments' => 'Entre commentarios',
+
     // ----------------------------------------------
 ];
 

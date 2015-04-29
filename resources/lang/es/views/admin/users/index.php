@@ -3,9 +3,8 @@
 
 return [
     // ----------------------------------------------
-    'title' => 'Users',
-    'tab_table' => 'Table',
-    'tab_tree' => 'Tree',
+    'title' => 'Usuarios',
+    'tab_table' => 'Tabla',
 
 
     // ----------------------------------------------

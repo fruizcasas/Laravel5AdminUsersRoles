@@ -158,11 +158,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getStrRolesAttribute()
     {
-        $roles = $this->roles()->lists('acronym');
         $trim_roles = [];
-        foreach($roles as $role)
+        foreach($this->roles as $role)
         {
-            $trim_roles[] = trim($role);
+            $trim_roles[] = trim($role->acronym);
         }
         return implode(', ',$trim_roles);
     }
@@ -178,11 +177,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getStrDepartmentsAttribute()
     {
-        $departments = $this->departments()->lists('acronym');
         $trim_departments = [];
-        foreach($departments as $department)
+        foreach($this->departments as $department)
         {
-            $trim_departments[] = trim($department);
+            $trim_departments[] = trim($department->acronym);
         }
         return implode(', ',$trim_departments);
     }

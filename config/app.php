@@ -86,8 +86,8 @@ return [
         //'it' => 'Italiano',
         //'pt' => 'Português',
         //'br' => 'Brasileiro',
-        'cn' => '中国',
-        'ru' => 'Русский'
+        //'cn' => '中国',
+        //'ru' => 'Русский'
     ],
 
 

@@ -290,7 +290,7 @@ class UsersController extends Controller
     public function index()
     {
         $filter = $this->getFilter();
-        $models = $this->getModels($filter)->with('roles')->with('departments');
+        $models = $this->getModels($filter)->with('roles')->with('departments')->with('parent');
         $models = $models->paginate(Profile::loginProfile()->per_page);
         return view($this->index_view, compact('models', 'filter'));
     }
@@ -311,7 +311,7 @@ class UsersController extends Controller
                 'is_approver' => false,
                 'is_publisher' => false,
             ]);
-        $roles = Role::lists('acronym', 'id');
+        $roles = Role::lists('name', 'id');
         $model_roles = [];
         $departments = Department::lists('name', 'id');
         $model_departments = [];
@@ -338,11 +338,11 @@ class UsersController extends Controller
     {
         try {
             $model = $this->getModel($id);
-            $roles = Role::lists('acronym', 'id');
+            $roles = Role::lists('name', 'id');
             $model_roles = $model->roles->lists('id');
             $departments = Department::lists('name', 'id');
             $model_departments = $model->departments->lists('id');
-            $users = User::ListUsers();
+            $users = User::where('id','<>',$id)->withTrashed()->lists('display_name','id');
             return view($this->show_view,
                 compact([
                     'model',
@@ -368,13 +368,11 @@ class UsersController extends Controller
     {
         try {
             $model = $this->getModel($id);
-            $roles = Role::lists('acronym', 'id');
+            $roles = Role::lists('name', 'id');
             $model_roles = $model->roles->lists('id');
             $departments = Department::lists('name', 'id');
             $model_departments = $model->departments->lists('id');
-            $excluded = $model->children()->lists('id');
-            $excluded[] = $model->id;
-            $users = User::ListUsers($excluded);
+            $users = User::where('id','<>',$id)->withTrashed()->lists('display_name','id');
 
             return view($this->edit_view,
                 compact([
@@ -392,6 +390,18 @@ class UsersController extends Controller
     }
 
 
+    protected function dummy_picture()
+    {
+        $objImg = @imagecreatetruecolor(100,100);
+        imagefill($objImg,0,0,0xCCCCCC);
+        imagestring($objImg,5,18,45,'NO IMAGE',0);
+        ob_start();
+        imagejpeg($objImg,null,100);
+        $file_content = ob_get_contents();
+        ob_end_clean();
+        imagedestroy($objImg);
+        return $file_content;
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -406,8 +416,17 @@ class UsersController extends Controller
                 $picture = $user->picture;
                 if ($picture) {
                     $filename = base_path() . $picture->filename;
-                    $file_content = File::get($filename);
+                    if (File::exists($filename)) {
+                        $file_content = File::get($filename);
+                    }
+                    else{
+                        $file_content = $this->dummy_picture();
+                    }
                     return (new Response($file_content, Response::HTTP_OK))->header('Content-Type', $picture->mime_type);
+                }
+                else{
+                    return (new Response($this->dummy_picture(), Response::HTTP_OK))
+                                    ->header('Content-Type', 'image/jpeg');
                 }
             }
             return (new Response('', Response::HTTP_NOT_FOUND));
@@ -419,15 +438,21 @@ class UsersController extends Controller
 
     public function save_picture($user_name, UploadedFile $file_upload)
     {
+
+        $tmp_name = storage_path('tmp/').str_random(16).'.'.$file_upload->getClientOriginalExtension();
+        Utils::file_force_contents($tmp_name, File::get($file_upload));
         $pictures_dir = Config::get('dirs.pìctures','/uploads/pictures');
-        $extension = $file_upload->guessExtension();
-        $target_name = $pictures_dir .'/'. $user_name . '.' . $extension;
+        $target_name = $pictures_dir .'/'. $user_name . '.jpeg';
+        if (!File::isDirectory(base_path().$pictures_dir)) {
+            mkdir(base_path() . $pictures_dir, 0770, true);
+        }
         $n = 1;
         while (File::exists(base_path().$target_name)) {
-            $target_name = $pictures_dir .'/'.  $user_name . '(' . $n . ').' . $extension;
+            $target_name = $pictures_dir .'/'.  $user_name . '(' . $n . ').jpeg';
             $n++;
         }
-        Utils::file_force_contents(base_path().$target_name, File::get($file_upload));
+        Imaging::img_resize($tmp_name,base_path().$target_name,200,300);
+        File::delete($tmp_name);
         return $target_name;
 
     }
@@ -457,6 +482,9 @@ class UsersController extends Controller
                         $picture->filename = $this->save_picture($model->name,$uploaded_file);
                         $picture->mime_type = $uploaded_file->getMimeType();
                         $picture->extension = $uploaded_file->guessExtension();
+                        if (!$picture->extension){
+                            $picture->extension = $uploaded_file->getExtension();
+                        }
                         $picture->user_id = $model->id;
                         $picture->save();
                     }
@@ -491,6 +519,7 @@ class UsersController extends Controller
             $roles = $request->input('roles', []);
             $departments = $request->input('departments', []);
             $user_id = $request->input('user_id', null);
+            $clear_picture= $request->input('clear_picture', false);
             $model = $this->getModel($id);
             try {
                 DB::beginTransaction();
@@ -498,7 +527,18 @@ class UsersController extends Controller
                 $model->update($request->all());
                 $model->roles()->sync($roles);
                 $model->departments()->sync($departments);
-                if ($request->hasFile('photo')) {
+                if ($clear_picture) {
+                    $picture = $model->picture;
+                    if ($picture) {
+                        try {
+                            File::delete(base_path() . $picture->filename);
+                            $picture->forcedelete();
+                        } catch (Exception $e) {
+
+                        }
+                    };
+                }
+                else if ($request->hasFile('photo')) {
                     $uploaded_file= $request->file('photo');
                     if ($uploaded_file->isValid()) {
                         $picture = $model->picture;
@@ -518,6 +558,9 @@ class UsersController extends Controller
                         $picture->filename = $this->save_picture($model->name,$uploaded_file);
                         $picture->mime_type = $uploaded_file->getMimeType();
                         $picture->extension = $uploaded_file->guessExtension();
+                        if (!$picture->extension){
+                            $picture->extension = $uploaded_file->getExtension();
+                        }
                         $picture->user_id = $model->id;
                         $picture->save();
                     }
