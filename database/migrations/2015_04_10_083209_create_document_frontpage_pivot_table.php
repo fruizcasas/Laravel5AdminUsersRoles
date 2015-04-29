@@ -16,9 +16,9 @@ class CreateDocumentFrontpagePivotTable extends Migration {
 		{
             $table->increments('id');
 			$table->integer('document_id')->unsigned()->index();
-			$table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
+			$table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade')->onUpdate('cascade');
 			$table->integer('frontpage_id')->unsigned()->index();
-			$table->foreign('frontpage_id')->references('id')->on('frontpages')->onDelete('cascade');
+			$table->foreign('frontpage_id')->references('id')->on('frontpages')->onDelete('cascade')->onUpdate('cascade');
             $table->softDeletes();
             $table->timestamps();
 		});

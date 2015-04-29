@@ -5,6 +5,7 @@ return [
     'profile' => 'Profile',
     'password' => 'Password',
     'admin' => 'Admin',
+    'author' => 'Author',
     'create' => 'Create',
     'show' => 'Show',
     'edit' => 'Edit',

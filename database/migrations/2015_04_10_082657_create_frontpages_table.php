@@ -23,13 +23,13 @@ class CreateFrontpagesTable extends Migration {
             $table->string('title');
             $table->string('reason_for_revision');
             $table->integer('author_id')->unsigned()->nullable()->index();
-            $table->foreign('author_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('author_id')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
             $table->integer('reviewer_id')->unsigned()->nullable()->index();
-            $table->foreign('reviewer_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('reviewer_id')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
             $table->integer('approver_id')->unsigned()->nullable()->index();
-            $table->foreign('approver_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('approver_id')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
             $table->integer('publisher_id')->unsigned()->nullable()->index();
-            $table->foreign('publisher_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('publisher_id')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
             $table->text('description')->nullable();
             $table->softDeletes();
             $table->timestamps();

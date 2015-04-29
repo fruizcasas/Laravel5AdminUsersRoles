@@ -18,7 +18,7 @@ class CreateCategoriesTable extends Migration {
             $table->string('acronym')->nullable();
             $table->string('display_name')->nullable();
             $table->integer('category_id')->unsigned()->nullable()->index();
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null')->onUpdate('cascade');
             $table->integer('order')->unsigned()->nullable();
             $table->text('description')->nullable();
             $table->softDeletes();

@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration {
 			$table->rememberToken();
             $table->text('comments')->nullable();
             $table->integer('user_id')->unsigned()->nullable()->index();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
             $table->integer('order')->unsigned()->nullable();
             $table->boolean('is_admin')->default(false)->nullable();
             $table->boolean('is_employee')->default(false)->nullable();

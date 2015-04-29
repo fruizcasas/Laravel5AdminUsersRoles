@@ -16,9 +16,9 @@ class CreateCategoryFrontpagePivotTable extends Migration {
 		{
             $table->increments('id');
 			$table->integer('category_id')->unsigned()->index();
-			$table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+			$table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
 			$table->integer('frontpage_id')->unsigned()->index();
-			$table->foreign('frontpage_id')->references('id')->on('frontpages')->onDelete('cascade');
+			$table->foreign('frontpage_id')->references('id')->on('frontpages')->onDelete('cascade')->onUpdate('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

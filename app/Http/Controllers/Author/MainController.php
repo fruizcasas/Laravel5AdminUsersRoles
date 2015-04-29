@@ -1,11 +1,11 @@
-<?php namespace App\Http\Controllers;
+<?php namespace App\Http\Controllers\Author;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-class AuthorController extends Controller {
+class MainController extends Controller {
 
     /**
      * Create a new controller instance.
@@ -23,7 +23,7 @@ class AuthorController extends Controller {
      */
     public function index()
     {
-        return view('home');
+        return view('author.main.index');
     }
 
 

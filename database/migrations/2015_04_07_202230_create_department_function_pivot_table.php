@@ -16,9 +16,9 @@ class CreateDepartmentFunctionPivotTable extends Migration {
 		{
             $table->increments('id');
 			$table->integer('department_id')->unsigned()->index();
-			$table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
+			$table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade')->onUpdate('cascade');
 			$table->integer('function_id')->unsigned()->index();
-			$table->foreign('function_id')->references('id')->on('functions')->onDelete('cascade');
+			$table->foreign('function_id')->references('id')->on('functions')->onDelete('cascade')->onUpdate('cascade');
             $table->softDeletes();
             $table->timestamps();
 		});

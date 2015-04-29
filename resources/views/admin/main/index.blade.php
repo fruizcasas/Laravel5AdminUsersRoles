@@ -10,7 +10,7 @@ $VN = 'views/admin/main/index.';
 @extends('app')
 
 @section('headings')
-    <h1>{{trans($VN.'administration')}}</h1>
+    <h1>{{trans($VN.'dashboard')}}</h1>
 @endsection
 
 

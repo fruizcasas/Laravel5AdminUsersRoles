@@ -16,11 +16,11 @@ class CreateFoldersTable extends Migration {
             $table->increments('id');
             $table->string('name');
             $table->integer('folder_id')->nullable()->unsigned()->index();
-            $table->foreign('folder_id')->references('id')->on('folders')->onDelete('set null');
+            $table->foreign('folder_id')->references('id')->on('folders')->onDelete('set null')->onUpdate('cascade');
             $table->integer('order')->unsigned()->nullable();
             $table->integer('root_id')->nullable()->unsigned();
             $table->integer('user_id')->nullable()->unsigned()->index();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
             $table->boolean('private')->nullable();
             $table->text('description')->nullable();
             $table->softDeletes();

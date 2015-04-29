@@ -37,12 +37,16 @@ if (!array_has($locales, $locale)) {
                 <ul class="nav navbar-nav">
                     @if(Auth::user()->is_author)
                         <li class="dropdown">
-                            <a href="{{ route('author.index') }}" class="dropdown-toggle" data-toggle="dropdown"
+                            <a href="{{ route('author.main.index') }}" class="dropdown-toggle" data-toggle="dropdown"
                                role="button" aria-expanded="false">{{trans($VN.'author')}}<span
                                         class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ route('author.index') }}">Item1</a></li>
-                                <li><a href="{{ route('author.index') }}">Item2</a></li>
+                                <li><a href="{{ route('author.main.index') }}">{{trans($VN.'author_dashboard')}}</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{{ route('author.folders.index') }}">{{trans($VN.'folders')}}</a></li>
+                                <li><a href="{{ route('author.frontpages.index') }}">{{trans($VN.'frontpages')}}</a></li>
+                                <li><a href="{{ route('author.documents.index') }}">{{trans($VN.'documents')}}</a></li>
+                                <li class="divider"></li>
                             </ul>
                         </li>
                     @endif
@@ -98,16 +102,14 @@ if (!array_has($locales, $locale)) {
                                 <li><a href="{{ route('admin.main.index') }}">{{trans($VN.'admin_dashboard')}}</a></li>
                                 <li class="divider"></li>
                                 <li><a href="{{ route('admin.users.index') }}">{{trans($VN.'users')}}</a></li>
-                                <li><a href="{{ route('admin.departments.index') }}">{{trans($VN.'departments')}}</a>
-                                </li>
-                                <li><a href="{{ route('admin.roles.index') }}">{{trans($VN.'roles')}}</a></li>
-                                <li><a href="{{ route('admin.permissions.index') }}">{{trans($VN.'permissions')}}</a>
-                                </li>
-                                <li class="divider"></li>
                                 <li><a href="{{ route('admin.folders.index') }}">{{trans($VN.'folders')}}</a></li>
-                                <li><a href="{{ route('admin.categories.index') }}">{{trans($VN.'categories')}}</a></li>
                                 <li><a href="{{ route('admin.frontpages.index') }}">{{trans($VN.'frontpages')}}</a></li>
                                 <li><a href="{{ route('admin.documents.index') }}">{{trans($VN.'documents')}}</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{{ route('admin.departments.index') }}">{{trans($VN.'departments')}}</a></li>
+                                <li><a href="{{ route('admin.roles.index') }}">{{trans($VN.'roles')}}</a></li>
+                                <li><a href="{{ route('admin.permissions.index') }}">{{trans($VN.'permissions')}}</a></li>
+                                <li><a href="{{ route('admin.categories.index') }}">{{trans($VN.'categories')}}</a></li>
                             </ul>
                         </li>
                     @endif

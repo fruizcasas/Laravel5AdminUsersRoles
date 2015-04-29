@@ -15,7 +15,7 @@ class CreateDocumentsTable extends Migration {
 		Schema::create('documents', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()->nullable()->index();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
             $table->string('name');
             $table->string('mime_type');
             $table->string('extension');

@@ -4,6 +4,7 @@ return [
     // ----------------------------------------------
     'app_name' => 'ISO Aurinka',
     'author' => 'Author',
+    'author_dashboard' => 'Author Dashboard',
     'reviewer' => 'Reviewer',
     'approver' => 'Approver',
     'publisher' => 'Publisher',

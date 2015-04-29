@@ -8,7 +8,7 @@ return [
     'name' => 'Nombre',
     'root' => 'Raiz',
     'parent' => 'Padre',
-    'order' => 'OrdeN',
+    'order' => 'Orden',
     'owner' => 'Autor',
     'private' => 'Priv',
     'description' => 'Descripción',

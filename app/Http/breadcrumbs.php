@@ -38,6 +38,53 @@ Breadcrumbs::register('password', function($breadcrumbs) use ($VN)
     $breadcrumbs->push(trans($VN.'password'), route('password.edit'));
 });
 
+/*
+|--------------------------------------------------------------------------
+| home / author Breadcrumb
+|--------------------------------------------------------------------------
+*/
+Breadcrumbs::register('author', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('home');
+    $breadcrumbs->push(trans($VN.'author'), route('author.main.index'));
+});
+
+/*
+|--------------------------------------------------------------------------
+| home / admin / folders Breadcrumb
+|--------------------------------------------------------------------------
+*/
+
+// Home > author -> Folders
+Breadcrumbs::register('author.folders', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('author');
+    $breadcrumbs->push(trans($VN.'folders'), route('author.folders.index'));
+});
+
+// Home > author -> folders -> Create
+Breadcrumbs::register('author.folders.create', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('author.folders');
+    $breadcrumbs->push(trans($VN.'create'), route('author.folders.create'));
+});
+
+// Home > author -> folders -> Edit
+Breadcrumbs::register('author.folders.edit', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('author.folders');
+    $breadcrumbs->push(trans($VN.'edit'), route('author.folders.edit'));
+});
+
+// Home > author -> folders -> Show
+Breadcrumbs::register('author.folders.show', function($breadcrumbs) use ($VN)
+{
+    $breadcrumbs->parent('author.folders');
+    $breadcrumbs->push(trans($VN.'show'), route('author.folders.show'));
+});
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +96,7 @@ Breadcrumbs::register('admin', function($breadcrumbs) use ($VN)
     $breadcrumbs->parent('home');
     $breadcrumbs->push(trans($VN.'admin'), route('admin.main.index'));
 });
+
 
 /*
 |--------------------------------------------------------------------------

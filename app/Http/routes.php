@@ -81,11 +81,6 @@ Route::put('password',
 |--------------------------------------------------------------------------
 */
 
-Route::get('author',
-    [
-        'as' => 'author.index', 'uses' => 'AuthorController@index'
-    ]);
-
 Route::get('reviewer',
     [
         'as' => 'reviewer.index', 'uses' => 'ReviewerController@index'
@@ -103,6 +98,176 @@ Route::get('signer',
 
 /*
 |--------------------------------------------------------------------------
+| Author namespace
+|--------------------------------------------------------------------------
+*/
+
+Route::group(
+    [
+        'prefix' => 'author',
+        'namespace' => 'Author',
+        'middleware' => 'author'
+    ],
+    function () {
+
+        Route::get('/',
+            [
+                'as' => 'author.main.index', 'uses' => 'MainController@index'
+            ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Author/Folders Routes
+        |--------------------------------------------------------------------------
+        */
+
+        Route::post('/folders/filter',
+            [
+                'as' => 'author.folders.filter',
+                'uses' => 'FoldersController@filter'
+            ]);
+
+        Route::get('/folders/excel',
+            [
+                'as' => 'author.folders.excel',
+                'uses' => 'FoldersController@excel'
+            ]);
+
+
+        Route::get('/folders/trash/{trash?}',
+            [
+                'as' => 'author.folders.trash',
+                'uses' => 'FoldersController@trash'
+            ]);
+
+        Route::get('/folders/sort/{column?}/{order?}',
+            [
+                'as' => 'author.folders.sort',
+                'uses' => 'FoldersController@sort'
+            ]);
+
+        Route::delete('/folders/{folders}/forcedelete',
+            [
+                'as' => 'author.folders.forcedelete',
+                'uses' => 'FoldersController@forcedelete'
+            ]);
+
+        Route::post('/folders/{folders}/restore',
+            [
+                'as' => 'author.folders.restore',
+                'uses' => 'FoldersController@restore'
+            ]);
+
+        Route::post('/folders/{folders}/subfolders',
+            [
+                'as' => 'author.folders.addsubfolders',
+                'uses' => 'FoldersController@addsubfolders'
+            ]);
+
+        Route::delete('/folders/{folders}/subfolders',
+            [
+                'as' => 'author.folders.delsubfolders',
+                'uses' => 'FoldersController@delsubfolders'
+            ]);
+
+
+        Route::resource('/folders', 'FoldersController');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Author/Documents Routes
+        |--------------------------------------------------------------------------
+        */
+
+        Route::post('/documents/filter',
+            [
+                'as' => 'author.documents.filter',
+                'uses' => 'DocumentsController@filter'
+            ]);
+
+        Route::get('/documents/excel',
+            [
+                'as' => 'author.documents.excel',
+                'uses' => 'DocumentsController@excel'
+            ]);
+
+        Route::get('/documents/trash/{trash?}',
+            [
+                'as' => 'author.documents.trash',
+                'uses' => 'DocumentsController@trash'
+            ]);
+
+        Route::get('/documents/sort/{column?}/{order?}',
+            [
+                'as' => 'author.documents.sort',
+                'uses' => 'DocumentsController@sort'
+            ]);
+
+        Route::delete('/documents/{documents}/forcedelete',
+            [
+                'as' => 'author.documents.forcedelete',
+                'uses' => 'DocumentsController@forcedelete'
+            ]);
+
+        Route::post('/documents/{documents}/restore',
+            [
+                'as' => 'author.documents.restore',
+                'uses' => 'DocumentsController@restore'
+            ]);
+
+        Route::resource('/documents', 'DocumentsController');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Author/Frontpages Routes
+        |--------------------------------------------------------------------------
+        */
+
+        Route::post('/frontpages/filter',
+            [
+                'as' => 'author.frontpages.filter',
+                'uses' => 'FrontpagesController@filter'
+            ]);
+
+        Route::get('/frontpages/excel',
+            [
+                'as' => 'author.frontpages.excel',
+                'uses' => 'FrontpagesController@excel'
+            ]);
+
+        Route::get('/frontpages/trash/{trash?}',
+            [
+                'as' => 'author.frontpages.trash',
+                'uses' => 'FrontpagesController@trash'
+            ]);
+
+        Route::get('/frontpages/sort/{column?}/{order?}',
+            [
+                'as' => 'author.frontpages.sort',
+                'uses' => 'FrontpagesController@sort'
+            ]);
+
+        Route::delete('/frontpages/{frontpages}/forcedelete',
+            [
+                'as' => 'author.frontpages.forcedelete',
+                'uses' => 'FrontpagesController@forcedelete'
+            ]);
+
+        Route::post('/frontpages/{frontpages}/restore',
+            [
+                'as' => 'author.frontpages.restore',
+                'uses' => 'FrontpagesController@restore'
+            ]);
+
+        Route::resource('/frontpages', 'FrontpagesController');
+
+
+    }
+);
+
+
+/*
+|--------------------------------------------------------------------------
 | Admin namespace
 |--------------------------------------------------------------------------
 */
@@ -115,17 +280,16 @@ Route::group(
     ],
     function () {
 
-        /*
-        |--------------------------------------------------------------------------
-        | Admin/Users Routes
-        |--------------------------------------------------------------------------
-        */
-
         Route::get('/',
             [
                 'as' => 'admin.main.index', 'uses' => 'MainController@index'
             ]);
 
+        /*
+        |--------------------------------------------------------------------------
+        | Admin/Users Routes
+        |--------------------------------------------------------------------------
+        */
 
         Route::post('/users/filter',
             [
@@ -332,7 +496,6 @@ Route::group(
 
 
         Route::resource('/fileentries', 'FileentriesController');
-
 
 
         /*
@@ -574,7 +737,6 @@ Route::group(
             ]);
 
         Route::resource('/frontpages', 'FrontpagesController');
-
 
 
     });

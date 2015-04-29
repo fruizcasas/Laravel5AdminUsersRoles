@@ -3,7 +3,7 @@
 
 return [
     // ----------------------------------------------
-    'administration' => 'Administration',
+    'dashboard' => 'Administrator Dashboard',
     'people' => 'People',
     'users' => 'Users',
     'roles' => 'Roles',
