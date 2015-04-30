@@ -20,6 +20,7 @@ class Locale {
         $locale = $request->cookie('locale', Config::get('app.locale'));
         App::setLocale($locale);
         Carbon::setLocale($locale);
+        Carbon::setToStringFormat('Y-m-d H:i:s');
 
         return $next($request);
     }

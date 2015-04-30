@@ -1,18 +1,6 @@
 <?php namespace App\Http\Requests\Admin;
 
-use App\Http\Requests\Request;
-
-class FrontpageNewRequest extends Request {
-
-	/**
-	 * Determine if the user is authorized to make this request.
-	 *
-	 * @return bool
-	 */
-	public function authorize()
-	{
-		return false;
-	}
+class FrontpageNewRequest extends BaseRequest {
 
 	/**
 	 * Get the validation rules that apply to the request.
@@ -22,7 +10,9 @@ class FrontpageNewRequest extends Request {
 	public function rules()
 	{
 		return [
-			//
+            'title' => 'required|min:2',
+            'creation_date' => 'date',
+            'description' => '',
 		];
 	}
 

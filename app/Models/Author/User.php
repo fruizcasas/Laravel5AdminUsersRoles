@@ -14,26 +14,26 @@ use App\Traits\SortableTrait;
 /**
  * App\Models\Author\User
  *
- * @property integer $id 
- * @property string $name 
- * @property string $acronym 
- * @property string $display_name 
- * @property string $email 
- * @property string $password 
- * @property string $remember_token 
- * @property string $comments 
- * @property boolean $is_admin 
- * @property boolean $is_author 
- * @property boolean $is_reviewer 
- * @property boolean $is_approver 
- * @property boolean $is_publisher 
- * @property \Carbon\Carbon $deleted_at 
- * @property \Carbon\Carbon $created_at 
- * @property \Carbon\Carbon $updated_at 
+ * @property integer $id
+ * @property string $name
+ * @property string $acronym
+ * @property string $display_name
+ * @property string $email
+ * @property string $password
+ * @property string $remember_token
+ * @property string $comments
+ * @property boolean $is_admin
+ * @property boolean $is_author
+ * @property boolean $is_reviewer
+ * @property boolean $is_approver
+ * @property boolean $is_publisher
+ * @property \Carbon\Carbon $deleted_at
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Author\Role')->withTimestamps([] $roles
- * @property-read mixed $str_roles 
+ * @property-read mixed $str_roles
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Author\Department')->withTimestamps([] $departments
- * @property-read mixed $str_departments 
+ * @property-read mixed $str_departments
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Author\User whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Author\User whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Author\User whereAcronym($value)
@@ -51,6 +51,13 @@ use App\Traits\SortableTrait;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Author\User whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Author\User whereUpdatedAt($value)
  * @method static \App\Models\Author\User sortable($view)
+ * @property integer $user_id
+ * @property integer $order
+ * @property boolean $is_employee
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Author\Folder')->withTimestamps([] $folders
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Author\User whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Author\User whereOrder($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Author\User whereIsEmployee($value)
  */
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 

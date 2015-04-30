@@ -133,7 +133,7 @@ class FoldersController extends Controller
         ];
 
 
-    protected $author_folder = Folder::ROOT_FOLDER;
+    protected $author_folder;
 
 
     /**
@@ -185,7 +185,7 @@ class FoldersController extends Controller
                 $root->description = Auth::user()->display_name . '\'s Private folder';
                 $root->save();
             }
-            $this->author_folder = $root->id;
+            $this->author_folder = $root;
         }
     }
 
@@ -214,7 +214,7 @@ class FoldersController extends Controller
      */
     public function getModels($filter = null)
     {
-        $models = Folder::sortable($this->index_view)->whereRootId($this->author_folder);
+        $models = Folder::sortable($this->index_view)->whereRootId($this->author_folder->id);
         if ($this->show_trash()) {
             $models = $models->withTrashed();
         }
@@ -368,16 +368,16 @@ class FoldersController extends Controller
      */
     public function create()
     {
-        $folders = Folder::ListItems([],$this->author_folder);
+        $folders = Folder::ListItems([],$this->author_folder->id);
         $model = new Folder(
             [
-                'root_id' => $this->author_folder,
-                'folder_id' => $this->author_folder,
+                'root_id' => $this->author_folder->id,
+                'folder_id' => $this->author_folder->id,
                 'user_id' => Auth::user()->id,
                 'private' => true,
             ]);
         $users = User::withTrashed()->lists('display_name', 'id');
-        $roots = Folder::whereFolderId(Folder::ROOT_FOLDER)->orWhere('id', Folder::ROOT_FOLDER)->withTrashed()->lists('name', 'id');
+        $roots = [$this->author_folder->id => $this->author_folder->name];
         return view($this->create_view,
             compact([
                 'model',
@@ -396,10 +396,10 @@ class FoldersController extends Controller
     public function show($id)
     {
         try {
-            $folders = Folder::ListItems();
+            $folders = Folder::ListItems([],$this->author_folder->id);
             $model = $this->getModel($id);
             $users = User::withTrashed()->lists('display_name', 'id');
-            $roots = Folder::whereFolderId(Folder::ROOT_FOLDER)->orWhere('id', Folder::ROOT_FOLDER)->withTrashed()->lists('name', 'id');
+            $roots = [$this->author_folder->id => $this->author_folder->name];
             return view($this->show_view, compact([
                 'model',
                 'folders',
@@ -430,11 +430,9 @@ class FoldersController extends Controller
         }
         try {
             $model = $this->getModel($id);
-            $excluded = $model->children()->lists('id');
-            $excluded[] = $model->id;
-            $folders = Folder::ListItems($excluded);
+            $folders = Folder::ListItems([],$this->author_folder->id);
             $users = User::withTrashed()->lists('display_name', 'id');
-            $roots = Folder::whereFolderId(Folder::ROOT_FOLDER)->orWhere('id', Folder::ROOT_FOLDER)->withTrashed()->lists('name', 'id');
+            $roots = [$this->author_folder->id => $this->author_folder->name];
             return view($this->edit_view, compact([
                 'model',
                 'folders',

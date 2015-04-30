@@ -25,4 +25,24 @@ class Scripts
 
         return $result;
     }
+
+    static public function Datepicker($items)
+    {
+        $result = '';
+        $result .= '<script src="'.asset('/datepicker/js/bootstrap-datepicker.js').'"></script>'.PHP_EOL;
+        $result .= '<script src="'.asset('/datepicker/js/locales/bootstrap-datepicker.'. App::getLocale() . '.js').'" charset="UTF-8"></script>'.PHP_EOL;
+        $result .= '<script type="text/javascript">'.PHP_EOL;
+
+        foreach ($items as $item) {
+            $result .=
+                "  $('#$item').datepicker({" .PHP_EOL.
+                "       language: '" . App::getLocale() . "'," .PHP_EOL.
+                "       format: 'yyyy-mm-dd'" .PHP_EOL.
+                "   });".PHP_EOL;
+        }
+        $result .= '</script>'.PHP_EOL;
+
+        return $result;
+    }
+
 }

@@ -17,8 +17,10 @@ class CreateFrontpagesTable extends Migration {
             $table->string('code');
             $table->integer('edition')->unsigned();
             $table->string('status');
-            $table->timestamp('review_date');
-            $table->timestamp('publishing_date');
+            $table->timestamp('creation_date')->nullable();
+            $table->timestamp('review_date')->nullable();
+            $table->timestamp('approval_date')->nullable();
+            $table->timestamp('publishing_date')->nullable();
             $table->integer('total_pages')->nullable();
             $table->string('title');
             $table->string('reason_for_revision');

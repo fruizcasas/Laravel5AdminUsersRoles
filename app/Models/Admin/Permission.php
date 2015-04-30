@@ -9,17 +9,17 @@ use App\Traits\SortableTrait;
 /**
  * App\Models\Admin\Permission
  *
- * @property integer $id 
- * @property string $name 
- * @property string $acronym 
- * @property string $display_name 
- * @property string $description 
- * @property \Carbon\Carbon $deleted_at 
- * @property \Carbon\Carbon $created_at 
- * @property \Carbon\Carbon $updated_at 
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Admin\Role')->withTimestamps([] $roles 
- * @property-read mixed $short_description 
- * @property-read mixed $str_roles 
+ * @property integer $id
+ * @property string $name
+ * @property string $acronym
+ * @property string $display_name
+ * @property string $description
+ * @property \Carbon\Carbon $deleted_at
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Admin\Role')->withTimestamps([] $roles
+ * @property-read mixed $short_description
+ * @property-read mixed $str_roles
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Permission whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Permission whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Permission whereAcronym($value)

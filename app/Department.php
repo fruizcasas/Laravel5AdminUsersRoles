@@ -5,15 +5,15 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Department
  *
- * @property integer $id 
- * @property string $name 
- * @property string $acronym 
- * @property string $display_name 
- * @property integer $department_id 
- * @property string $description 
- * @property string $deleted_at 
- * @property \Carbon\Carbon $created_at 
- * @property \Carbon\Carbon $updated_at 
+ * @property integer $id
+ * @property string $name
+ * @property string $acronym
+ * @property string $display_name
+ * @property integer $department_id
+ * @property string $description
+ * @property string $deleted_at
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
  * @method static \Illuminate\Database\Query\Builder|\App\Department whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Department whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Department whereAcronym($value)
@@ -23,6 +23,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\App\Department whereDeletedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Department whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Department whereUpdatedAt($value)
+ * @property integer $order
+ * @method static \Illuminate\Database\Query\Builder|\App\Department whereOrder($value)
  */
 class Department extends Model {
 

@@ -9,23 +9,33 @@ use App\Traits\SortableTrait;
 /**
  * App\Models\Admin\Document
  *
- * @property integer $id 
- * @property string $name 
- * @property string $title 
- * @property integer $user_id 
- * @property string $mime 
- * @property string $storage_path 
- * @property string $description 
- * @property \Carbon\Carbon $deleted_at 
- * @property \Carbon\Carbon $created_at 
- * @property \Carbon\Carbon $updated_at 
+ * @property integer $id
+ * @property integer $user_id
+ * @property string $name
+ * @property string $mime_type
+ * @property string $extension
+ * @property string $title
+ * @property string $description
+ * @property string $original_name
+ * @property string $original_mime_type
+ * @property string $original_extension
+ * @property integer $size
+ * @property string $sha1
+ * @property \Carbon\Carbon $deleted_at
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereTitle($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereUserId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereMime($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereStoragePath($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereMimeType($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereExtension($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereTitle($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereDescription($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereOriginalName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereOriginalMimeType($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereOriginalExtension($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereSize($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereSha1($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereDeletedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereUpdatedAt($value)

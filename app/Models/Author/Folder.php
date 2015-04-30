@@ -27,6 +27,17 @@ use App\Library\Utils;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Author\Folder whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Author\Folder whereUpdatedAt($value)
  * @method static \App\Models\Author\Folder sortable($view)
+ * @property integer $order
+ * @property integer $root_id
+ * @property boolean $private
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Author\ScFolder[] $children
+ * @property-read \App\Models\Author\SpFolder $parent
+ * @property-read \App\Models\Author\SpFolder $root
+ * @property-read \App\Models\Author\User $owner
+ * @property-read mixed $short_description
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Author\Folder whereOrder($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Author\Folder whereRootId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Author\Folder wherePrivate($value)
  */
 class Folder extends Model
 {

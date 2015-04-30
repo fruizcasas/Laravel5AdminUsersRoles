@@ -17,26 +17,33 @@ use App\Traits\SortableTrait;
 /**
  * App\Models\Admin\User
  *
- * @property integer $id 
- * @property string $name 
- * @property string $acronym 
- * @property string $display_name 
- * @property string $email 
- * @property string $password 
- * @property string $remember_token 
- * @property string $comments 
- * @property boolean $is_admin 
- * @property boolean $is_author 
- * @property boolean $is_reviewer 
- * @property boolean $is_approver 
- * @property boolean $is_publisher 
- * @property \Carbon\Carbon $deleted_at 
- * @property \Carbon\Carbon $created_at 
- * @property \Carbon\Carbon $updated_at 
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Admin\Role')->withTimestamps([] $roles 
- * @property-read mixed $str_roles 
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Admin\Department')->withTimestamps([] $departments 
- * @property-read mixed $str_departments 
+ * @property integer $id
+ * @property string $name
+ * @property string $acronym
+ * @property string $display_name
+ * @property string $email
+ * @property string $password
+ * @property string $remember_token
+ * @property string $comments
+ * @property integer $user_id
+ * @property integer $order
+ * @property boolean $is_admin
+ * @property boolean $is_employee
+ * @property boolean $is_author
+ * @property boolean $is_reviewer
+ * @property boolean $is_approver
+ * @property boolean $is_publisher
+ * @property \Carbon\Carbon $deleted_at
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Admin\ScUser[] $children
+ * @property-read \App\Models\Admin\SpUser $parent
+ * @property-read \App\Models\Admin\Picture $picture
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Admin\Role')->withTimestamps([] $roles
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Admin\Folder')->withTimestamps([] $folders
+ * @property-read mixed $str_roles
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Admin\Department')->withTimestamps([] $departments
+ * @property-read mixed $str_departments
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\User whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\User whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\User whereAcronym($value)
@@ -45,7 +52,10 @@ use App\Traits\SortableTrait;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\User wherePassword($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\User whereRememberToken($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\User whereComments($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\User whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\User whereOrder($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\User whereIsAdmin($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\User whereIsEmployee($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\User whereIsAuthor($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\User whereIsReviewer($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\User whereIsApprover($value)

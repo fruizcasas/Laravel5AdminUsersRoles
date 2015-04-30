@@ -7,6 +7,7 @@ use App\Traits\SortableTrait;
 use App\Library\Utils;
 
 
+
 /**
  * App\Models\Admin\Category
  *
@@ -15,22 +16,26 @@ use App\Library\Utils;
  * @property string $acronym
  * @property string $display_name
  * @property integer $category_id
+ * @property integer $order
  * @property string $description
  * @property \Carbon\Carbon $deleted_at
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Admin\ScCategory[] $children
+ * @property-read \App\Models\Admin\SpCategory $parent
+ * @property-read mixed $short_description
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Category whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Category whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Category whereAcronym($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Category whereDisplayName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Category whereCategoryId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Category whereOrder($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Category whereDescription($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Category whereDeletedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Category whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Category whereUpdatedAt($value)
  * @method static \App\Models\Admin\Category sortable($view)
  */
-
 class Category extends Model
 {
 

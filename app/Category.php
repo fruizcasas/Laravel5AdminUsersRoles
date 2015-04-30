@@ -5,15 +5,15 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Category
  *
- * @property integer $id 
- * @property string $name 
- * @property string $acronym 
- * @property string $display_name 
- * @property integer $category_id 
- * @property string $description 
- * @property string $deleted_at 
- * @property \Carbon\Carbon $created_at 
- * @property \Carbon\Carbon $updated_at 
+ * @property integer $id
+ * @property string $name
+ * @property string $acronym
+ * @property string $display_name
+ * @property integer $category_id
+ * @property string $description
+ * @property string $deleted_at
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
  * @method static \Illuminate\Database\Query\Builder|\App\Category whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Category whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Category whereAcronym($value)
@@ -23,6 +23,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\App\Category whereDeletedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Category whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Category whereUpdatedAt($value)
+ * @property integer $order
+ * @method static \Illuminate\Database\Query\Builder|\App\Category whereOrder($value)
  */
 class Category extends Model {
 

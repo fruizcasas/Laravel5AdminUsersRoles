@@ -7,21 +7,33 @@ use App\Traits\SortableTrait;
 use App\Library\Utils;
 
 
+
 /**
  * App\Models\Admin\Folder
  *
  * @property integer $id
  * @property string $name
  * @property integer $folder_id
+ * @property integer $order
+ * @property integer $root_id
  * @property integer $user_id
+ * @property boolean $private
  * @property string $description
  * @property \Carbon\Carbon $deleted_at
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Admin\ScFolder[] $children
+ * @property-read \App\Models\Admin\SpFolder $parent
+ * @property-read \App\Models\Admin\SpFolder $root
+ * @property-read \App\Models\Admin\User $owner
+ * @property-read mixed $short_description
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Folder whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Folder whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Folder whereFolderId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Folder whereOrder($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Folder whereRootId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Folder whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Folder wherePrivate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Folder whereDescription($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Folder whereDeletedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Folder whereCreatedAt($value)

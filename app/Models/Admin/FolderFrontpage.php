@@ -5,6 +5,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 
+
+/**
+ * App\Models\Admin\FolderFrontpage
+ *
+ */
 class FolderFrontpage extends Model {
 
     use SoftDeletes;

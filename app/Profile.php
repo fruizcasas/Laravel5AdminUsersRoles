@@ -7,17 +7,17 @@ use Illuminate\Support\Str;
 /**
  * App\Profile
  *
- * @property integer $id 
- * @property integer $user_id 
- * @property integer $per_page 
- * @property boolean $show_trash 
- * @property string $theme 
- * @property string $filters 
- * @property string $order_by 
- * @property string $deleted_at 
- * @property \Carbon\Carbon $created_at 
- * @property \Carbon\Carbon $updated_at 
- * @property-read \App\User $user 
+ * @property integer $id
+ * @property integer $user_id
+ * @property integer $per_page
+ * @property boolean $show_trash
+ * @property string $theme
+ * @property string $filters
+ * @property string $order_by
+ * @property string $deleted_at
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property-read \App\User $user
  * @method static \Illuminate\Database\Query\Builder|\App\Profile whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Profile whereUserId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Profile wherePerPage($value)
@@ -28,6 +28,8 @@ use Illuminate\Support\Str;
  * @method static \Illuminate\Database\Query\Builder|\App\Profile whereDeletedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Profile whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Profile whereUpdatedAt($value)
+ * @property string $ckeditor
+ * @method static \Illuminate\Database\Query\Builder|\App\Profile whereCkeditor($value)
  */
 class Profile extends Model
 {
