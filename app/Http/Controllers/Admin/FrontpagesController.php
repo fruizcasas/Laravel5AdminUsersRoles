@@ -255,7 +255,8 @@ class FrontpagesController extends Controller
     public function create()
     {
         $model = new Frontpage();
-        $users = User::withTrashed()->lists('display_name','id');
+        $users = [null =>'Empty'] +
+                  User::withTrashed()->lists('display_name','id');
         return view($this->create_view,
             compact([
                 'model','users',
@@ -272,7 +273,8 @@ class FrontpagesController extends Controller
     {
         try {
             $model = $this->getModel($id);
-            $users = User::withTrashed()->lists('display_name','id');
+            $users = [null =>'Empty'] +
+                      User::withTrashed()->lists('display_name','id');
             return view($this->show_view,
                 compact([
                     'model',
@@ -294,7 +296,8 @@ class FrontpagesController extends Controller
     {
         try {
             $model = $this->getModel($id);
-            $users = User::withTrashed()->lists('display_name','id');
+            $users = [null =>'Empty'] +
+                    User::withTrashed()->lists('display_name','id');
 
             return view($this->edit_view,
                 compact([

@@ -2,19 +2,23 @@
 
 return [
     // ----------------------------------------------
-    'name' => 'Name',
+    'code' => 'Code',
+    'edition' => 'Edition',
+    'status' => 'Status',
+    'total_pages' => 'Pages',
+    'title' => 'Title',
+    'reason_for_revision' => 'Reason for revision',
+    'author' => 'Author',
+    'creation_date' => 'Creation Date',
+    'reviewer' => 'Reviewer',
+    'review_date' => 'Review Date',
+    'approver' => 'Approver',
+    'approval_date' => 'Approval Date',
+    'publisher' => 'Publisher',
+    'publishing_date' => 'Publishing Date',
     'description' => 'Description',
-    'order' => 'Order',
-    'root_id' => 'Root',
-    'path' => 'Path',
-    'owner' => 'Owner',
-    'parent' => 'Parent Folder',
-    'children' => 'Subfolders',
-    'trash' => 'trash',
     'yes' => 'Yes',
     'no' => 'No',
-    'private' => 'Private',
-    'root' => 'Root',
     // ----------------------------------------------
 ];
 

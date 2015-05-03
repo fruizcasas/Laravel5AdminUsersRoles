@@ -22,7 +22,9 @@ use App\Models\Admin\Folder;
                     {{ $folder->name }}
                 </td>
                 <td>
-                    {{ $folder->owner->name }}
+                    @if ($folder->owner)
+                        {{ $folder->owner->name }}
+                    @endif
                 </td>
                 <td>
                     {{ $folder->updated_at->diffForHumans()}}

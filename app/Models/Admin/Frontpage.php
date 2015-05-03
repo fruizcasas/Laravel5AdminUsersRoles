@@ -7,34 +7,33 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\SortableTrait;
 
 
-
 /**
  * App\Models\Admin\Frontpage
  *
- * @property integer $id 
- * @property string $code 
- * @property integer $edition 
- * @property string $status 
- * @property \Carbon\Carbon $creation_date 
- * @property \Carbon\Carbon $review_date 
- * @property \Carbon\Carbon $approval_date 
- * @property \Carbon\Carbon $publishing_date 
- * @property integer $total_pages 
- * @property string $title 
- * @property string $reason_for_revision 
- * @property integer $author_id 
- * @property integer $reviewer_id 
- * @property integer $approver_id 
- * @property integer $publisher_id 
- * @property string $description 
- * @property \Carbon\Carbon $deleted_at 
- * @property \Carbon\Carbon $created_at 
- * @property \Carbon\Carbon $updated_at 
- * @property-read \App\Models\Admin\User $author 
- * @property-read \App\Models\Admin\User $reviewer 
- * @property-read \App\Models\Admin\User $approver 
- * @property-read \App\Models\Admin\User $publisher 
- * @property-read mixed $display_name 
+ * @property integer $id
+ * @property string $code
+ * @property integer $edition
+ * @property string $status
+ * @property \Carbon\Carbon $creation_date
+ * @property \Carbon\Carbon $review_date
+ * @property \Carbon\Carbon $approval_date
+ * @property \Carbon\Carbon $publishing_date
+ * @property integer $total_pages
+ * @property string $title
+ * @property string $reason_for_revision
+ * @property integer $author_id
+ * @property integer $reviewer_id
+ * @property integer $approver_id
+ * @property integer $publisher_id
+ * @property string $description
+ * @property \Carbon\Carbon $deleted_at
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property-read \App\Models\Admin\User $author
+ * @property-read \App\Models\Admin\User $reviewer
+ * @property-read \App\Models\Admin\User $approver
+ * @property-read \App\Models\Admin\User $publisher
+ * @property-read mixed $display_name
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Frontpage whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Frontpage whereCode($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Frontpage whereEdition($value)
@@ -100,7 +99,6 @@ class Frontpage extends Model
         'publisher_id',
         'description'];
 
-
     /**
      * @return mixed
      */
@@ -108,6 +106,7 @@ class Frontpage extends Model
     {
         return $this->belongsTo('App\Models\Admin\User', 'author_id');
     }
+
     /**
      * @return mixed
      */
@@ -115,6 +114,7 @@ class Frontpage extends Model
     {
         return $this->belongsTo('App\Models\Admin\User', 'reviewer_id');
     }
+
     /**
      * @return mixed
      */
@@ -122,6 +122,7 @@ class Frontpage extends Model
     {
         return $this->belongsTo('App\Models\Admin\User', 'approver_id');
     }
+
     /**
      * @return mixed
      */
@@ -132,13 +133,55 @@ class Frontpage extends Model
 
     public function getDisplayNameAttribute()
     {
-        return $this->code.'-'.sprintf('%02.2d',$this->edition).':'.$this->title;
+        return $this->code . '-' . sprintf('%02.2d', $this->edition) . ':' . $this->title;
+    }
+
+    protected function getDate($value)
+    {
+        if ($value) {
+            $d = new Carbon($value);
+            return $d->toDateString();
+        } else {
+            return null;
+        }
     }
 
     public function getCreationDateAttribute($value)
     {
-        $d = new Carbon($value);
-        return $d->toDateString();
+        return $this->getDate($value);
+    }
+
+    public function getReviewDateAttribute($value)
+    {
+        return $this->getDate($value);
+    }
+
+    public function getApprovalDateAttribute($value)
+    {
+        return $this->getDate($value);
+    }
+
+    public function getPublishingDateAttribute($value)
+    {
+        return $this->getDate($value);
+    }
+
+    public function save(array $options = array())
+    {
+        $this->sanitize();
+        parent::save($options);
+    }
+
+    public function sanitize()
+    {
+        foreach($this->getAttributes() as $key => $value)
+        {
+            if (in_array($key,$this->getDates())) {
+                if (!$value) {
+                    $this->{$key} = null;
+                }
+            }
+        }
     }
 
 }
