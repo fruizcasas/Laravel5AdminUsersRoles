@@ -14,6 +14,7 @@ class Status {
     const STATUS_FP_APPROVED='APPROVED';
     const STATUS_FP_TO_BE_PUBLISHED='TO_BE_PUBLISHED';
     const STATUS_FP_PUBLISHED='PUBLISHED';
+    const STATUS_FP_ARCHIVED='ARCHIVED';
 
     static public function getFrontPageStatus()
     {
@@ -26,6 +27,7 @@ class Status {
             static::STATUS_FP_APPROVED => static::STATUS_FP_APPROVED,
             static::STATUS_FP_TO_BE_PUBLISHED => static::STATUS_FP_TO_BE_PUBLISHED,
             static::STATUS_FP_PUBLISHED => static::STATUS_FP_PUBLISHED,
+            static::STATUS_FP_ARCHIVED => static::STATUS_FP_ARCHIVED,
         ];
 
     }

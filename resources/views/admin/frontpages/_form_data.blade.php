@@ -106,7 +106,7 @@ $yes_no = ['0' => trans($VN . 'no'), '1' => trans($VN . 'yes')];
             {!! Form::label('reviewer_id', trans($VN.'reviewer'),
                                 ['class' =>'col-sm-2 control-label text-right']) !!}
             <div class="col-sm-4 {{$errors->first('reviewer_id','has-error')}}">
-                {!! Form::select('reviewer_id',$users, $model->user_id,
+                {!! Form::select('reviewer_id',$users, $model->reviewer_id,
                                 ['class' => 'form-control input-sm',
                                 'style' => 'width:100%;']+
                                 ($readonly?['disabled']:[])) !!}

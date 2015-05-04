@@ -262,7 +262,7 @@ class Profile extends Model
         $values = [];
         foreach ($filters as $key => $value) {
             if (trim($value) != '') {
-                $values[] = "$key= $value";
+                $values[] = "$key:  $value";
             }
         }
         return implode(' | ', $values);

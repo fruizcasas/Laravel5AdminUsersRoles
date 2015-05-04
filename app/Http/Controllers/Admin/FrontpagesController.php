@@ -2,6 +2,7 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Response;
 
 use App\Profile;
@@ -42,15 +43,17 @@ class FrontpagesController extends Controller
             'code',
             'edition',
             'status',
-            'review_date',
-            'publishing_date',
             'total_pages ',
             'title',
             'reason_for_revision',
             'author_id',
+            'creation_date',
             'reviewer_id',
+            'review_date',
             'approver_id',
+            'approval_date',
             'publisher_id',
+            'publishing_date',
         ];
 
     protected $filter_fields =
@@ -59,15 +62,17 @@ class FrontpagesController extends Controller
             'code',
             'edition',
             'status',
-            'review_date',
-            'publishing_date',
             'total_pages ',
             'title',
             'reason_for_revision',
-            'author_id',
-            'reviewer_id',
-            'approver_id',
-            'publisher_id',
+            'author',
+            'creation_date',
+            'reviewer',
+            'review_date',
+            'approver',
+            'approval_date',
+            'publisher',
+            'publishing_date',
         ];
 
     protected $filter_numeric_fields =
@@ -149,6 +154,7 @@ class FrontpagesController extends Controller
 
     public function getModels($filter = null)
     {
+        $model = new Frontpage();
         $models = Frontpage::sortable($this->index_view);
         if ($this->show_trash()) {
             $models = $models->withTrashed();
@@ -156,16 +162,88 @@ class FrontpagesController extends Controller
         if (isset($filter)) {
             foreach ($this->filter_fields as $field) {
                 if (trim($filter[$field]) != '') {
-                    $models = $models->Where(function ($query) use ($field, $filter) {
+                    $models = $models->Where(function ($query) use ($field, $filter, $model) {
                         $values = explode(',', $filter[$field]);
                         $first = true;
                         foreach ($values as $value) {
-                            if (in_array($field, $this->filter_numeric_fields)) {
+                            if (strtolower($value)=='null') {
+                                if ($first) {
+                                    $query = $query->Where($field, 'IS NULL');
+                                    $first = false;
+                                } else {
+                                    $query = $query->orWhere($field, 'IS NULL');
+                                }
+
+                            } else if (in_array($field, $this->filter_numeric_fields)) {
                                 if ($first) {
                                     $query = $query->Where($field, $value);
                                     $first = false;
                                 } else {
                                     $query = $query->orWhere($field, $value);
+                                }
+
+                            } else if (in_array($field, $model->getDates())) {
+                                try {
+                                    $dates = explode('..', $value);
+                                    if (count($dates) > 1) {
+                                        $date1 = new Carbon($dates[0]);
+                                        $date1 = $date1->startOfDay();
+                                        $date2 = new Carbon($dates[1]);
+                                        $date2 = $date2->startOfDay();
+                                        if ($first) {
+                                            $query = $query->whereBetween($field, [$date1, $date2]);
+                                            $first = false;
+                                        } else {
+                                            $query = $query->orWhereBetween($field, [$date1, $date2]);
+                                        }
+                                    } else {
+                                        switch (mb_substr($value, 0, 1)) {
+                                            case '<':
+                                                $op = '<';
+                                                $value = substr($value, 1);
+                                                switch (mb_substr($value, 0, 1)) {
+                                                    case '=':
+                                                        $op = '<=';
+                                                        $value = substr($value, 1);
+                                                        break;
+                                                    case '>':
+                                                        $op = '<>';
+                                                        $value = substr($value, 1);
+                                                        break;
+                                                };
+                                                break;
+                                            case '>':
+                                                $op = '>';
+                                                $value = substr($value, 1);
+                                                switch (mb_substr($value, 0, 1)) {
+                                                    case '=':
+                                                        $op = '>=';
+                                                        $value = substr($value, 1);
+                                                        break;
+                                                };
+                                                break;
+                                            case '=':
+                                                $op = '=';
+                                                $value = substr($value, 1);
+                                                break;
+                                            default:
+                                                $op = '=';
+                                        };
+                                        $date = new Carbon($value);
+                                        $date = $date->startOfDay();
+                                        if ($value != $date->toDateString()) {
+                                            throw new Exception();
+                                        }
+                                        if ($first) {
+                                            $query = $query->where($field, $op, $date);
+                                            $first = false;
+                                        } else {
+                                            $query = $query->orWhere($field, $op, $date);
+                                        }
+                                    }
+                                } catch (Exception $e) {
+                                    $message = $e->getMessage();
+                                    Flash::error("$message: invalid value '$value' for $field (YYYY-MM-DD)");
                                 }
                             } else if (in_array($field, $this->filter_boolean_fields)) {
                                 $value = (strtolower($value) == 'x');
@@ -178,13 +256,13 @@ class FrontpagesController extends Controller
                             } else if (in_array($field, $this->filter_has_fields)) {
                                 $value = '%' . $value . '%';
                                 if ($first) {
-                                    $query = $query->whereHas($field, function ($q) use ($value) {
-                                        $q->where('name', 'LIKE', $value);
+                                    $query->whereHas($field, function ($q) use ($value) {
+                                        $q->where('acronym', 'LIKE', $value);
                                     });
                                     $first = false;
                                 } else {
                                     $query = $query->orWhereHas($field, function ($q) use ($value) {
-                                        $q->where('name', 'LIKE', $value);
+                                        $q->where('acronym', 'LIKE', $value);
                                     });
                                 }
                             } else {
@@ -204,12 +282,14 @@ class FrontpagesController extends Controller
         return $models;
     }
 
-    public function getModel($id)
+    public
+    function getModel($id)
     {
         return $this->getModels()->findOrFail($id);
     }
 
-    public function getFilter()
+    public
+    function getFilter()
     {
         $values = [];
         foreach ($this->filter_fields as $field) {
@@ -219,7 +299,8 @@ class FrontpagesController extends Controller
     }
 
 
-    public function excel($format = 'xlsx')
+    public
+    function excel($format = 'xlsx')
     {
         $filter = $this->getFilter();
         $models = $this->getModels($filter);
@@ -239,7 +320,8 @@ class FrontpagesController extends Controller
     /**
      * @return \Illuminate\View\View
      */
-    public function index()
+    public
+    function index()
     {
         $filter = $this->getFilter();
         $models = $this->getModels($filter)->with('author')->with('reviewer')->with('approver')->with('publisher');
@@ -252,14 +334,15 @@ class FrontpagesController extends Controller
      *
      * @return Response
      */
-    public function create()
+    public
+    function create()
     {
         $model = new Frontpage();
-        $users = [null =>'Empty'] +
-                  User::withTrashed()->lists('display_name','id');
+        $users = [null => 'Empty'] +
+            User::withTrashed()->lists('display_name', 'id');
         return view($this->create_view,
             compact([
-                'model','users',
+                'model', 'users',
             ]));
     }
 
@@ -269,12 +352,13 @@ class FrontpagesController extends Controller
      * @param  int $id
      * @return Response
      */
-    public function show($id)
+    public
+    function show($id)
     {
         try {
             $model = $this->getModel($id);
-            $users = [null =>'Empty'] +
-                      User::withTrashed()->lists('display_name','id');
+            $users = [null => 'Empty'] +
+                User::withTrashed()->lists('display_name', 'id');
             return view($this->show_view,
                 compact([
                     'model',
@@ -292,12 +376,13 @@ class FrontpagesController extends Controller
      * @param  int $id
      * @return Response
      */
-    public function edit($id)
+    public
+    function edit($id)
     {
         try {
             $model = $this->getModel($id);
-            $users = [null =>'Empty'] +
-                    User::withTrashed()->lists('display_name','id');
+            $users = [null => 'Empty'] +
+                User::withTrashed()->lists('display_name', 'id');
 
             return view($this->edit_view,
                 compact([
@@ -316,7 +401,8 @@ class FrontpagesController extends Controller
      *
      * @return Response
      */
-    public function store(ModelNewRequest $request)
+    public
+    function store(ModelNewRequest $request)
     {
         try {
             $model = new Frontpage($request->all());
@@ -333,9 +419,10 @@ class FrontpagesController extends Controller
         } catch (Exception $e) {
             $errors = [];
             if ($e->getCode() == 23000) {
-                $errors['email'] = trans($this->resource_name . 'duplicated_email');
+                Flash::error(get_class($e) . '-' . $e->getMessage());
+                //$errors['email'] = trans($this->resource_name . 'duplicated_email');
             } else {
-                Flash::error(get_class($e).'-'.$e->getMessage());
+                Flash::error(get_class($e) . '-' . $e->getMessage());
             }
             return $request->response($errors);
         }
@@ -347,7 +434,8 @@ class FrontpagesController extends Controller
      * @param  int $id
      * @return Response
      */
-    public function update($id, ModelRequest $request)
+    public
+    function update($id, ModelRequest $request)
     {
         try {
             $model = $this->getModel($id);
@@ -366,7 +454,7 @@ class FrontpagesController extends Controller
             if ($e->getCode() == 23000) {
                 $errors['email'] = trans($this->resource_name . 'duplicated_email');
             } else {
-                Flash::error(get_class($e).'-'.$e->getMessage());
+                Flash::error(get_class($e) . '-' . $e->getMessage());
             }
             return $request->response($errors);
         }
@@ -378,7 +466,8 @@ class FrontpagesController extends Controller
      * @param  int $id
      * @return Response
      */
-    public function destroy($id, DeleteRequest $request)
+    public
+    function destroy($id, DeleteRequest $request)
     {
         try {
             $model = $this->getModel($id);
@@ -396,7 +485,8 @@ class FrontpagesController extends Controller
     }
 
 
-    public function restore($id, DeleteRequest $request)
+    public
+    function restore($id, DeleteRequest $request)
     {
         try {
             $model = $this->getModel($id);
@@ -409,7 +499,8 @@ class FrontpagesController extends Controller
         }
     }
 
-    public function forcedelete($id, DeleteRequest $request)
+    public
+    function forcedelete($id, DeleteRequest $request)
     {
         try {
             $model = $this->getModel($id);

@@ -41,7 +41,8 @@ use App\Traits\SortableTrait;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin\Document whereUpdatedAt($value)
  * @method static \App\Models\Admin\Document sortable($view)
  */
-class Document extends Model {
+class Document extends Model
+{
 
     use SortableTrait;
 
@@ -60,7 +61,25 @@ class Document extends Model {
      *
      * @var array
      */
-    protected $fillable = ['name','title', 'mime','storage_path','description'];
+    protected $fillable = [
+        'user_id',
+        'name',
+        'mime_type',
+        'extension',
+        'title',
+        'description',
+        'original_name',
+        'original_mime_type',
+        'original_extension',
+        'size',
+    ];
 
+    /**
+     * @return mixed
+     */
+    public function owner()
+    {
+        return $this->belongsTo('App\Models\Admin\User', 'user_id');
+    }
 
 }

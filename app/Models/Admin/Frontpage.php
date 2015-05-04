@@ -133,7 +133,7 @@ class Frontpage extends Model
 
     public function getDisplayNameAttribute()
     {
-        return $this->code . '-' . sprintf('%02.2d', $this->edition) . ':' . $this->title;
+        return $this->code . '- Ed.' . sprintf('%02.2d', $this->edition) . '/' . $this->title;
     }
 
     protected function getDate($value)
@@ -166,7 +166,7 @@ class Frontpage extends Model
         return $this->getDate($value);
     }
 
-    public function save(array $options = array())
+    public function save(array $options = [])
     {
         $this->sanitize();
         parent::save($options);
@@ -174,9 +174,12 @@ class Frontpage extends Model
 
     public function sanitize()
     {
-        foreach($this->getAttributes() as $key => $value)
-        {
-            if (in_array($key,$this->getDates())) {
+        foreach ($this->getAttributes() as $key => $value) {
+            if (in_array($key, $this->getDates())) {
+                if (!$value) {
+                    $this->{$key} = null;
+                }
+            } else {
                 if (!$value) {
                     $this->{$key} = null;
                 }

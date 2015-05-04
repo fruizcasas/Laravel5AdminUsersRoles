@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
  * Class AdminController
  * @package App\Http\Controllers
  */
-class MainController extends Controller {
+class DashboardController extends Controller {
 
     /**
      * Create a new controller instance.

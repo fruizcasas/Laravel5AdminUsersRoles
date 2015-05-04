@@ -112,7 +112,7 @@ Route::group(
 
         Route::get('/',
             [
-                'as' => 'author.main.index', 'uses' => 'MainController@index'
+                'as' => 'author.main.index', 'uses' => 'DashboardController@index'
             ]);
 
         /*
@@ -282,7 +282,7 @@ Route::group(
 
         Route::get('/',
             [
-                'as' => 'admin.main.index', 'uses' => 'MainController@index'
+                'as' => 'admin.main.index', 'uses' => 'DashboardController@index'
             ]);
 
         /*

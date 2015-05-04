@@ -15,13 +15,21 @@ $VN = 'views/admin/frontpages/_index_table.';
 
 <table class="table table-striped table-bordered table-compact table-hover table-responsive">
     <col style="width:6em;"> {{-- Buttons --}}
-    <col style="width:5em;"> {{-- ID --}}
-    <col> {{-- code --}}
-    <col style="width:5em;"> {{-- edition--}}
+    <col style="width:4em;"> {{-- ID --}}
+    <col style="width:6em;"> {{-- code --}}
+    <col style="width:4em;"> {{-- edition--}}
     <col> {{-- status --}}
-    <col style="width:5em;"> {{-- total_pages --}}
+    <col style="width:4em;"> {{-- total_pages --}}
     <col> {{-- title --}}
     <col> {{-- reason_for_revision --}}
+    <col style="width:3em;"> {{-- author --}}
+    <col style="width:4em;"> {{-- creation_date --}}
+    <col style="width:3em;"> {{-- reviewer --}}
+    <col style="width:4em;"> {{-- review_date --}}
+    <col style="width:3em;"> {{-- approver --}}
+    <col style="width:4em;"> {{-- approval_date --}}
+    <col style="width:3em;"> {{-- publisher --}}
+    <col style="width:4em;"> {{-- publishing_date --}}
     <col> {{-- description --}}
     <thead>
     <th>
@@ -36,12 +44,15 @@ $VN = 'views/admin/frontpages/_index_table.';
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'status',trans($VN.'status'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'total_pages',trans($VN.'total_pages'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'title',trans($VN.'title'))!!}</th>
-    <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'author',trans($VN.'author'))!!}</th>
+    <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'reason_for_revision',trans($VN.'reason_for_revision'))!!}</th>
+    <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'author_id',trans($VN.'author'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'creation_date',trans($VN.'creation_date'))!!}</th>
-    <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'reviewer',trans($VN.'reviewer'))!!}</th>
+    <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'reviewer_id',trans($VN.'reviewer'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'review_date',trans($VN.'review_date'))!!}</th>
-    <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'approver',trans($VN.'approver'))!!}</th>
+    <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'approver_id',trans($VN.'approver'))!!}</th>
     <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'approval_date',trans($VN.'approval_date'))!!}</th>
+    <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'publisher_id',trans($VN.'publisher'))!!}</th>
+    <th>{!!App\Traits\SortableTrait::link_to_sorting(SORT_ROUTE,VIEW_NAME,'publishing_date',trans($VN.'publishing_date'))!!}</th>
     <th>{{trans($VN.'description')}}</th>
     </thead>
     <tbody>
@@ -71,6 +82,7 @@ $VN = 'views/admin/frontpages/_index_table.';
             <!--- status Field --->
             {!! Form::select('status',App\Library\Status::getFrontPageStatus(), null, ['class' => 'form-control input-sm',
                                                      'style' => 'width:100%;',
+                                                     'onchange'=> 'this.form.submit()',
                                                      'placeholder'=>trans($VN.'status')]) !!}
         </td>
         <td>
@@ -84,6 +96,12 @@ $VN = 'views/admin/frontpages/_index_table.';
             {!! Form::text('title', null, ['class' => 'form-control input-sm',
                                                      'style' => 'width:100%;',
                                                      'placeholder'=>trans($VN.'title')]) !!}
+        </td>
+        <td>
+            <!--- reason_for_revision Field --->
+            {!! Form::text('reason_for_revision', null, ['class' => 'form-control input-sm',
+                                                     'style' => 'width:100%;',
+                                                     'placeholder'=>trans($VN.'reason_for_revision')]) !!}
         </td>
         <td>
             <!--- author Field --->
@@ -116,10 +134,22 @@ $VN = 'views/admin/frontpages/_index_table.';
                                                      'placeholder'=>trans($VN.'approver')]) !!}
         </td>
         <td>
-            <!--- creation_date Field --->
+            <!--- approval_date Field --->
             {!! Form::text('approval_date', null, ['class' => 'form-control input-sm',
                                                      'style' => 'width:100%;',
                                                      'placeholder'=>trans($VN.'approval_date')]) !!}
+        </td>
+        <td>
+            <!--- publisher Field --->
+            {!! Form::text('publisher', null, ['class' => 'form-control input-sm',
+                                                     'style' => 'width:100%;',
+                                                     'placeholder'=>trans($VN.'publisher')]) !!}
+        </td>
+        <td>
+            <!--- publishing_date Field --->
+            {!! Form::text('approval_date', null, ['class' => 'form-control input-sm',
+                                                     'style' => 'width:100%;',
+                                                     'placeholder'=>trans($VN.'publishing_date')]) !!}
         </td>
         <td>
             <!--- filter description Field --->
@@ -142,16 +172,19 @@ $VN = 'views/admin/frontpages/_index_table.';
                 {!! link_to_route(SHOW_ROUTE,$model->code,['id'=>$model->id]) !!}
             </td>
             <td class="text-right">
-                {!! link_to_route(SHOW_ROUTE,$model->edition,['id'=>$model->id]) !!}
+                {{$model->edition}}
             </td>
             <td>
-                {!! link_to_route(SHOW_ROUTE,$model->status,['id'=>$model->id]) !!}
+                {{$model->status}}
             </td>
-            <td>
-                {!! link_to_route(SHOW_ROUTE,$model->total_pages,['id'=>$model->id]) !!}
+            <td class="text-right">
+                {{$model->total_pages}}
             </td>
             <td>
                 {!! link_to_route(SHOW_ROUTE,$model->title,['id'=>$model->id]) !!}
+            </td>
+            <td>
+                {!! link_to_route(SHOW_ROUTE,$model->reason_for_revision,['id'=>$model->id]) !!}
             </td>
             <td>
                 @if($model->author)
@@ -176,6 +209,14 @@ $VN = 'views/admin/frontpages/_index_table.';
             </td>
             <td>
                 {{ $model->approval_date}}
+            </td>
+            <td>
+                @if($model->publisher)
+                    {{ $model->publisher->acronym }}
+                @endif
+            </td>
+            <td>
+                {{ $model->publishing_date}}
             </td>
             <td>
                 {{ $model->ShortDescription}}
