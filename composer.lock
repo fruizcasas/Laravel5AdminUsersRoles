@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d28d230a308efd149114feaee9df4159",
+    "hash": "b7a157c9795b1261e9b7cf6445899998",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -842,16 +842,16 @@
         },
         {
             "name": "maatwebsite/excel",
-            "version": "v2.0.2",
+            "version": "v2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maatwebsite/Laravel-Excel.git",
-                "reference": "5da62ad9c8250fe332a6322d0b110559174e30d5"
+                "reference": "0ade0c2b0795d185bcf598ef41f55283a30dbd79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maatwebsite/Laravel-Excel/zipball/5da62ad9c8250fe332a6322d0b110559174e30d5",
-                "reference": "5da62ad9c8250fe332a6322d0b110559174e30d5",
+                "url": "https://api.github.com/repos/Maatwebsite/Laravel-Excel/zipball/0ade0c2b0795d185bcf598ef41f55283a30dbd79",
+                "reference": "0ade0c2b0795d185bcf598ef41f55283a30dbd79",
                 "shasum": ""
             },
             "require": {
@@ -905,7 +905,7 @@
                 "import",
                 "laravel"
             ],
-            "time": "2015-03-19 13:47:43"
+            "time": "2015-05-02 19:02:05"
         },
         {
             "name": "mews/purifier",
@@ -913,12 +913,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mewebstudio/Purifier.git",
-                "reference": "73b5195eb64941079bbf895d65999b7f1e50e7f9"
+                "reference": "6f41bbd566cfc4235f0c80b78b516b99ccaa8f28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mewebstudio/Purifier/zipball/73b5195eb64941079bbf895d65999b7f1e50e7f9",
-                "reference": "73b5195eb64941079bbf895d65999b7f1e50e7f9",
+                "url": "https://api.github.com/repos/mewebstudio/Purifier/zipball/6f41bbd566cfc4235f0c80b78b516b99ccaa8f28",
+                "reference": "6f41bbd566cfc4235f0c80b78b516b99ccaa8f28",
                 "shasum": ""
             },
             "require": {
@@ -964,7 +964,7 @@
                 "security",
                 "xss"
             ],
-            "time": "2015-04-14 20:14:44"
+            "time": "2015-04-27 10:35:35"
         },
         {
             "name": "monolog/monolog",
@@ -1132,16 +1132,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v1.2.2",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "08f97eb4efa029e2fafb6d8c98b71731bf0cf621"
+                "reference": "dff239267fd1befa1cd40430c9ed12591aa720ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/08f97eb4efa029e2fafb6d8c98b71731bf0cf621",
-                "reference": "08f97eb4efa029e2fafb6d8c98b71731bf0cf621",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/dff239267fd1befa1cd40430c9ed12591aa720ca",
+                "reference": "dff239267fd1befa1cd40430c9ed12591aa720ca",
                 "shasum": ""
             },
             "require": {
@@ -1151,7 +1151,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2-dev"
+                    "dev-master": "1.3-dev"
                 }
             },
             "autoload": {
@@ -1173,7 +1173,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2015-04-03 14:33:59"
+            "time": "2015-05-02 15:40:40"
         },
         {
             "name": "phenx/php-font-lib",
@@ -1211,16 +1211,16 @@
         },
         {
             "name": "phpoffice/phpexcel",
-            "version": "1.8.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PHPExcel.git",
-                "reference": "e69a5e4d0ffa7fb6f171859e0a04346e580df30b"
+                "reference": "372c7cbb695a6f6f1e62649381aeaa37e7e70b32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/e69a5e4d0ffa7fb6f171859e0a04346e580df30b",
-                "reference": "e69a5e4d0ffa7fb6f171859e0a04346e580df30b",
+                "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/372c7cbb695a6f6f1e62649381aeaa37e7e70b32",
+                "reference": "372c7cbb695a6f6f1e62649381aeaa37e7e70b32",
                 "shasum": ""
             },
             "require": {
@@ -1264,7 +1264,103 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2014-03-02 15:22:49"
+            "time": "2015-05-01 07:00:55"
+        },
+        {
+            "name": "phpoffice/phpword",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PHPOffice/PHPWord.git",
+                "reference": "3f136501b3dfea94766a704e17782c8a942a7b9b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHPOffice/PHPWord/zipball/3f136501b3dfea94766a704e17782c8a942a7b9b",
+                "reference": "3f136501b3dfea94766a704e17782c8a942a7b9b",
+                "shasum": ""
+            },
+            "require": {
+                "ext-xml": "*",
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "dompdf/dompdf": "0.6.*",
+                "mpdf/mpdf": "5.*",
+                "phpdocumentor/phpdocumentor": "2.*",
+                "phploc/phploc": "2.*",
+                "phpmd/phpmd": "2.*",
+                "phpunit/phpunit": "3.7.*",
+                "sebastian/phpcpd": "2.*",
+                "squizlabs/php_codesniffer": "1.*",
+                "tecnick.com/tcpdf": "6.*"
+            },
+            "suggest": {
+                "dompdf/dompdf": "Used to write PDF",
+                "ext-gd2": "Used to add images",
+                "ext-xmlwriter": "Used to write DOCX and ODT",
+                "ext-xsl": "Used to apply XSL style sheet to main document part of OOXML template",
+                "ext-zip": "Used to write DOCX and ODT"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PhpOffice\\PhpWord\\": "src/PhpWord"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Baker"
+                },
+                {
+                    "name": "Franck Lefevre",
+                    "homepage": "http://blog.rootslabs.net"
+                },
+                {
+                    "name": "Gabriel Bull",
+                    "email": "me@gabrielbull.com",
+                    "homepage": "http://gabrielbull.com/"
+                },
+                {
+                    "name": "Ivan Lanin",
+                    "homepage": "http://ivan.lanin.org"
+                },
+                {
+                    "name": "Roman Syroeshko",
+                    "homepage": "http://ru.linkedin.com/pub/roman-syroeshko/34/a53/994/"
+                }
+            ],
+            "description": "PHPWord - A pure PHP library for reading and writing word processing documents (DOCX, ODT, RTF, HTML, PDF)",
+            "homepage": "http://phpoffice.github.io",
+            "keywords": [
+                "ISO IEC 29500",
+                "OOXML",
+                "Office Open XML",
+                "OpenDocument",
+                "OpenXML",
+                "PhpOffice",
+                "PhpWord",
+                "Rich Text Format",
+                "WordprocessingML",
+                "doc",
+                "docx",
+                "html",
+                "odt",
+                "office",
+                "pdf",
+                "php",
+                "reader",
+                "rtf",
+                "template",
+                "template processor",
+                "word",
+                "writer"
+            ],
+            "time": "2015-01-03 09:42:48"
         },
         {
             "name": "psr/log",
@@ -1376,17 +1472,60 @@
             "time": "2015-03-26 18:43:54"
         },
         {
-            "name": "spatie/laravel-backup",
-            "version": "2.2.1",
+            "name": "smalot/pdfparser",
+            "version": "v0.9.23",
             "source": {
                 "type": "git",
-                "url": "https://github.com/freekmurze/laravel-backup.git",
-                "reference": "1dbdf0ce3f8f490cb124415c02d681f2e1987623"
+                "url": "https://github.com/smalot/pdfparser.git",
+                "reference": "9d3a71bdf7bdef7b2e1ccbdc1be67d4cc736299d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/freekmurze/laravel-backup/zipball/1dbdf0ce3f8f490cb124415c02d681f2e1987623",
-                "reference": "1dbdf0ce3f8f490cb124415c02d681f2e1987623",
+                "url": "https://api.github.com/repos/smalot/pdfparser/zipball/9d3a71bdf7bdef7b2e1ccbdc1be67d4cc736299d",
+                "reference": "9d3a71bdf7bdef7b2e1ccbdc1be67d4cc736299d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "tecnick.com/tcpdf": ">=6.0.050"
+            },
+            "require-dev": {
+                "atoum/atoum": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Smalot\\PdfParser\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastien MALOT",
+                    "email": "sebastien@malot.fr",
+                    "homepage": "http://www.malot.fr",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Pdf parser library. Can read and extract information from pdf file.",
+            "homepage": "http://www.pdfparser.org",
+            "time": "2015-03-18 08:17:46"
+        },
+        {
+            "name": "spatie/laravel-backup",
+            "version": "2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/freekmurze/laravel-backup.git",
+                "reference": "91c1f4bedfa7a3ff6bb130a8d2facaf4209cb7b7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/freekmurze/laravel-backup/zipball/91c1f4bedfa7a3ff6bb130a8d2facaf4209cb7b7",
+                "reference": "91c1f4bedfa7a3ff6bb130a8d2facaf4209cb7b7",
                 "shasum": ""
             },
             "require": {
@@ -1430,7 +1569,7 @@
                 "mysql",
                 "spatie"
             ],
-            "time": "2015-04-15 23:47:05"
+            "time": "2015-04-30 20:05:19"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -2249,6 +2388,69 @@
                 "dump"
             ],
             "time": "2015-03-31 08:12:29"
+        },
+        {
+            "name": "tecnick.com/tcpdf",
+            "version": "6.2.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tecnickcom/TCPDF.git",
+                "reference": "3dee9e7f3a414875fd1d9f4f1dfc2433493a86d2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/3dee9e7f3a414875fd1d9f4f1dfc2433493a86d2",
+                "reference": "3dee9e7f3a414875fd1d9f4f1dfc2433493a86d2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "fonts",
+                    "config",
+                    "include",
+                    "tcpdf.php",
+                    "tcpdf_parser.php",
+                    "tcpdf_import.php",
+                    "tcpdf_barcodes_1d.php",
+                    "tcpdf_barcodes_2d.php",
+                    "include/tcpdf_colors.php",
+                    "include/tcpdf_filters.php",
+                    "include/tcpdf_font_data.php",
+                    "include/tcpdf_fonts.php",
+                    "include/tcpdf_images.php",
+                    "include/tcpdf_static.php",
+                    "include/barcodes/datamatrix.php",
+                    "include/barcodes/pdf417.php",
+                    "include/barcodes/qrcode.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPLv3"
+            ],
+            "authors": [
+                {
+                    "name": "Nicola Asuni",
+                    "email": "info@tecnick.com",
+                    "homepage": "http://nicolaasuni.tecnick.com"
+                }
+            ],
+            "description": "TCPDF is a PHP class for generating PDF documents and barcodes.",
+            "homepage": "http://www.tcpdf.org/",
+            "keywords": [
+                "PDFD32000-2008",
+                "TCPDF",
+                "barcodes",
+                "datamatrix",
+                "pdf",
+                "pdf417",
+                "qrcode"
+            ],
+            "time": "2015-04-29 16:13:58"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
@@ -3253,16 +3455,16 @@
         },
         {
             "name": "phpspec/prophecy",
-            "version": "1.4.0",
+            "version": "v1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "8724cd239f8ef4c046f55a3b18b4d91cc7f3e4c5"
+                "reference": "3132b1f44c7bf2ec4c7eb2d3cb78fdeca760d373"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/8724cd239f8ef4c046f55a3b18b4d91cc7f3e4c5",
-                "reference": "8724cd239f8ef4c046f55a3b18b4d91cc7f3e4c5",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/3132b1f44c7bf2ec4c7eb2d3cb78fdeca760d373",
+                "reference": "3132b1f44c7bf2ec4c7eb2d3cb78fdeca760d373",
                 "shasum": ""
             },
             "require": {
@@ -3309,7 +3511,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2015-03-27 19:31:25"
+            "time": "2015-04-27 22:15:08"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -3559,16 +3761,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.6.4",
+            "version": "4.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "163232991e652e6efed2f8470326fffa61e848e2"
+                "reference": "3afe303d873a4d64c62ef84de491b97b006fbdac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/163232991e652e6efed2f8470326fffa61e848e2",
-                "reference": "163232991e652e6efed2f8470326fffa61e848e2",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3afe303d873a4d64c62ef84de491b97b006fbdac",
+                "reference": "3afe303d873a4d64c62ef84de491b97b006fbdac",
                 "shasum": ""
             },
             "require": {
@@ -3627,7 +3829,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-04-11 05:23:21"
+            "time": "2015-04-29 15:18:52"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -4161,6 +4363,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "zizaco/entrust": 20,
+        "phpoffice/phpword": 20,
         "mews/purifier": 20
     },
     "prefer-stable": false,

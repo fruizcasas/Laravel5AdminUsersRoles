@@ -11,9 +11,11 @@
 		"laracasts/flash": "~1.3",
 		"zizaco/entrust": "dev-laravel-5",
 		"maatwebsite/excel": "~2.0.0",
+        "phpoffice/phpword": "dev-master",
 		"dompdf/dompdf": "0.6.*",
 		"spatie/laravel-backup": "~2.1",
-		"mews/purifier": "dev-master"
+		"mews/purifier": "dev-master",
+        "smalot/pdfparser": "*"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0",

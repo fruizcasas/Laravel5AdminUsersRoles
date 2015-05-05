@@ -25,6 +25,8 @@ use App\Models\Admin\User;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+use Smalot\PdfParser\Parser;
+
 
 
 class DocumentsController extends Controller
@@ -421,6 +423,25 @@ class DocumentsController extends Controller
                     if (! $model->title)
                     {
                         $model->title = $model->original_name;
+                    }
+                    if ($model->extension == 'pdf') {
+                        // Parse pdf file and build necessary objects.
+                        $parser = new Parser();
+                        $pdf = $parser->parseFile(base_path() . $model->name);
+                        $text = str_replace([',',':','.','-',';','$','(',')','/','_','\r',"\n",'\'','"','\t','\f',"''",'“'],
+                                            [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
+                                            $pdf->getText());
+
+                        $text = explode(' ',$text);
+                        $words = [];
+                        foreach($text as $word)
+                        {
+                            $words[strtolower($word)] = true;
+                        }
+                        ksort($words);
+                        $text = array_keys($words);
+                        $text = implode(' ',$text);
+                        $model->description = $text;
                     }
                 }
             }
