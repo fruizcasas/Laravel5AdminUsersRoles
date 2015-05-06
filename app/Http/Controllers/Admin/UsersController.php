@@ -626,6 +626,17 @@ class UsersController extends Controller
             $model = $this->getModel($id);
             DB::transaction(
                 function () use ($model) {
+                    if ($model->picture)
+                    {
+                        try {
+                            File::delete(base_path() . $model->picture->filename);
+                        }
+                        catch(Exception $e)
+                        {
+
+                        }
+                        $model->picture->forcedelete();
+                    }
                     $model->departments()->sync([]);
                     $model->roles()->sync([]);
                     $model->forcedelete();
